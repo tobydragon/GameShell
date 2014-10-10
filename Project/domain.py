@@ -1,4 +1,4 @@
-import pygame, pygbutton, sys, random, csv
+import pygame, pygbutton, sys, random, eztext
 from pygame.locals import *
 
 FPS = 30
@@ -33,6 +33,16 @@ class Individual:
 
     def __repr__(self):
         return(self.name+" "+self.category+" "+self.imagepath)
+
+
+
+class HighlightRect:
+    def __init__(self, color, thickness, rect):
+        self.color = color
+        self.thickness = thickness
+        self.rect = rect
+
+    
         
 
 def main():
@@ -66,26 +76,36 @@ def main():
     DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('BioLab')
 
+    #Student Name Inputs
+    """txtbx = eztext.Input(maxlength=45, color=(255,0,0), prompt='type here: ')
+    typed = events = pygame.event.get()"""
+
 
     #Initial Score, Image, Value & Correct
     score = 0
     correct = False
     current_value = 0
 
-    #The Answers Buttons
-    width = 350
-    height = 450
+    #Rectangles Array
+    rectArray = []
+
+    #The Answers Buttons & White Right/Wrong Rectangles
+    x = 250
+    y = 450
     indPath = domModel.individualList[0].imagepath
     indCate = domModel.individualList[0].category
+    numButtons = 9
     answerButtons = []
-    for i in range(9):
+    for i in range(numButtons):
         indPath = domModel.individualList[i].imagepath
         indCate = domModel.individualList[i].category
-        answerButtons.append(pygbutton.PygButton((width, height, 0, 0), normal=indPath, value=indCate))
-        width += 170
-        if width == 1200:
-            width = 430
-            height = 625
+        answerButtons.append(pygbutton.PygButton((x, y, 0, 0), normal=indPath, value=indCate))
+        rectArray.append(HighlightRect( BLACK, 7, [x, y, 160, 160]))
+        x += 200
+        if x == 1250:
+            x = 350
+            y = 650
+    
 
     #The Next Button
     nextButton = pygbutton.PygButton((1100, 850, 120, 50), 'NEXT')
@@ -99,78 +119,29 @@ def main():
                 pygame.quit()
                 sys.exit()
             #Correct or Incorrect decision
-            if 'click' in answerButtons[0].handleEvent(event):
-                if answerButtons[0].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                    #asnwerButtons[0].normal = indList[0].pathright
-                else:
-                    score -= 1
-                    #asnwerButtons[0].normal = indList[0].pathwrong
-
-            if 'click' in answerButtons[1].handleEvent(event):
-                if answerButtons[1].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
-            if 'click' in answerButtons[2].handleEvent(event):
-                if answerButtons[2].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
-            if 'click' in answerButtons[3].handleEvent(event):
-                if answerButtons[3].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
-            if 'click' in answerButtons[4].handleEvent(event):
-                if answerButtons[4].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
-            if 'click' in answerButtons[5].handleEvent(event):
-                if answerButtons[5].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
-
-            if 'click' in answerButtons[6].handleEvent(event):
-                if answerButtons[6].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
-            if 'click' in answerButtons[7].handleEvent(event):
-                if answerButtons[7].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
-            if 'click' in answerButtons[8].handleEvent(event):
-                if answerButtons[8].value == catList[current_value]:
-                    score += 1
-                    correct = True
-                else:
-                    score -= 1
-
+            for buttonsLoop in range(numButtons):
+                
+                if 'click' in answerButtons[buttonsLoop].handleEvent(event):
+                    if answerButtons[buttonsLoop].value == catList[current_value]:
+                        score += 1
+                        rectArray[buttonsLoop].color = GREEN
+                        correct = True
+                    
+                    else:
+                        score -= 1
+                        rectX = answerButtons[buttonsLoop].rect[0]
+                        rectY = answerButtons[buttonsLoop].rect[1]
+                        rectArray[buttonsLoop].color = RED
+                       
 
             #Next Question Button Event
             if correct == True:
                 if 'click' in nextButton.handleEvent(event):
-                    current_value = (current_value+1)%9
-                    random.shuffle(answerButtons)
+                    current_value = (current_value+1)%numButtons
+                    #random.shuffle(answerButtons)
+                    for i in range(numButtons):
+                        rectArray[i].color = BLACK
+
                     correct = False
 
 
@@ -181,15 +152,19 @@ def main():
             #Turn the BG in White
             DISPLAYSURFACE.fill(WHITE)
             #Display the Images on the screen
-            for i in range(9):
+            for i in range(numButtons):
                 answerButtons[i].draw(DISPLAYSURFACE)
+                pygame.draw.rect(DISPLAYSURFACE, rectArray[i].color, rectArray[i].rect, rectArray[i].thickness)
+                
             if correct == True:
                 nextButton.draw(DISPLAYSURFACE)
-                
+            """txtbx.update(typed)"""
+            
 
             ##Writing Score##
             font1 = pygame.font.Font(None, 30)
             text = font1.render("Score: "+str(score), True, BLACK)
+            """txtbx.draw(DISPLAYSURFACE)"""
             DISPLAYSURFACE.blit(text, [150, 100])
             DISPLAYSURFACE.blit(question, [670, 300])
 
@@ -197,3 +172,4 @@ def main():
             FPSCLOCK.tick(FPS)
 
 main()
+
