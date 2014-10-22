@@ -122,12 +122,20 @@ def main():
             for buttonsLoop in range(numButtons):
                 
                 if 'click' in answerButtons[buttonsLoop].handleEvent(event):
+                    #If right, play sound, add score, change rect color to GREEN and open Next Button
                     if answerButtons[buttonsLoop].value == catList[current_value]:
+                        pygame.mixer.music.load('sounds/Right.mp3')
+                        pygame.mixer.music.set_volume(0.5)
+                        pygame.mixer.music.play()
                         score += 1
                         rectArray[buttonsLoop].color = GREEN
                         correct = True
-                    
+
+                    #If wrong, play sound, sub score and change rect color to RED
                     else:
+                        pygame.mixer.music.load('sounds/Wrong.mp3')
+                        pygame.mixer.music.set_volume(0.5)
+                        pygame.mixer.music.play()
                         score -= 1
                         rectX = answerButtons[buttonsLoop].rect[0]
                         rectY = answerButtons[buttonsLoop].rect[1]
