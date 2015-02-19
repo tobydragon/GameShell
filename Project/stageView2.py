@@ -24,6 +24,8 @@ class StageView:
         self.answerButtons = self.initButtons()
         self.rectList = self.initRects()
         self.display = display
+
+        self.display.fill(WHITE)
         
 
     def initButtons(self):
