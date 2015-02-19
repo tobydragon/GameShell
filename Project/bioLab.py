@@ -16,22 +16,22 @@ LIGHTGRAY = (212, 208, 200)
 def main():
     #Initializing the Individuals List
     indList = []
-    
+
     fileInput = open("Animal Input.csv", "r")
     lines = fileInput.readlines()
     lines = lines[1:]
     for line in lines:
-        
+
         if(line[len(line)-1]) == '\n':
             line = line[0:len(line)-1]
-                
+
         values = line.split(",")
         indList.append(domainModel.Individual(values[0], values[1], values[2]))
 
     fileInput.close()
-            
+
     random.shuffle(indList)
-        
+
     #Initializing the Categories List and the Domain Model
     catList = ["Porifera", "Cnidaria", "Platyhelminthes", "Nematoda", "Mollusca", "Annelida", "Arthropoda", "Echinodermata", "Chordata"]
     random.shuffle(catList)
@@ -76,11 +76,11 @@ def main():
         if x == 1250:
             x = 350
             y = 650
-    
+
 
     #The Next Button
     nextButton = pygbutton.PygButton((1100, 850, 120, 50), 'NEXT')
-    
+
 
     #Main Game Loop
     while True:
@@ -92,7 +92,7 @@ def main():
             #Correct or Incorrect decision
             for buttonsLoop in range(numButtons):
                 buttonResponse = answerButtons[buttonsLoop].handleEvent(event)
-                
+
                 if 'click' in buttonResponse:
                     print(event)
                     print(buttonResponse)
@@ -101,7 +101,7 @@ def main():
                         pygame.mixer.music.load('sounds/Beep.mp3')
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
-                    
+
                     #If right, play sound, add score, change rect color to GREEN and open Next Button
                     elif answerButtons[buttonsLoop].value == catList[current_value]:
                         pygame.mixer.music.load('sounds/Right.mp3')
@@ -120,7 +120,7 @@ def main():
                         rectX = answerButtons[buttonsLoop].rect[0]
                         rectY = answerButtons[buttonsLoop].rect[1]
                         rectList[buttonsLoop].color = RED
-                       
+
 
             #Next Question Button Event
             if correct == True:
@@ -136,17 +136,17 @@ def main():
             questionFont = pygame.font.Font(None, 70)
             question = questionFont.render(str(catList[current_value]), True, BLACK)
 
-            #Turn the BG in White
+            #Turn the BG to White
             DISPLAYSURFACE.fill(WHITE)
             #Display the Images on the screen
             for i in range(numButtons):
                 answerButtons[i].draw(DISPLAYSURFACE)
                 pygame.draw.rect(DISPLAYSURFACE, rectList[i].color, rectList[i].rect, rectList[i].thickness)
-                
+
             if correct == True:
                 nextButton.draw(DISPLAYSURFACE)
             """txtbx.update(typed)"""
-            
+
 
             #Writing Score
             font1 = pygame.font.Font(None, 30)
