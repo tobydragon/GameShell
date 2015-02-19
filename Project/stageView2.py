@@ -24,7 +24,6 @@ class StageView:
         self.answerButtons = self.initButtons()
         self.rectList = self.initRects()
         self.display = display
-
         self.display.fill(WHITE)
         
 
@@ -68,3 +67,10 @@ class StageView:
         for i in range(len(self.rectList)):
                 self.answerButtons[i].draw(self.display)
                 pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
+
+    def checkForButtonClick(self, event):
+        for buttonsLoop in range(len(self.answerButtons)):
+                buttonResponse = self.answerButtons[buttonsLoop].handleEvent(event)
+                if 'click' in buttonResponse:
+                    return "Clicked"
+

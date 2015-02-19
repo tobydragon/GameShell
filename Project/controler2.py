@@ -1,4 +1,6 @@
 import domainModel2, random, pygame, sys, stageView2
+from pygame.locals import *
+
 
 class Controller:
     def __init__(self, domModel, stageModel, stageView):
@@ -10,6 +12,13 @@ class Controller:
 
     def gameLoop(self):
         while True:
+            for event in pygame.event.get():
+                if event.type == QUIT or (event.type == KEYDOWN and event.type == K_ESCAPE):
+                    pygame.quit()
+                    sys.exit()
+                #Correct or Incorrect decision
+                buttonResponse = self.stageView.checkForButtonClick(event)
+
             self.stageView.drawButtons()
             pygame.display.update()
             self.fpsClock.tick(self.FPS)
