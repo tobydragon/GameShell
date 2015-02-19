@@ -3,7 +3,7 @@ import pygame, pygbutton, sys, stageView2, controler2, domainModel2, random
 from pygame.locals import *
 
 FPS = 30
-WINDOWWIDTH = 1500q
+WINDOWWIDTH = 1500
 WINDOWHEIGHT = 1000
 WHITE = (255, 255, 255)
 
@@ -56,6 +56,7 @@ def main():
     nextButton = pygbutton.PygButton((1100, 850, 120, 50), 'NEXT')
     #INCOMPLETE
 
-
+    myStageView = stageView2.StageView(stageModel, 250, 450, DISPLAYSURFACE)
+    myStageView.drawButtons()
 
 main()

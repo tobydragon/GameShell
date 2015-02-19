@@ -12,23 +12,24 @@ class HighlightRect:
     def __init__(self, color, thickness, rect):
         self.color = color
         self.thickness = thickness
+        #a list of 4 numbers, x, y, width, height
         self.rect = rect
 
 
 class StageView:
-    def __init__(self, stageModel, xRect, yRect, numButtons):
-        self.xRect = xRect
-        self.yRect = yRect
-        self.numButtons = numButtons
+    def __init__(self, stageModel, buttonStartX, buttonStartY, display):
+        self.buttonStartX = buttonStartX
+        self.buttonStartY = buttonStartY
         self.stageModel = stageModel
         self.answerButtons = self.initButtons()
         self.rectList = self.initRects()
+        self.display = display
         
 
     def initButtons(self):
-        x = self.xRect
-        y = self.yRect
-        numButtons = self.numButtons
+        x = self.buttonStartX
+        y = self.buttonStartY
+        numButtons = self.stageModel.numButtons
         answerButtons = []
 
         for i in range(numButtons):
@@ -46,9 +47,9 @@ class StageView:
 
     def initRects(self):
         rectList = []
-        x = self.xRect
-        y = self.yRect
-        numButtons = self.numButtons
+        x = self.buttonStartX
+        y = self.buttonStartY
+        numButtons = self.stageModel.numButtons
 
         for i in range(numButtons):
             rectList.append(HighlightRect( BLACK, 7, [x, y, 160, 160]))
@@ -60,8 +61,8 @@ class StageView:
 
         return rectList
 
-    def drawButtons(self, rectList, answerButtons, display):
+    def drawButtons(self):
 
         for i in range(len(self.rectList)):
-                answerButtons[i].draw(display)
-                pygame.draw.rect(display, rectList[i].color, rectList[i].rect, rectList[i].thickness)
+                self.answerButtons[i].draw(self.display)
+                pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
