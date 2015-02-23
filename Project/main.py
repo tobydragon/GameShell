@@ -44,7 +44,7 @@ def main():
     domModel = createDomainModel("Animal Input.csv")
     stageModel = StageModel.StageModel(domModel)
     stageView = stageView2.StageView(stageModel, 250, 450, DISPLAYSURFACE)
-    controller = controler2.Controller(domModel, stageView)
+    controller = controler2.Controller(domModel, stageModel, stageView)
     controller.gameLoop()
 
 main()

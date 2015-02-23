@@ -4,7 +4,7 @@ import domainModel2, random
 
 class StageModel:
     def __init__(self, domainModel):
-        catList = domainModel.categoryList.copy()
+        catList = domainModel.categoryList[:]
         random.shuffle(catList)
         self.category = catList[0]
 

@@ -41,7 +41,6 @@ class StageView:
             if x == 1250:
                 x = 350
                 y = 650
-            print(answerButtons[i])
 
         return answerButtons
 
@@ -58,7 +57,6 @@ class StageView:
             if x == 1250:
                 x = 350
                 y = 650
-            print(rectList[i])
 
         return rectList
 
@@ -68,9 +66,31 @@ class StageView:
                 self.answerButtons[i].draw(self.display)
                 pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
 
+    def writeQuestion(self):
+        questionFont = pygame.font.Font(None, 70)
+        question = questionFont.render(str(self.stageModel.category), True, BLACK)
+        self.display.blit(question, [670, 300])
+
+    def writeScore(self, score):
+        font = pygame.font.Font(None, 30)
+        scoreRender = font.render("Score: "+str(score), True, BLACK)
+        self.display.blit(scoreRender, [150, 100])
+
+    def clearDisplay(self):
+        self.display.fill(WHITE)
+
     def checkForButtonClick(self, event):
         for buttonsLoop in range(len(self.answerButtons)):
                 buttonResponse = self.answerButtons[buttonsLoop].handleEvent(event)
                 if 'click' in buttonResponse:
-                    return "Clicked"
+                    if self.rectList[buttonsLoop].color != BLACK:
+                        return "null"
+                    elif self.answerButtons[buttonsLoop].value == self.stageModel.category:
+                        self.rectList[buttonsLoop].color = GREEN
+                        return "correct"
+                    else:
+                        self.rectList[buttonsLoop].color = RED
+                        return "incorrect"
+
+                    #return "Clicked"
 
