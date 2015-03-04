@@ -69,7 +69,7 @@ class StageView:
     def writeQuestion(self):
         questionFont = pygame.font.Font(None, 70)
         question = questionFont.render(str(self.stageModel.category), True, BLACK)
-        self.display.blit(question, [670, 300])
+        self.display.blit(question, [600, 300])
 
     def writeScore(self, score):
         font = pygame.font.Font(None, 30)
@@ -79,17 +79,19 @@ class StageView:
     def clearDisplay(self):
         self.display.fill(WHITE)
 
-    def checkForButtonClick(self, event):
+    def checkForButtonClick(self, event, off):
         for buttonsLoop in range(len(self.answerButtons)):
                 buttonResponse = self.answerButtons[buttonsLoop].handleEvent(event)
                 if 'click' in buttonResponse:
-                    if self.rectList[buttonsLoop].color != BLACK:
+                    if self.rectList[buttonsLoop].color != BLACK or off:
                         return "null"
                     elif self.answerButtons[buttonsLoop].value == self.stageModel.category:
-                        self.rectList[buttonsLoop].color = GREEN
+                        if off == False:
+                            self.rectList[buttonsLoop].color = GREEN
                         return "correct"
                     else:
-                        self.rectList[buttonsLoop].color = RED
+                        if off == False:
+                            self.rectList[buttonsLoop].color = RED
                         return "incorrect"
 
                     #return "Clicked"

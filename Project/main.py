@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, sys, stageView2, controler2, domainModel2, random, StageModel
+import pygame, pygbutton, sys, stageView2, controler2, domainModel2, random, StageModel, gameView
 from pygame.locals import *
 
 
@@ -40,11 +40,14 @@ def main():
     DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('BioLab')
 
-    #Creating Domain Model, Controller and first Stage Model
+    #Initialize Game
     domModel = createDomainModel("Animal Input.csv")
     stageModel = StageModel.StageModel(domModel)
     stageView = stageView2.StageView(stageModel, 250, 450, DISPLAYSURFACE)
-    controller = controler2.Controller(domModel, stageModel, stageView)
+    gameModel = gameView.GameModel()
+    gView = gameView.GameView(DISPLAYSURFACE, gameModel)
+    controller = controler2.Controller(domModel, stageModel, stageView, gView)
+    #The Game Loop
     controller.gameLoop()
 
 main()
