@@ -1,6 +1,3 @@
-import pygame, pygbutton, sys, random, eztext, stageView, controler
-from pygame.locals import *
-
 class DomainModel:
     def __init__(self, categoryList, individualList):
         self.categoryList = categoryList
@@ -8,8 +5,8 @@ class DomainModel:
 
     def __repr__(self):
         return(self.categoryList.__repr__()+self.individualList.__repr__())
-        
-    
+
+
 
 
 class Individual:

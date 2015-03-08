@@ -1,61 +1,106 @@
-import pygame, pygbutton, sys, random, eztext, domainModel, controler
+__author__ = 'JoãoGabriel'
+import pygame, pygbutton, controller
 
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+DARKGREEN = (5, 102, 0)
+LIGHTGREY = (212, 208, 200)
+LIGHTBLUE = (153, 255, 255)
 
 class HighlightRect:
     def __init__(self, color, thickness, rect):
         self.color = color
         self.thickness = thickness
+        #a list of 4 numbers, x, y, width, height
         self.rect = rect
 
 
 class StageView:
-    def __init__(self, domModel, xRect, yRect, numButtons):
-        self.xRect = xRect
-        self.yRect = yRect
-        self.numButtons = numButtons
-        self.domModel = domModel
+    def __init__(self, stageModel, buttonStartX, buttonStartY, display):
+        self.buttonStartX = buttonStartX
+        self.buttonStartY = buttonStartY
+        self.stageModel = stageModel
         self.answerButtons = self.initButtons()
         self.rectList = self.initRects()
-        self.drawButtons(self.answerButtons, self.rectList)
+        self.display = display
+        self.display.fill(WHITE)
+        self.border = HighlightRect(DARKGREEN, 7, [150, 150, 1200, 600])
+        
 
     def initButtons(self):
-        x = self.xRect
-        y = self.yRect
-        numButtons = self.numButtons
-        indPath = domModel.individualList[0].imagepath
-        indCate = domModel.individualList[0].category
+        x = self.buttonStartX
+        y = self.buttonStartY
+        numButtons = self.stageModel.numButtons
         answerButtons = []
+
         for i in range(numButtons):
-            indPath = domModel.individualList[i].imagepath
-            indCate = domModel.individualList[i].category
+            indPath = self.stageModel.indList[i].imagepath
+            indCate = self.stageModel.indList[i].category
             answerButtons.append(pygbutton.PygButton((x, y, 0, 0), normal=indPath, value=indCate))
             x += 200
             if x == 1250:
                 x = 350
-                y = 650
-            print(answerButtons[i])
+                y = 550
 
         return answerButtons
 
+
     def initRects(self):
         rectList = []
-        x = self.xRect
-        y = self.yRect
-        numButtons = self.numButtons
-        
+        x = self.buttonStartX
+        y = self.buttonStartY
+        numButtons = self.stageModel.numButtons
+
         for i in range(numButtons):
             rectList.append(HighlightRect( BLACK, 7, [x, y, 160, 160]))
             x += 200
             if x == 1250:
                 x = 350
-                y = 650
-            print(rectList[i])
+                y = 550
 
         return rectList
 
+    def drawButtons(self):
+        for i in range(len(self.rectList)):
+                self.answerButtons[i].draw(self.display)
+                pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
 
-    def drawButtons(rectList, answerButtons):
+    def drawBorder(self):
+        pygame.draw.rect(self.display, self.border.color, self.border.rect, self.border.thickness)
 
-        for i in range(len(rectList)):
-                answerButtons[i].draw(DISPLAYSURFACE)
-                pygame.draw.rect(DISPLAYSURFACE, rectList[i].color, rectList[i].rect, rectList[i].thickness)
+    def paintBackground(self):
+        pygame.draw.rect(self.display, WHITE, [150,150,1200,600], 0)
+
+    def writeQuestion(self):
+        questionFont = pygame.font.Font(None, 70)
+        question = questionFont.render(str(self.stageModel.category), True, BLACK)
+        self.display.blit(question, [600, 200])
+
+    def writeScore(self, score):
+        font = pygame.font.Font(None, 30)
+        scoreRender = font.render("Score: "+str(score), True, BLACK)
+        self.display.blit(scoreRender, [150, 100])
+
+    def clearDisplay(self):
+        self.display.fill(WHITE)
+
+    def checkForButtonClick(self, event, off):
+        for buttonsLoop in range(len(self.answerButtons)):
+                buttonResponse = self.answerButtons[buttonsLoop].handleEvent(event)
+                if 'click' in buttonResponse:
+                    if self.rectList[buttonsLoop].color != BLACK or off:
+                        return "null"
+                    elif self.answerButtons[buttonsLoop].value == self.stageModel.category:
+                        if off == False:
+                            self.rectList[buttonsLoop].color = GREEN
+                        return "correct"
+                    else:
+                        if off == False:
+                            self.rectList[buttonsLoop].color = RED
+                        return "incorrect"
+
+                    #return "Clicked"
+

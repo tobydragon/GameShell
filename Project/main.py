@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, sys, stageView2, controler2, domainModel2, random, StageModel, gameView
+import pygame, pygbutton, sys, stageView, controller, domainModel, random, stageModel, gameView
 from pygame.locals import *
 
 
@@ -20,7 +20,7 @@ def createDomainModel(fileName):
                 line = line[0:len(line)-1]
 
             values = line.split(",")
-            indList.append(domainModel2.Individual(values[0], values[1], values[2]))
+            indList.append(domainModel.Individual(values[0], values[1], values[2]))
 
         fileInput.close()
 
@@ -31,7 +31,7 @@ def createDomainModel(fileName):
         random.shuffle(catList)
 
         #Create domModel
-        domModel = domainModel2.DomainModel(catList, indList)
+        domModel = domainModel.DomainModel(catList, indList)
         return domModel
 
 def main():
@@ -42,12 +42,12 @@ def main():
 
     #Initialize Game
     domModel = createDomainModel("Animal Input.csv")
-    stageModel = StageModel.StageModel(domModel)
-    stageView = stageView2.StageView(stageModel, 250, 450, DISPLAYSURFACE)
-    gameModel = gameView.GameModel()
-    gView = gameView.GameView(DISPLAYSURFACE, gameModel)
-    controller = controler2.Controller(domModel, stageModel, stageView, gView)
+    stgModel = stageModel.StageModel(domModel)
+    stgView = stageView.StageView(stgModel, 250, 350, DISPLAYSURFACE)
+    gModel = gameView.GameModel()
+    gView = gameView.GameView(DISPLAYSURFACE, gModel)
+    control = controller.Controller(domModel, stgModel, stgView, gView)
     #The Game Loop
-    controller.gameLoop()
+    control.gameLoop()
 
 main()

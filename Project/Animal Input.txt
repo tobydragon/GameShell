@@ -1,9 +1,0 @@
-Orange_Porifera Porifera images/poriferaorange.png
-Jellyfish Cnidaria images/jellyfish.png
-Planarian Platyhelminthes images/planarian.png
-Roundworm Nematoda images/roundworm.png
-Snail Mollusca images/snail.png
-Leecher Annelida images/leecher.png
-Scorpion Arthropoda images/scorpion.png
-Starfish Echinodermata images/starfish.png
-Tiger Chordata images/bengaltiger.png
