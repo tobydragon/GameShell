@@ -14,7 +14,16 @@ class Controller:
         self.stageView = stageView
         self.gameView = gameView
         self.showNextButton = False
-        self.score = 0
+        self.student = "Bob"
+
+    def writeFile(self):
+        file = open(self.student, "w")
+        file.truncate() #Clear file
+        file.write("Name: "+self.student+"\n")
+        file.write("Score: "+str(self.gameView.gameModel.score)+"\n")
+        file.write("Current Stage: "+str(self.gameView.gameModel.stage))
+        file.close()
+
 
     def gameLoop(self):
 
@@ -46,6 +55,7 @@ class Controller:
                         self.stageModel = stageModel.StageModel(self.domainModel)
                         self.stageView = stageView.StageView(self.stageModel, 250, 350, DISPLAYSURFACE)
                         self.gameView.gameModel.stage += 1
+                        self.writeFile()
                         self.showNextButton = False
                         self.stageView.clearDisplay()
 
