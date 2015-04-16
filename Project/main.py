@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, sys, stageView, controller, domainModel, random, stageModel, gameView
+import pygame, pygbutton, sys, stageView, controller, domainModel, random, stageModel, gameView, os.path
 from pygame.locals import *
 #from libs.pygbutton import*
 
@@ -35,6 +35,7 @@ def createDomainModel(fileName):
         return domModel
 
 def main():
+
     pygame.init()
 
     DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -44,9 +45,30 @@ def main():
     domModel = createDomainModel("Animal Input.csv")
     stgModel = stageModel.StageModel(domModel)
     stgView = stageView.StageView(stgModel, 250, 350, DISPLAYSURFACE)
-    gModel = gameView.GameModel()
-    gView = gameView.GameView(DISPLAYSURFACE, gModel)
-    control = controller.Controller(domModel, stgModel, stgView, gView)
+    gView = gameView.GameView(DISPLAYSURFACE)
+
+    #Ask for the User Name
+    print("Enter User Name:")
+    userName = input()
+    if(os.path.isfile(userName)):
+        userData = []
+        fileInput = open(userName, "r")
+        lines = fileInput.readlines()
+        lines = lines[1:] #We don't need the first line (userName)
+
+        #Read lines and get data
+        for line in lines:
+            if(line[len(line)-1]) == '\n':
+                line = line[0:len(line)-1]
+
+            values = line.split(": ")
+            userData.append(values[1])
+
+        control = controller.Controller(domModel, stgModel, stgView, gView, userName, userData)
+
+    else:
+        control = controller.Controller(domModel, stgModel, stgView, gView, userName)
+
     #The Game Loop
     control.gameLoop()
 

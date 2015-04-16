@@ -1,4 +1,4 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel
+import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel
 from pygame.locals import *
 
 WINDOWWIDTH = 1500
@@ -6,22 +6,25 @@ WINDOWHEIGHT = 1000
 DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 
 class Controller:
-    def __init__(self, domModel, stageModel, stageView, gameView):
-        self.FPS = 30
+    def __init__(self, domModel, stageModel, stageView, gameView, userName, userData = None):
+        self.FPS = 1
         self.fpsClock = pygame.time.Clock()
         self.domainModel = domModel
         self.stageModel = stageModel
         self.stageView = stageView
         self.gameView = gameView
         self.showNextButton = False
-        self.student = "Bob"
+        if(userData == None):
+            self.student = userModel.User(userName)
+        else:
+            self.student = userModel.User(userName, userData)
 
     def writeFile(self):
-        file = open(self.student, "w")
+        file = open(self.student.name, "w")
         file.truncate() #Clear file
-        file.write("Name: "+self.student+"\n")
-        file.write("Score: "+str(self.gameView.gameModel.score)+"\n")
-        file.write("Current Stage: "+str(self.gameView.gameModel.stage))
+        file.write("Name: "+self.student.name+"\n")
+        file.write("Score: "+str(self.student.score)+"\n")
+        file.write("Current Stage: "+str(self.student.currentStage))
         file.close()
 
 
@@ -43,26 +46,26 @@ class Controller:
 
                 if self.showNextButton == False:
                     if buttonResponse == "correct":
-                        self.gameView.gameModel.score += 1
+                        self.student.score += 1
                         self.showNextButton = True
 
                     elif buttonResponse == "incorrect":
-                        self.gameView.gameModel.score -= 1
+                        self.student.score -= 1
 
                 else:
                     buttonResponse = self.gameView.checkForNextButton(event)
                     if buttonResponse:
                         self.stageModel = stageModel.StageModel(self.domainModel)
                         self.stageView = stageView.StageView(self.stageModel, 250, 350, DISPLAYSURFACE)
-                        self.gameView.gameModel.stage += 1
+                        self.student.currentStage += 1
                         self.writeFile()
                         self.showNextButton = False
                         self.stageView.clearDisplay()
 
 
             self.gameView.paintBackground()
-            self.gameView.writeScore()
-            self.gameView.writeStage()
+            self.gameView.writeScore(self.student.score)
+            self.gameView.writeStage(self.student.currentStage)
             self.stageView.paintBackground()
             self.stageView.writeQuestion()
             self.stageView.drawButtons()
