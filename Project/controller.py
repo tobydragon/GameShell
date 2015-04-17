@@ -7,24 +7,33 @@ DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 
 class Controller:
     def __init__(self, domModel, stageModel, stageView, gameView, userName, userData = None):
-        self.FPS = 1
+        self.FPS = 30
         self.fpsClock = pygame.time.Clock()
+
+        if(userData == None):
+            self.student = userModel.User(userName)
+        else:
+            self.student = userModel.User(userName, userData)
+
         self.domainModel = domModel
         self.stageModel = stageModel
         self.stageView = stageView
         self.gameView = gameView
         self.showNextButton = False
-        if(userData == None):
-            self.student = userModel.User(userName)
-        else:
-            self.student = userModel.User(userName, userData)
 
     def writeFile(self):
         file = open(self.student.name, "w")
         file.truncate() #Clear file
         file.write("Name: "+self.student.name+"\n")
         file.write("Score: "+str(self.student.score)+"\n")
-        file.write("Current Stage: "+str(self.student.currentStage))
+        file.write("Current Stage: "+str(self.student.currentStage)+"\n")
+        file.write("Current Stage Category: "+str(self.stageModel.category)+"\n")
+        file.write("Current Stage Animals: ")
+        for i in range(len(self.stageModel.indList)):
+            if(i == len(self.stageModel.indList)-1):
+                file.write(str(self.stageModel.indList[i].name))
+            else:
+                file.write(str(self.stageModel.indList[i].name+", "))
         file.close()
 
 

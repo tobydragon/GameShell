@@ -60,10 +60,20 @@ def main():
         for line in lines:
             if(line[len(line)-1]) == '\n':
                 line = line[0:len(line)-1]
+                values = line.split(": ")
+                userData.append(values[1])
 
-            values = line.split(": ")
-            userData.append(values[1])
+            else:
+                divide = line.split(":")
+                values = str(divide[1]).split(",")
+                for i in range(len(values)):
+                    values[i] = values[i][1:]
+                userData.append(values)
+                print(values)
 
+
+        stgModel = stageModel.StageModel(domModel, userData[2], userData[3])
+        stgView = stageView.StageView(stgModel, 250, 350, DISPLAYSURFACE)
         control = controller.Controller(domModel, stgModel, stgView, gView, userName, userData)
 
     else:
