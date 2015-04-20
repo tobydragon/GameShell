@@ -31,9 +31,10 @@ class Controller:
         file.write("Current Stage Animals: ")
         for i in range(len(self.stageModel.indList)):
             if(i == len(self.stageModel.indList)-1):
-                file.write(str(self.stageModel.indList[i].name))
+                file.write(str(self.stageModel.indList[i].name)+".\n")
             else:
                 file.write(str(self.stageModel.indList[i].name+", "))
+        file.write("Right Answers: " + str(self.student.rightAnswers))
         file.close()
 
 
@@ -56,6 +57,7 @@ class Controller:
                 if self.showNextButton == False:
                     if buttonResponse == "correct":
                         self.student.score += 1
+                        self.student.rightAnswers.append([self.stageView.rightAnswer()+": "+self.stageModel.category])
                         self.showNextButton = True
 
                     elif buttonResponse == "incorrect":

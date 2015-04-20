@@ -28,7 +28,7 @@ class StageView:
         self.display = display
         self.display.fill(WHITE)
         self.border = HighlightRect(DARKGREEN, 7, [150, 150, 1200, 600])
-        
+
 
     def initButtons(self):
         x = self.buttonStartX
@@ -96,4 +96,9 @@ class StageView:
                         if off == False:
                             self.rectList[buttonsLoop].color = RED
                         return "incorrect"
+
+    def rightAnswer(self):
+        for i in range(len(self.answerButtons)):
+            if self.stageModel.indList[i].category == self.stageModel.category:
+                return self.stageModel.indList[i].name
 

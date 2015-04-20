@@ -6,7 +6,7 @@ class StageModel:
     def __init__(self, domainModel, category = None, indList = None):
         #First time playing
         if(category == None and indList == None):
-            catList = domainModel.categoryList[:]
+            catList = domainModel.categoryList
             random.shuffle(catList)
             self.category = catList[0]
 

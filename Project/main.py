@@ -54,22 +54,28 @@ def main():
         userData = []
         fileInput = open(userName, "r")
         lines = fileInput.readlines()
-        lines = lines[1:] #We don't need the first line (userName)
+        answers = lines[4]
+        lines = lines[1:5] #We don't need the first line (userName) and neither the 5 and on, just answers
 
         #Read lines and get data
         for line in lines:
-            if(line[len(line)-1]) == '\n':
-                line = line[0:len(line)-1]
-                values = line.split(": ")
-                userData.append(values[1])
-
-            else:
+            if(line[len(line)-2]) == '.':
                 divide = line.split(":")
                 values = str(divide[1]).split(",")
                 for i in range(len(values)):
                     values[i] = values[i][1:]
+                values[len(values)-1] = values[len(values)-1][:len(values[len(values)-1])-2] #Takes off the "." on the last name in the Current Stage Animals list
                 userData.append(values)
                 print(values)
+
+            else:
+                line = line[0:len(line)-1]
+                values = line.split(": ")
+                userData.append(values[1])
+
+        answers = answers[15:len(answers)-1] #Take off the brackets "[]" in the beginning and ending of line
+        answers = answers.split(", ")
+        userData.append(answers)
 
 
         stgModel = stageModel.StageModel(domModel, userData[2], userData[3])

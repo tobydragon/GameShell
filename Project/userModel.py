@@ -8,3 +8,5 @@ class User:
         else:
             self.score = int(userData[0])
             self.currentStage = int(userData[1])
+        self.rightAnswers = []
+        self.wrongAnswers = []
