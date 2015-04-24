@@ -1,4 +1,4 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel
+import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel, os.path
 from pygame.locals import *
 
 WINDOWWIDTH = 1500
@@ -6,35 +6,35 @@ WINDOWHEIGHT = 1000
 DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 
 class Controller:
-    def __init__(self, domModel, stageModel, stageView, gameView, userName, userData = None):
+    def __init__(self, domModel, userName):
         self.FPS = 30
         self.fpsClock = pygame.time.Clock()
-
-        if(userData == None):
-            self.student = userModel.User(userName)
-        else:
-            self.student = userModel.User(userName, userData)
-
         self.domainModel = domModel
-        self.stageModel = stageModel
-        self.stageView = stageView
-        self.gameView = gameView
+        self.userName = userName
+
+        if(os.path.isfile(userName)): #Check if there is already a file for this User
+            self.readFile()
+        else:
+            self.student = userModel.User(userName)
+            self.stageModel = stageModel.StageModel(domModel)
+
+        self.stageView = stageView.StageView(self.stageModel, 250, 350, DISPLAYSURFACE)
+        self.gameView = gameView.GameView(DISPLAYSURFACE)
         self.showNextButton = False
+
+
+    def readFile(self):
+        fileInput = open(self.userName, "r")
+        lines = fileInput.readlines()
+        self.student = userModel.User(self.userName, lines[1:4]) #Passing lines (Score, Current Stage &  Right Answers)
+        self.stageModel = stageModel.StageModel(self.domainModel, lines[4], lines[5]) #Passing lines (Current Stage Category & Animals)
+
 
     def writeFile(self):
         file = open(self.student.name, "w")
         file.truncate() #Clear file
-        file.write("Name: "+self.student.name+"\n")
-        file.write("Score: "+str(self.student.score)+"\n")
-        file.write("Current Stage: "+str(self.student.currentStage)+"\n")
-        file.write("Current Stage Category: "+str(self.stageModel.category)+"\n")
-        file.write("Current Stage Animals: ")
-        for i in range(len(self.stageModel.indList)):
-            if(i == len(self.stageModel.indList)-1):
-                file.write(str(self.stageModel.indList[i].name)+".\n")
-            else:
-                file.write(str(self.stageModel.indList[i].name+", "))
-        file.write("Right Answers: " + str(self.student.rightAnswers))
+        file.write(self.student.__repr__()) #Write Student Information
+        file.write(self.stageModel.__repr__()) #Write Current Stage Information, for Loading PS: The last played answers will be in the end between []
         file.close()
 
 
