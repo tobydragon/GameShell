@@ -8,8 +8,6 @@ class User:
             self.rightAnswers = []
         else:
             self.retrieveData(userData)
-            """self.score = int(userData[0])
-            self.currentStage = int(userData[1])"""
 
     def retrieveData(self, userData):
         scoreLine = userData[0] #Line with the Score
