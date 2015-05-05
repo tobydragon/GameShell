@@ -28,8 +28,8 @@ class Controller:
     def readFile(self):
         fileInput = open(self.userName, "r")
         lines = fileInput.readlines()
-        self.student = userModel.User(self.userName, lines[1:4]) #Passing lines (Score, Current Stage &  Right Answers)
-        self.stageModel = stageModel.StageModel(self.domainModel, lines[4], lines[5]) #Passing lines (Current Stage Category & Animals)
+        self.student = userModel.User(self.userName, lines[1:5]) #Passing lines (Score, Current Stage,  Right & Wrong Answers)
+        self.stageModel = stageModel.StageModel(self.domainModel, lines[5], lines[6]) #Passing lines (Current Stage Category & Animals)
 
 
     def writeFile(self):
@@ -52,7 +52,10 @@ class Controller:
                     #Correct, Incorrect or "Already clicked"(null) decision
                     buttonResponse = self.stageView.checkForButtonClick(event, self.showNextButton)
                     if buttonResponse != None:
-                        pygame.mixer.music.load('sounds/'+buttonResponse+'.mp3')
+                        if buttonResponse != None and buttonResponse != "null" and buttonResponse != "correct":
+                            pygame.mixer.music.load('sounds/incorrect.mp3')
+                        else:
+                            pygame.mixer.music.load('sounds/'+buttonResponse+'.mp3')
                         pygame.mixer.music.set_volume(0.5)
                         pygame.mixer.music.play()
 
@@ -62,8 +65,9 @@ class Controller:
                             self.student.rightAnswers.append([self.stageView.rightAnswer()+": "+self.stageModel.category])
                             self.showNextButton = True
 
-                        elif buttonResponse == "incorrect":
+                        elif buttonResponse != None and buttonResponse != "null":
                             self.student.score -= 1
+                            self.student.wrongAnswers.append(str(buttonResponse)+": "+self.stageModel.category)
 
                     else:
                         buttonResponse = self.gameView.checkForNextButton(event)

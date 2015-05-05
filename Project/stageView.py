@@ -95,7 +95,7 @@ class StageView:
                     else:
                         if off == False:
                             self.rectList[buttonsLoop].color = RED
-                        return "incorrect"
+                        return str(self.stageModel.indList[buttonsLoop].name)
 
     def rightAnswer(self):
         for i in range(len(self.answerButtons)):

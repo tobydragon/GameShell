@@ -6,6 +6,7 @@ class User:
             self.score = 0
             self.currentStage = 1
             self.rightAnswers = []
+            self.wrongAnswers = []
         else:
             self.retrieveData(userData)
 
@@ -32,9 +33,24 @@ class User:
                 self.rightAnswers.append(str(singleAnswer))
                 singleAnswer = ""
 
+        self.wrongAnswers = [] #Line with the Wrong Answers
+        singleAnswer = ""
+        open = False
+        for char in userData[3]: #Line with the Right Answers
+            if char != "'" and open:
+                singleAnswer += char
+
+            if char == "'" and not open:
+                open = True
+            elif char == "'" and open:
+                open = False
+                self.wrongAnswers.append(str(singleAnswer))
+                singleAnswer = ""
+
 
     def __repr__(self):
         return("Name: "+self.name+"\n"+
                "Score: "+str(self.score)+"\n"+
                "Current Stage: "+str(self.currentStage)+"\n"+
-               "Right Answers: "+str(self.rightAnswers)+"\n")
+               "Right Answers: "+str(self.rightAnswers)+"\n"+
+               "Wrong Answers: "+str(self.wrongAnswers)+"\n")
