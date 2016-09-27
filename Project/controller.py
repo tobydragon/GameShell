@@ -4,6 +4,7 @@ from pygame.locals import *
 WINDOWWIDTH = 1500
 WINDOWHEIGHT = 1000
 DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+USER_DATA_DIR = "userdata/"
 
 class Controller:
     def __init__(self, domModel, userName):
@@ -13,7 +14,7 @@ class Controller:
         self.userName = userName
         self.game = False
 
-        if(os.path.isfile(userName)): #Check if there is already a file for this User
+        if(os.path.isfile(USER_DATA_DIR+userName)): #Check if there is already a file for this User
             self.readFile()
         else:
             self.student = userModel.User(userName)
@@ -26,14 +27,14 @@ class Controller:
 
 
     def readFile(self):
-        fileInput = open(self.userName, "r")
+        fileInput = open(USER_DATA_DIR+self.userName, "r")
         lines = fileInput.readlines()
         self.student = userModel.User(self.userName, lines[1:5]) #Passing lines (Score, Current Stage,  Right & Wrong Answers)
         self.stageModel = stageModel.StageModel(self.domainModel, lines[5], lines[6]) #Passing lines (Current Stage Category & Animals)
 
 
     def writeFile(self):
-        file = open(self.student.name, "w")
+        file = open(USER_DATA_DIR+self.student.name, "w")
         file.truncate() #Clear file
         file.write(self.student.__repr__()) #Write Student Information
         file.write(self.stageModel.__repr__()) #Write Current Stage Information, for Loading PS: The last played answers will be in the end between []
@@ -52,12 +53,13 @@ class Controller:
                     #Correct, Incorrect or "Already clicked"(null) decision
                     buttonResponse = self.stageView.checkForButtonClick(event, self.showNextButton)
                     if buttonResponse != None:
-                        if buttonResponse != None and buttonResponse != "null" and buttonResponse != "correct":
-                            pygame.mixer.music.load('sounds/incorrect.mp3')
-                        else:
-                            pygame.mixer.music.load('sounds/'+buttonResponse+'.mp3')
-                        pygame.mixer.music.set_volume(0.5)
-                        pygame.mixer.music.play()
+                        pass
+                        # if buttonResponse != None and buttonResponse != "null" and buttonResponse != "correct":
+                        #     pygame.mixer.music.load('sounds/incorrect.mp3')
+                        # else:
+                        #     pygame.mixer.music.load('sounds/'+buttonResponse+'.mp3')
+                        # pygame.mixer.music.set_volume(0.5)
+                        # pygame.mixer.music.play()
 
                     if self.showNextButton == False:
                         if buttonResponse == "correct":
