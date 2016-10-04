@@ -2,12 +2,13 @@ __author__ = 'JoãoGabriel'
 class User:
     def __init__(self, name, userData = None):
         self.name = name
-        if(userData == None):
+
+        if userData is None: # No user file
             self.score = 0
             self.currentStage = 1
             self.rightAnswers = []
             self.wrongAnswers = []
-        else:
+        else: #User file
             self.retrieveData(userData)
 
     def retrieveData(self, userData):

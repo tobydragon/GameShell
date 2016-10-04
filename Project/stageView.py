@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, controller
+import pygame, pygbutton, controller, os.path
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -38,8 +38,12 @@ class StageView:
 
         for i in range(numButtons):
             indPath = self.stageModel.indList[i].imagepath
-            indCate = self.stageModel.indList[i].category
-            answerButtons.append(pygbutton.PygButton((x, y, 0, 0), normal=indPath, value=indCate))
+            indCate = self.stageModel.indList[i].tags["category"]
+            indName = self.stageModel.indList[i].name
+            if os.path.isfile(indPath):
+                answerButtons.append(pygbutton.PygButton((x, y, 160, 160), normal=indPath, value=indCate))
+            else:
+                answerButtons.append(pygbutton.PygButton((x, y, 0, 0), normal= "images/MISSING_TEXTURE.png",value=indCate))
             x += 200
             if x == 1250:
                 x = 350

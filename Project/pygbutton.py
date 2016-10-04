@@ -276,7 +276,11 @@ class PygButton(object):
         self.surfaceDown = self.origSurfaceDown
         self.surfaceHighlight = self.origSurfaceHighlight
         self.customSurfaces = True
-        self._rect = pygame.Rect((self._rect.left, self._rect.top, self.surfaceNormal.get_width(), self.surfaceNormal.get_height()))
+
+        # @BWelsh: rather than resizing the button to match the image,
+        # let's resize the image to match the button.
+        self._update()
+        #self._rect = pygame.Rect((self._rect.left, self._rect.top, self.surfaceNormal.get_width(), self.surfaceNormal.get_height()))
 
 
 

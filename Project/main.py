@@ -27,11 +27,11 @@ def createDomainModel(fileName):
         random.shuffle(indList)
 
         #Initializing the Categories List and the Domain Model
-        catList = ["Porifera", "Cnidaria", "Platyhelminthes", "Nematoda", "Mollusca", "Annelida", "Arthropoda", "Echinodermata", "Chordata"]
-        random.shuffle(catList)
+        #catList = ["Porifera", "Cnidaria", "Platyhelminthes", "Nematoda", "Mollusca", "Annelida", "Arthropoda", "Echinodermata", "Chordata"]
+        #random.shuffle(catList)
 
         #Create domModel
-        domModel = domainModel.DomainModel(catList, indList)
+        domModel = domainModel.DomainModel(indList)
         return domModel
 
 def main():
@@ -40,11 +40,12 @@ def main():
     pygame.display.set_caption('BioLab')
 
     #Create Domain Model
-    domModel = createDomainModel("Animal Input.csv")
+    domModel = createDomainModel("Buildings Domain 8.csv")
 
     #Ask for the User Name & Create Controller
     print("Enter User Name:")
-    userName = input()
+    #userName = input() #Normal
+    userName="" #DEBUG MODE
     control = controller.Controller(domModel, userName)
 
     #The Game Loop

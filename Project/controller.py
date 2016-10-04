@@ -14,7 +14,8 @@ class Controller:
         self.userName = userName
         self.game = False
 
-        if(os.path.isfile(USER_DATA_DIR+userName)): #Check if there is already a file for this User
+        # No name represents debugging; no saves are made
+        if userName != "" and os.path.isfile(USER_DATA_DIR+userName): #Check if there is already a file for this User
             self.readFile()
         else:
             self.student = userModel.User(userName)
@@ -34,6 +35,9 @@ class Controller:
 
 
     def writeFile(self):
+        #No name represents debugging; no saves are made
+        if self.student.name == "":
+            return
         file = open(USER_DATA_DIR+self.student.name, "w")
         file.truncate() #Clear file
         file.write(self.student.__repr__()) #Write Student Information
@@ -44,7 +48,7 @@ class Controller:
     def gameLoop(self):
 
         while True:
-            if self.game == True: #After clicking START (After Start Menu Screen)
+            if self.game: #After clicking START (After Start Menu Screen)
                 for event in pygame.event.get():
                     if event.type == QUIT or (event.type == KEYDOWN and event.type == K_ESCAPE):
                         pygame.quit()

@@ -7,13 +7,15 @@ class StageModel:
         self.domainModel = domainModel
         #First time playing
         if(category == None and indList == None):
-            catList = domainModel.categoryList
-            random.shuffle(catList)
-            self.category = catList[0]
+            #catList = domainModel.categoryList
+            #random.shuffle(catList)
 
-            self.indList = domainModel.individualList
+
+            self.indList = domainModel.individualList[:]
             self.numButtons = len(self.indList)
             random.shuffle(self.indList)
+            assert self.indList!=domainModel.individualList
+            self.category = self.indList[random.randint(0,self.numButtons-1)].tags["category"]
         #Recovering data from file
         else:
             self.retrieveData(category, indList)
