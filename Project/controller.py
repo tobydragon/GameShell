@@ -2,7 +2,7 @@ import domainModel, random, pygame, sys, stageView, gameView, stageModel, userMo
 from pygame.locals import *
 
 WINDOWWIDTH = 1500
-WINDOWHEIGHT = 1000
+WINDOWHEIGHT = 850
 DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 USER_DATA_DIR = "userdata/"
 
@@ -22,7 +22,7 @@ class Controller:
             self.stageModel = stageModel.StageModel(domModel)
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.userName)
-        self.stageView = stageView.StageView(self.stageModel, 250, 350, DISPLAYSURFACE)
+        self.stageView = stageView.StageView(self.stageModel, 150, 50, DISPLAYSURFACE)
         self.gameView = gameView.GameView(DISPLAYSURFACE)
         self.showNextButton = False
 
@@ -79,7 +79,7 @@ class Controller:
                         buttonResponse = self.gameView.checkForNextButton(event)
                         if buttonResponse:
                             self.stageModel = stageModel.StageModel(self.domainModel)
-                            self.stageView = stageView.StageView(self.stageModel, 250, 350, DISPLAYSURFACE)
+                            self.stageView = stageView.StageView(self.stageModel, 150, 50, DISPLAYSURFACE)
                             self.student.currentStage += 1
                             self.writeFile()
                             self.showNextButton = False

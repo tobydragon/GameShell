@@ -18,12 +18,12 @@ class GameView:
     def writeScore(self, score):
         font = pygame.font.Font(None, 30)
         scoreRender = font.render("Score: "+str(score), True, BLACK)
-        self.display.blit(scoreRender, [150, 100])
+        self.display.blit(scoreRender, [150, 20])
 
     def writeStage(self, stage):
         font = pygame.font.Font(None, 30)
         stageRender = font.render("Stage: "+str(stage), True, BLACK)
-        self.display.blit(stageRender, [1250, 100])
+        self.display.blit(stageRender, [1250, 20])
 
     def displayNextButton(self):
         self.nextButton.draw(self.display)

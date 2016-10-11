@@ -1,0 +1,5 @@
+# I'm just keeping a running record of what I'm doing in here.
+
+## 10-10-16 ##
+Added Card Class. GameView no longer uses the old button system, though I have yet to remove the code.
+Redid the layout/proportions of stuff to neaten up and to better fit cards.

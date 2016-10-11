@@ -1,6 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, controller, os.path
-
+import pygame, pygbutton, controller, os.path, enum
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -9,6 +8,57 @@ GREEN = (0, 255, 0)
 DARKGREEN = (5, 102, 0)
 LIGHTGREY = (212, 208, 200)
 LIGHTBLUE = (153, 255, 255)
+
+def drawGoodRect(display, color, rect,thickness):
+    """
+    Draws a pygame rectangle without little notches in the corners.
+    :param display: The pygame display to draw to
+    :param color: The color of the rectangle
+    :param rect: The rectangle to draw
+    :param thickness: The border's thickness
+    :return:
+    """
+    rect = pygame.Rect(rect) #Convert list-style rect to pygame rect]
+    halfThick=thickness/2.0
+    pygame.draw.line(display, color, (rect.x,rect.y-halfThick+1), (rect.x,rect.y+rect.h+halfThick), thickness)
+    pygame.draw.line(display, color, (rect.x,rect.y), (rect.x+rect.w+halfThick,rect.y), thickness)
+    pygame.draw.line(display, color, (rect.x+rect.w+halfThick,rect.y+rect.h),  (rect.x,rect.y+rect.h), thickness)
+    pygame.draw.line(display, color, (rect.x+rect.w,rect.y+rect.h),(rect.x+rect.w,rect.y), thickness)
+
+class Card:
+    def __init__(self, x, y, individual, title="", borderColor=BLACK, borderThickness=7):
+        self.individual = individual
+        self.borderColor = borderColor
+        self.borderThickness = borderThickness
+        self.title = title
+        self.state = self.NONE
+        self.cardRect=pygame.Rect(x,y,200,250)
+
+
+        self.button=pygbutton.PygButton((x+20, y+20, 160, 160), normal=individual.imagepath)
+
+    def draw(self,display):
+        self.button.draw(display)
+        font = pygame.font.Font(None, 32)
+        titleDisplay = font.render(self.title.format(**self.individual.tags), True, BLACK)
+        display.blit(titleDisplay, (self.cardRect.x+20,self.cardRect.y+220))
+        drawGoodRect(display, self.borderColor, self.cardRect, self.borderThickness)
+
+    def setState(self,state):
+        self.state=state
+        self.borderColor=(BLACK,LIGHTBLUE,GREEN,RED)[state]
+
+    def handleEvent(self,event):
+        """
+        Handles mouse events. Will pass the event to the internal button
+        :param event:
+        :return:
+        """
+        pass
+    NONE=0
+    SELECTED=1
+    CORRECT=2
+    INCORRECT=3
 
 class HighlightRect:
     def __init__(self, color, thickness, rect):
@@ -19,20 +69,25 @@ class HighlightRect:
 
 
 class StageView:
-    def __init__(self, stageModel, buttonStartX, buttonStartY, display):
-        self.buttonStartX = buttonStartX
-        self.buttonStartY = buttonStartY
+    def __init__(self, stageModel, positionX, positionY, display):
+        #self.buttonStartX = buttonStartX
+        #self.buttonStartY = buttonStartY
+        self.positionX = positionX
+        self.positionY = positionY
         self.stageModel = stageModel
         self.answerButtons = self.initButtons()
         self.rectList = self.initRects()
+        self.cardList=self.initCards()
         self.display = display
         self.display.fill(WHITE)
-        self.border = HighlightRect(DARKGREEN, 7, [150, 150, 1200, 600])
+        self.border = HighlightRect(DARKGREEN, 7, [positionX, positionY, 1200, 750])
 
+        #TEMP
+        self.card1=Card(positionX+50, positionY+150, stageModel.indList[0], "{category}")
 
     def initButtons(self):
-        x = self.buttonStartX
-        y = self.buttonStartY
+        x = 150#self.buttonStartX
+        y = 150#self.buttonStartY
         numButtons = self.stageModel.numButtons
         answerButtons = []
 
@@ -51,11 +106,15 @@ class StageView:
 
         return answerButtons
 
+    def initCards(self):
+        cards=[]
+
+        return cards
 
     def initRects(self):
         rectList = []
-        x = self.buttonStartX
-        y = self.buttonStartY
+        x = 150# self.buttonStartX
+        y = 150#self.buttonStartY
         numButtons = self.stageModel.numButtons
 
         for i in range(numButtons):
@@ -69,19 +128,21 @@ class StageView:
 
     def drawButtons(self):
         for i in range(len(self.rectList)):
-                self.answerButtons[i].draw(self.display)
-                pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
+                pass
+                #self.answerButtons[i].draw(self.display)
+                #pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
+        self.card1.draw(self.display)
 
     def drawBorder(self):
-        pygame.draw.rect(self.display, self.border.color, self.border.rect, self.border.thickness)
+        drawGoodRect(self.display, self.border.color, self.border.rect, self.border.thickness)
 
     def paintBackground(self):
-        pygame.draw.rect(self.display, WHITE, [150,150,1200,600], 0)
+        pygame.draw.rect(self.display, WHITE, [self.positionX,self.positionY,1200,750], 0)
 
     def writeQuestion(self):
         questionFont = pygame.font.Font(None, 70)
         question = questionFont.render(str(self.stageModel.category), True, BLACK)
-        self.display.blit(question, [600, 200])
+        self.display.blit(question, [self.positionX+50,self.positionY+50])
 
     def clearDisplay(self):
         self.display.fill(WHITE)
