@@ -22,7 +22,7 @@ class Controller:
             self.stageModel = stageModel.StageModel(domModel)
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.userName)
-        self.stageView = stageView.StageView(self.stageModel, 150, 50, DISPLAYSURFACE)
+        self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
         self.gameView = gameView.GameView(DISPLAYSURFACE)
         self.showNextButton = False
 

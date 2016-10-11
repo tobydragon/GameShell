@@ -2,6 +2,7 @@ __author__ = 'tdragon'
 
 import  random
 
+# TODO: Depreciate numButtons in favor of directly finding the size of indList
 class StageModel:
     def __init__(self, domainModel, category = None, indList = None):
         self.domainModel = domainModel

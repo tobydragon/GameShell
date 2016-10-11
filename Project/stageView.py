@@ -72,18 +72,18 @@ class StageView:
     def __init__(self, stageModel, positionX, positionY, display):
         #self.buttonStartX = buttonStartX
         #self.buttonStartY = buttonStartY
-        self.positionX = positionX
-        self.positionY = positionY
+        self.posX = positionX
+        self.posY = positionY
         self.stageModel = stageModel
         self.answerButtons = self.initButtons()
         self.rectList = self.initRects()
         self.cardList=self.initCards()
         self.display = display
         self.display.fill(WHITE)
-        self.border = HighlightRect(DARKGREEN, 7, [positionX, positionY, 1200, 750])
+        self.border = HighlightRect(DARKGREEN, 7, [positionX, positionY, 1300, 750])
 
         #TEMP
-        self.card1=Card(positionX+50, positionY+150, stageModel.indList[0], "{category}")
+        #self.card1=Card(positionX+50, positionY+150, stageModel.indList[0], "{category}")
 
     def initButtons(self):
         x = 150#self.buttonStartX
@@ -107,8 +107,12 @@ class StageView:
         return answerButtons
 
     def initCards(self):
-        cards=[]
-
+        cards = []
+        numCards = len(self.stageModel.indList)
+        x=50
+        for i in range(min(numCards,5)):
+            cards+=[Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], "{category}")]
+            x+=250
         return cards
 
     def initRects(self):
@@ -131,18 +135,20 @@ class StageView:
                 pass
                 #self.answerButtons[i].draw(self.display)
                 #pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
-        self.card1.draw(self.display)
+        for card in self.cardList:
+            card.draw(self.display)
+        #self.card1.draw(self.display)
 
     def drawBorder(self):
         drawGoodRect(self.display, self.border.color, self.border.rect, self.border.thickness)
 
     def paintBackground(self):
-        pygame.draw.rect(self.display, WHITE, [self.positionX,self.positionY,1200,750], 0)
+        pygame.draw.rect(self.display, WHITE, [self.posX, self.posY, 1300, 750], 0)
 
     def writeQuestion(self):
         questionFont = pygame.font.Font(None, 70)
         question = questionFont.render(str(self.stageModel.category), True, BLACK)
-        self.display.blit(question, [self.positionX+50,self.positionY+50])
+        self.display.blit(question, [self.posX + 50, self.posY + 50])
 
     def clearDisplay(self):
         self.display.fill(WHITE)
