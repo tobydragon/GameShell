@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3ec33071-da98-476a-92ff-d8b44dad2161" name="Default" comment="Added base of the new Card class, and began integrating it into stageView. Rearranged the stageView elements (visually, not code)&#10;Added a Changelog.txt where I'm keeping more of a running log of what I'm doing, in order to track changes that aren't major.">
+    <list default="true" id="3ec33071-da98-476a-92ff-d8b44dad2161" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project/controller.py" afterPath="$PROJECT_DIR$/Project/controller.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project/stageModel.py" afterPath="$PROJECT_DIR$/Project/stageModel.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project/stageView.py" afterPath="$PROJECT_DIR$/Project/stageView.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project/Buildings Domain 8.csv" afterPath="$PROJECT_DIR$/Project/Buildings Domain 8.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project/domainModel.py" afterPath="$PROJECT_DIR$/Project/domainModel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project/main.py" afterPath="$PROJECT_DIR$/Project/main.py" />
     </list>
     <ignored path="GameShell.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -18,7 +18,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/GameShell$PCMain.coverage" NAME="PCMain Coverage Results" MODIFIED="1476204864731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project" />
+    <SUITE FILE_PATH="coverage/GameShell$PCMain.coverage" NAME="PCMain Coverage Results" MODIFIED="1476809714761" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project" />
     <SUITE FILE_PATH="coverage/GameShell$MacMain.coverage" NAME="MacMain Coverage Results" MODIFIED="1474996158856" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -35,8 +35,8 @@
           <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Project/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="17">
-                  <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+                <state relative-caret-position="255">
+                  <caret line="15" column="67" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
                   <folding>
                     <element signature="e#27#131#0" expanded="true" />
                   </folding>
@@ -56,26 +56,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Changelog.txt" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Project/Changelog.txt">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="68">
-                  <caret line="4" column="75" selection-start-line="4" selection-start-column="75" selection-end-line="4" selection-end-column="75" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="stageView.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Project/stageView.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="289">
-                  <caret line="114" column="18" selection-start-line="114" selection-start-column="18" selection-end-line="114" selection-end-column="18" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="stageModel.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Project/stageModel.py">
               <provider selected="true" editor-type-id="text-editor">
@@ -86,11 +66,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="pygbutton.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="pygbutton.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Project/pygbutton.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2023">
-                  <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+                <state relative-caret-position="353">
+                  <caret line="262" column="39" selection-start-line="262" selection-start-column="39" selection-end-line="262" selection-end-column="39" />
                   <folding />
                 </state>
               </provider>
@@ -113,8 +93,18 @@
           <file leaf-file-name="domainModel.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Project/domainModel.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="17">
-                  <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+                <state relative-caret-position="306">
+                  <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Buildings Domain 8.csv" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Project/Buildings Domain 8.csv">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="68">
+                  <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
                   <folding />
                 </state>
               </provider>
@@ -150,14 +140,14 @@
         <option value="$PROJECT_DIR$/Project/pygbutton.py" />
         <option value="$PROJECT_DIR$/Project/Animal Input.csv" />
         <option value="$PROJECT_DIR$/Project/Buildings Domain 8.txt" />
-        <option value="$PROJECT_DIR$/Project/Buildings Domain 8.csv" />
-        <option value="$PROJECT_DIR$/Project/domainModel.py" />
-        <option value="$PROJECT_DIR$/Project/main.py" />
         <option value="$PROJECT_DIR$/Project/gameView.py" />
         <option value="$PROJECT_DIR$/Project/Changelog.txt" />
         <option value="$PROJECT_DIR$/Project/stageModel.py" />
         <option value="$PROJECT_DIR$/Project/controller.py" />
         <option value="$PROJECT_DIR$/Project/stageView.py" />
+        <option value="$PROJECT_DIR$/Project/main.py" />
+        <option value="$PROJECT_DIR$/Project/Buildings Domain 8.csv" />
+        <option value="$PROJECT_DIR$/Project/domainModel.py" />
       </list>
     </option>
   </component>
@@ -214,8 +204,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -250,6 +238,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -722,7 +712,14 @@
       <option name="project" value="LOCAL" />
       <updated>1476149976715</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Continued work on Card integration">
+      <created>1476204957501</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1476204957501</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -799,7 +796,8 @@
     <MESSAGE value="Working on Start Menu" />
     <MESSAGE value="Add Wrong Answers to File" />
     <MESSAGE value="Added base of the new Card class, and began integrating it into stageView. Rearranged the stageView elements (visually, not code)&#10;Added a Changelog.txt where I'm keeping more of a running log of what I'm doing, in order to track changes that aren't major." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added base of the new Card class, and began integrating it into stageView. Rearranged the stageView elements (visually, not code)&#10;Added a Changelog.txt where I'm keeping more of a running log of what I'm doing, in order to track changes that aren't major." />
+    <MESSAGE value="Continued work on Card integration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Continued work on Card integration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1089,19 +1087,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Project/domainModel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Project/eztext.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1119,33 +1108,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Project/pygbutton.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2023">
-          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Project/gameView.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Project/Buildings Domain 8.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Project/Changelog.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="75" selection-start-line="4" selection-start-column="75" selection-end-line="4" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1157,13 +1123,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Project/main.py">
+    <entry file="file://$PROJECT_DIR$/Project/stageView.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding>
-            <element signature="e#27#131#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="323">
+          <caret line="115" column="20" selection-start-line="115" selection-start-column="20" selection-end-line="115" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Project/Changelog.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="43" selection-start-line="4" selection-start-column="43" selection-end-line="4" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1177,10 +1149,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Project/stageView.py">
+    <entry file="file://$PROJECT_DIR$/Project/Buildings Domain 8.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="114" column="18" selection-start-line="114" selection-start-column="18" selection-end-line="114" selection-end-column="18" />
+        <state relative-caret-position="68">
+          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Project/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="67" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
+          <folding>
+            <element signature="e#27#131#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Project/pygbutton.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="262" column="39" selection-start-line="262" selection-start-column="39" selection-end-line="262" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Project/domainModel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
           <folding />
         </state>
       </provider>

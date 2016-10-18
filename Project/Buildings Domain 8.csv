@@ -1,9 +1,9 @@
-Building,City,Images Path
-Eiffel Tower,Paris,images/eiffel_tower.jpg
-Pentagon,Washington D.C.,images/pentagon.jpg
-Washington Monument,Washington D.C.,images/washington_monument.jpg
-London Eye,London,images/london_eye.jpg
-Kremlin,Moscow,images/kremlin.jpg
-Empire State Building,New York,images/empire_state.jpg
-Transamerica Pyramid,San Fransisco,images/transamerica.jpg
-Colosseum,Rome,images/colosseum.jpg
+Name,Images Path,category,Year Built
+Eiffel Tower,images/eiffel_tower.jpg,Paris,1889
+Pentagon,images/pentagon.jpg,Washington D.C.,1941
+Washington Monument,images/washington_monument.jpg,Washington D.C.,1885
+London Eye,images/london_eye.jpg,London,1999
+Saint Basil's Cathedral,images/kremlin.jpg,Moscow,1561
+Empire State Building,images/empire_state.jpg,New York,1931
+Transamerica Pyramid,images/transamerica.jpg,San Fransisco,1972
+Colosseum,images/colosseum.jpg,Rome,80
