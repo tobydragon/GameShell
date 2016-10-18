@@ -1,7 +1,7 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, sys, stageView, controller, domainModel, random, stageModel, gameView
+import pygame, pygbutton, sys, stageView, controller, domainModel, random, stageModel, gameView, os.path
 from pygame.locals import *
-
+#from libs.pygbutton import*
 
 WINDOWWIDTH = 1500
 WINDOWHEIGHT = 1000
@@ -35,18 +35,18 @@ def createDomainModel(fileName):
         return domModel
 
 def main():
-    pygame.init()
 
-    DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    pygame.init()
     pygame.display.set_caption('BioLab')
 
-    #Initialize Game
+    #Create Domain Model
     domModel = createDomainModel("Animal Input.csv")
-    stgModel = stageModel.StageModel(domModel)
-    stgView = stageView.StageView(stgModel, 250, 350, DISPLAYSURFACE)
-    gModel = gameView.GameModel()
-    gView = gameView.GameView(DISPLAYSURFACE, gModel)
-    control = controller.Controller(domModel, stgModel, stgView, gView)
+
+    #Ask for the User Name & Create Controller
+    print("Enter User Name:")
+    userName = input()
+    control = controller.Controller(domModel, userName)
+
     #The Game Loop
     control.gameLoop()
 

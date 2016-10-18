@@ -28,7 +28,7 @@ class StageView:
         self.display = display
         self.display.fill(WHITE)
         self.border = HighlightRect(DARKGREEN, 7, [150, 150, 1200, 600])
-        
+
 
     def initButtons(self):
         x = self.buttonStartX
@@ -79,11 +79,6 @@ class StageView:
         question = questionFont.render(str(self.stageModel.category), True, BLACK)
         self.display.blit(question, [600, 200])
 
-    def writeScore(self, score):
-        font = pygame.font.Font(None, 30)
-        scoreRender = font.render("Score: "+str(score), True, BLACK)
-        self.display.blit(scoreRender, [150, 100])
-
     def clearDisplay(self):
         self.display.fill(WHITE)
 
@@ -100,7 +95,10 @@ class StageView:
                     else:
                         if off == False:
                             self.rectList[buttonsLoop].color = RED
-                        return "incorrect"
+                        return str(self.stageModel.indList[buttonsLoop].name)
 
-                    #return "Clicked"
+    def rightAnswer(self):
+        for i in range(len(self.answerButtons)):
+            if self.stageModel.indList[i].category == self.stageModel.category:
+                return self.stageModel.indList[i].name
 
