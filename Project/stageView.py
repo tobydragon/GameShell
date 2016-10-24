@@ -16,8 +16,8 @@ class StageView:
         self.posX = positionX
         self.posY = positionY
         self.stageModel = stageModel
-        self.answerButtons = self.initButtons()
-        self.rectList = self.initRects()
+        #self.answerButtons = self.initButtons()
+        #self.rectList = self.initRects()
         self.cardList=self.initCards()
         self.display = display
         self.display.fill(pygtools.WHITE)
@@ -29,7 +29,7 @@ class StageView:
     def initButtons(self):
         x = 150#self.buttonStartX
         y = 150#self.buttonStartY
-        numButtons = self.stageModel.numButtons
+        numButtons = len(self.stageModel.indList)
         answerButtons = []
 
         for i in range(numButtons):
@@ -52,8 +52,13 @@ class StageView:
         numCards = len(self.stageModel.indList)
         x=50
         for i in range(min(numCards,5)):
-            cards+=[card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], "{category}")]
+            cards+=[card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], "Year:{Year Built}")]
             x+=250
+        x=50
+        if(numCards>5):
+            for i in range(5,min(numCards, 10)):
+                cards += [card.Card(self.posX + x, self.posY + 450, self.stageModel.indList[i], "Year:{Year Built}")]
+                x += 250
         return cards
 
     def initRects(self):
@@ -72,10 +77,6 @@ class StageView:
         return rectList
 
     def drawButtons(self):
-        for i in range(len(self.rectList)):
-                pass
-                #self.answerButtons[i].draw(self.display)
-                #pygame.draw.rect(self.display, self.rectList[i].color, self.rectList[i].rect, self.rectList[i].thickness)
         for card in self.cardList:
             card.draw(self.display)
         #self.card1.draw(self.display)
@@ -88,7 +89,7 @@ class StageView:
 
     def writeQuestion(self):
         questionFont = pygame.font.Font(None, 70)
-        question = questionFont.render(str(self.stageModel.category), True, pygtools.BLACK)
+        question = questionFont.render(str(self.stageModel.correctTag), True, pygtools.BLACK)
         self.display.blit(question, [self.posX + 50, self.posY + 50])
 
     def clearDisplay(self):
@@ -99,12 +100,13 @@ class StageView:
         Handles a pygame event by passing it to each card.
         :param event: The pygame event to handle
         :return: a list of clicked cards
+        :rtype: Card
         """
-        ret=[]
+        ret = []
         for card in self.cardList:
-            result = card.handleEvent(event)
-            if result is "click":
-                ret+=[card]
+            response = card.handleEvent(event)
+            if "click" in response:
+                ret += [card]
         return ret
 
     def checkForButtonClick(self, event, off):

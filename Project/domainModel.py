@@ -14,18 +14,20 @@ class DomainModel:
         fileInput = open(path, "r")
         lines = fileInput.readlines()
         header = lines[0]
+        if header[-1]=='\n':
+            header=header[:-1]
         keys = header.split(",")
         data = lines[1:]
         for line in data:
 
             if (line[-1]) == '\n': #Strip trailing newline
-                line = line[0:-1]
+                line = line[:-1]
 
             values = line.split(",")
             tags={}
             for k, v in zip(keys, values):
                 if v:
-                    tags[k]=v
+                    tags[k] = v
             self.individualList.append(Individual(values[0], values[1], tags))
 
         fileInput.close()
@@ -43,7 +45,7 @@ class Individual:
         self.name = name
         self.imagepath = imagepath
 
-        self.tags=tags
+        self.tags = tags
 
     def __repr__(self):
         return(self.name+" "+self.imagepath+" "+str(self.tags))

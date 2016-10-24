@@ -27,12 +27,16 @@ class Card:
 
     def handleEvent(self,event):
         """
-        Handles mouse events. Will pass the event to the internal button
+         Handles mouse events. Will pass the event to the internal button
         :param event:
         :return:
         """
-        self.button.handleEvent(event)
-        pass
+        ret=self.button.handleEvent(event)
+        return ret
+
+    def __repr__(self):
+        return self.individual
+
     NONE=0
     SELECTED=1
     CORRECT=2

@@ -10,7 +10,7 @@ class GameView:
         self.nextButton = self.createNextButton('NEXT')
 
     def createNextButton(self, text):
-        return pygbutton.PygButton((1100, 850, 120, 50), text)
+        return pygbutton.PygButton((1200, 100, 120, 50), text)
 
     def paintBackground(self):
         pygame.draw.rect(self.display, LIGHTGREY, [0,0,1500,1000], 0)

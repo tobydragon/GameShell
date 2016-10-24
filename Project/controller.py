@@ -53,7 +53,20 @@ class Controller:
                     if event.type == QUIT or (event.type == KEYDOWN and event.type == K_ESCAPE):
                         pygame.quit()
                         sys.exit()
-
+                    ###
+                    if self.showNextButton:
+                        buttonResponse = self.gameView.checkForNextButton(event)
+                        if buttonResponse:
+                            self.stageModel = stageModel.StageModel(self.domainModel)
+                            self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
+                            self.student.currentStage += 1
+                            self.writeFile()
+                            self.showNextButton = False
+                            self.stageView.clearDisplay()
+                    else:
+                        self.checkCards(event)
+                    ###
+                    """
                     #Correct, Incorrect or "Already clicked"(null) decision
                     buttonResponse = self.stageView.checkForButtonClick(event, self.showNextButton)
                     if buttonResponse != None:
@@ -68,12 +81,12 @@ class Controller:
                     if self.showNextButton == False:
                         if buttonResponse == "correct":
                             self.student.score += 1
-                            self.student.rightAnswers.append([self.stageView.rightAnswer()+": "+self.stageModel.category])
+                            self.student.rightAnswers.append([self.stageView.rightAnswer() +": " + self.stageModel.correctTag])
                             self.showNextButton = True
 
                         elif buttonResponse != None and buttonResponse != "null":
                             self.student.score -= 1
-                            self.student.wrongAnswers.append(str(buttonResponse)+": "+self.stageModel.category)
+                            self.student.wrongAnswers.append(str(buttonResponse) +": " + self.stageModel.correctTag)
 
                     else:
                         buttonResponse = self.gameView.checkForNextButton(event)
@@ -85,7 +98,7 @@ class Controller:
                             self.showNextButton = False
                             self.stageView.clearDisplay()
 
-
+                    """
                 self.gameView.paintBackground()
                 self.gameView.writeScore(self.student.score)
                 self.gameView.writeStage(self.student.currentStage)
@@ -117,5 +130,26 @@ class Controller:
 
                 pygame.display.update()
                 self.fpsClock.tick(self.FPS)
+    def checkCards(self,event):
+        clickedCards = self.stageView.checkForCardClick(event)
+        correctCount = 0
+        assert len(clickedCards) <= 1
+        if len(clickedCards) == 1:
+            card = clickedCards[0]
+            if card.state is card.NONE:
+                print("Testing %s against %s"%(self.stageModel.correctTag,card.individual.tags[self.stageModel.tagType]))
+                if self.stageModel.correctTag == card.individual.tags[self.stageModel.tagType]:
+                    card.setState(card.CORRECT)
+                    correctCount += 1
+                else:
+                    card.setState(card.INCORRECT)
+                    correctCount -= 1
+        if correctCount >= 1:
+            self.student.score+=1
+            self.showNextButton=True
+
+        elif correctCount == -1:
+            self.student.score-=1
+
 
 
