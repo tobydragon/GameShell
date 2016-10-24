@@ -1,64 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, controller, os.path, enum
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-DARKGREEN = (5, 102, 0)
-LIGHTGREY = (212, 208, 200)
-LIGHTBLUE = (153, 255, 255)
-
-def drawGoodRect(display, color, rect,thickness):
-    """
-    Draws a pygame rectangle without little notches in the corners.
-    :param display: The pygame display to draw to
-    :param color: The color of the rectangle
-    :param rect: The rectangle to draw
-    :param thickness: The border's thickness
-    :return:
-    """
-    rect = pygame.Rect(rect) #Convert list-style rect to pygame rect]
-    halfThick=thickness/2.0
-    pygame.draw.line(display, color, (rect.x,rect.y-halfThick+1), (rect.x,rect.y+rect.h+halfThick), thickness)
-    pygame.draw.line(display, color, (rect.x,rect.y), (rect.x+rect.w+halfThick,rect.y), thickness)
-    pygame.draw.line(display, color, (rect.x+rect.w+halfThick,rect.y+rect.h),  (rect.x,rect.y+rect.h), thickness)
-    pygame.draw.line(display, color, (rect.x+rect.w,rect.y+rect.h),(rect.x+rect.w,rect.y), thickness)
-
-class Card:
-    def __init__(self, x, y, individual, title="", borderColor=BLACK, borderThickness=7):
-        self.individual = individual
-        self.borderColor = borderColor
-        self.borderThickness = borderThickness
-        self.title = title
-        self.state = self.NONE
-        self.cardRect=pygame.Rect(x,y,200,250)
-
-
-        self.button=pygbutton.PygButton((x+20, y+20, 160, 160), normal=individual.imagepath)
-
-    def draw(self,display):
-        self.button.draw(display)
-        font = pygame.font.Font(None, 32)
-        titleDisplay = font.render(self.title.format(**self.individual.tags), True, BLACK)
-        display.blit(titleDisplay, (self.cardRect.x+20,self.cardRect.y+220))
-        drawGoodRect(display, self.borderColor, self.cardRect, self.borderThickness)
-
-    def setState(self,state):
-        self.state=state
-        self.borderColor=(BLACK,LIGHTBLUE,GREEN,RED)[state]
-
-    def handleEvent(self,event):
-        """
-        Handles mouse events. Will pass the event to the internal button
-        :param event:
-        :return:
-        """
-        pass
-    NONE=0
-    SELECTED=1
-    CORRECT=2
-    INCORRECT=3
+import pygame, pygbutton, controller, os.path, enum, card, pygtools
 
 class HighlightRect:
     def __init__(self, color, thickness, rect):
@@ -79,8 +20,8 @@ class StageView:
         self.rectList = self.initRects()
         self.cardList=self.initCards()
         self.display = display
-        self.display.fill(WHITE)
-        self.border = HighlightRect(DARKGREEN, 7, [positionX, positionY, 1300, 750])
+        self.display.fill(pygtools.WHITE)
+        self.border = HighlightRect(pygtools.DARKGREEN, 7, [positionX, positionY, 1300, 750])
 
         #TEMP
         #self.card1=Card(positionX+50, positionY+150, stageModel.indList[0], "{category}")
@@ -111,7 +52,7 @@ class StageView:
         numCards = len(self.stageModel.indList)
         x=50
         for i in range(min(numCards,5)):
-            cards+=[Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], "{category}")]
+            cards+=[card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], "{category}")]
             x+=250
         return cards
 
@@ -122,7 +63,7 @@ class StageView:
         numButtons = self.stageModel.numButtons
 
         for i in range(numButtons):
-            rectList.append(HighlightRect( BLACK, 7, [x, y, 160, 160]))
+            rectList.append(HighlightRect(pygtools.BLACK, 7, [x, y, 160, 160]))
             x += 200
             if x == 1250:
                 x = 350
@@ -140,32 +81,45 @@ class StageView:
         #self.card1.draw(self.display)
 
     def drawBorder(self):
-        drawGoodRect(self.display, self.border.color, self.border.rect, self.border.thickness)
+        pygtools.drawGoodRect(self.display, self.border.color, self.border.rect, self.border.thickness)
 
     def paintBackground(self):
-        pygame.draw.rect(self.display, WHITE, [self.posX, self.posY, 1300, 750], 0)
+        pygame.draw.rect(self.display, pygtools.WHITE, [self.posX, self.posY, 1300, 750], 0)
 
     def writeQuestion(self):
         questionFont = pygame.font.Font(None, 70)
-        question = questionFont.render(str(self.stageModel.category), True, BLACK)
+        question = questionFont.render(str(self.stageModel.category), True, pygtools.BLACK)
         self.display.blit(question, [self.posX + 50, self.posY + 50])
 
     def clearDisplay(self):
-        self.display.fill(WHITE)
+        self.display.fill(pygtools.WHITE)
+
+    def checkForCardClick(self,event):
+        """
+        Handles a pygame event by passing it to each card.
+        :param event: The pygame event to handle
+        :return: a list of clicked cards
+        """
+        ret=[]
+        for card in self.cardList:
+            result = card.handleEvent(event)
+            if result is "click":
+                ret+=[card]
+        return ret
 
     def checkForButtonClick(self, event, off):
         for buttonsLoop in range(len(self.answerButtons)):
                 buttonResponse = self.answerButtons[buttonsLoop].handleEvent(event)
                 if 'click' in buttonResponse:
-                    if self.rectList[buttonsLoop].color != BLACK or off:
+                    if self.rectList[buttonsLoop].color != pygtools.BLACK or off:
                         return "null"
                     elif self.answerButtons[buttonsLoop].value == self.stageModel.category:
                         if off == False:
-                            self.rectList[buttonsLoop].color = GREEN
+                            self.rectList[buttonsLoop].color = pygtools.GREEN
                         return "correct"
                     else:
                         if off == False:
-                            self.rectList[buttonsLoop].color = RED
+                            self.rectList[buttonsLoop].color = pygtools.RED
                         return str(self.stageModel.indList[buttonsLoop].name)
 
     def rightAnswer(self):
