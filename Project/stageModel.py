@@ -46,3 +46,9 @@ class StageModel:
                 string += (str(self.indList[i].name + ", "))
 
         return string
+
+    def toJSON(self):
+         # Not Implemented
+        base={}
+        base["correctTag"] = self.correctTag
+        base["tagType"] = self.tagType

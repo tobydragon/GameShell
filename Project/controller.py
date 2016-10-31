@@ -18,7 +18,7 @@ class Controller:
         if userName != "" and os.path.isfile(USER_DATA_DIR+userName): #Check if there is already a file for this User
             self.readFile()
         else:
-            self.student = userModel.User(userName)
+            self.user = userModel.User(userName)
             self.stageModel = stageModel.StageModel(domModel)
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.userName)
@@ -30,17 +30,17 @@ class Controller:
     def readFile(self):
         fileInput = open(USER_DATA_DIR+self.userName, "r")
         lines = fileInput.readlines()
-        self.student = userModel.User(self.userName, lines[1:5]) #Passing lines (Score, Current Stage,  Right & Wrong Answers)
+        self.user = userModel.User(self.userName, lines[1:5]) #Passing lines (Score, Current Stage,  Right & Wrong Answers)
         self.stageModel = stageModel.StageModel(self.domainModel, lines[5], lines[6]) #Passing lines (Current Stage Category & Animals)
 
 
     def writeFile(self):
         #No name represents debugging; no saves are made
-        if self.student.name == "":
+        if self.user.name == "":
             return
-        file = open(USER_DATA_DIR+self.student.name, "w")
+        file = open(USER_DATA_DIR + self.user.name, "w")
         file.truncate() #Clear file
-        file.write(self.student.__repr__()) #Write Student Information
+        file.write(self.user.__repr__()) #Write Student Information
         file.write(self.stageModel.__repr__()) #Write Current Stage Information, for Loading PS: The last played answers will be in the end between []
         file.close()
 
@@ -57,12 +57,8 @@ class Controller:
                     if self.showNextButton:
                         buttonResponse = self.gameView.checkForNextButton(event)
                         if buttonResponse:
-                            self.stageModel = stageModel.StageModel(self.domainModel)
-                            self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
-                            self.student.currentStage += 1
-                            self.writeFile()
-                            self.showNextButton = False
-                            self.stageView.clearDisplay()
+                            self.nextStage()
+
                     else:
                         self.checkCards(event)
                     ###
@@ -100,8 +96,8 @@ class Controller:
 
                     """
                 self.gameView.paintBackground()
-                self.gameView.writeScore(self.student.score)
-                self.gameView.writeStage(self.student.currentStage)
+                self.gameView.writeScore(self.user.score)
+                self.gameView.writeStage(self.user.currentStage)
                 self.stageView.paintBackground()
                 self.stageView.writeQuestion()
                 self.stageView.drawButtons()
@@ -130,10 +126,12 @@ class Controller:
 
                 pygame.display.update()
                 self.fpsClock.tick(self.FPS)
+
     def checkCards(self,event):
         clickedCards = self.stageView.checkForCardClick(event)
         correctCount = 0
-        assert len(clickedCards) <= 1
+        if len(clickedCards) > 1:
+            raise Exception()
         if len(clickedCards) == 1:
             card = clickedCards[0]
             if card.state is card.NONE:
@@ -145,11 +143,18 @@ class Controller:
                     card.setState(card.INCORRECT)
                     correctCount -= 1
         if correctCount >= 1:
-            self.student.score+=1
+            self.user.score+=1
             self.showNextButton=True
 
         elif correctCount == -1:
-            self.student.score-=1
+            self.user.score-=1
 
+    def nextStage(self):
+        self.stageModel = stageModel.StageModel(self.domainModel)
+        self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
+        self.user.currentStage += 1
+        self.writeFile()
+        self.showNextButton = False
+        self.stageView.clearDisplay()
 
 

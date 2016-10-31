@@ -12,7 +12,7 @@ class Card:
         self.cardRect=pygame.Rect(x,y,200,250)
 
 
-        self.button=pygbutton.PygButton((x+20, y+20, 160, 160), normal=individual.imagepath)
+        self.button=pygbutton.PygButton((x+20, y+20, 160, 160), normal=individual.image)
 
     def draw(self,display):
         self.button.draw(display)
