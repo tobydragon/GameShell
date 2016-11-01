@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, controller, os.path, enum, card, pygtools
+import pygame, pygbutton, controller, os.path, enum, card, color, pygtools
 
 class HighlightRect:
     def __init__(self, color, thickness, rect):
@@ -16,8 +16,8 @@ class StageView:
         self.stageModel = stageModel
         self.cardList=self.initCards()
         self.display = display
-        self.display.fill(pygtools.WHITE)
-        self.border = HighlightRect(pygtools.DARKGREEN, 7, [positionX, positionY, 1300, 750])
+        self.display.fill(color.WHITE)
+        self.border = HighlightRect(color.DARKGREEN, 7, [positionX, positionY, 1300, 750])
 
     def initCards(self):
         cards = []
@@ -42,15 +42,15 @@ class StageView:
         pygtools.drawGoodRect(self.display, self.border.color, self.border.rect, self.border.thickness)
 
     def paintBackground(self):
-        pygame.draw.rect(self.display, pygtools.WHITE, [self.posX, self.posY, 1300, 750], 0)
+        pygame.draw.rect(self.display, color.WHITE, [self.posX, self.posY, 1300, 750], 0)
 
     def writeQuestion(self):
         questionFont = pygame.font.Font(None, 70)
-        question = questionFont.render(str(self.stageModel.correctTag), True, pygtools.BLACK)
+        question = questionFont.render(str(self.stageModel.correctTag), True, color.BLACK)
         self.display.blit(question, [self.posX + 50, self.posY + 50])
 
     def clearDisplay(self):
-        self.display.fill(pygtools.WHITE)
+        self.display.fill(color.WHITE)
 
     def checkForCardClick(self,event):
         """

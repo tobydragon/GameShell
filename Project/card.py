@@ -1,9 +1,9 @@
 __author__ = "BenjaminWelsh"
 
-import pygame, pygbutton, pygtools
+import pygame, pygbutton, pygtools, color
 
 class Card:
-    def __init__(self, x, y, individual, title="", borderColor=pygtools.BLACK, borderThickness=7):
+    def __init__(self, x, y, individual, title="", borderColor=color.BLACK, borderThickness=7):
         self.individual = individual
         self.borderColor = borderColor
         self.borderThickness = borderThickness
@@ -17,13 +17,13 @@ class Card:
     def draw(self,display):
         self.button.draw(display)
         font = pygame.font.Font(None, 32)
-        titleDisplay = font.render(self.title.format(**self.individual.tags), True, pygtools.BLACK)
+        titleDisplay = font.render(self.title.format(**self.individual.tags), True, color.BLACK)
         display.blit(titleDisplay, (self.cardRect.x+20,self.cardRect.y+220))
         pygtools.drawGoodRect(display, self.borderColor, self.cardRect, self.borderThickness)
 
     def setState(self,state):
         self.state=state
-        self.borderColor=(pygtools.BLACK,pygtools.LIGHTBLUE,pygtools.GREEN,pygtools.RED)[state]
+        self.borderColor=(color.BLACK, color.LIGHTBLUE, color.GREEN, color.RED)[state]
 
     def handleEvent(self,event):
         """
