@@ -1,4 +1,4 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel, startMenu, os.path
+import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel, startMenu, os.path, jsonIO
 from pygame.locals import *
 
 WINDOWWIDTH = 1500
@@ -11,22 +11,29 @@ class Controller:
         self.FPS = 30
         self.fpsClock = pygame.time.Clock()
         self.domainModel = domModel
-        self.userName = userName
+        #self.userName = userName
         self.game = False
 
         # No name represents debugging; no saves are made
         if userName != "" and os.path.isfile(USER_DATA_DIR+userName): #Check if there is already a file for this User
-            self.readFile()
+            try:
+                self.fromJSON(jsonIO.loadFromJson(USER_DATA_DIR + userName))
+            # TODO handle this better
+            except BaseException as e:
+                print("Unable to load save. Error:\n\t", e)
+                self.user = userModel.User(userName)
+                self.stageModel = stageModel.StageModel(domModel)
         else:
             self.user = userModel.User(userName)
             self.stageModel = stageModel.StageModel(domModel)
 
-        self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.userName)
+        self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.user.username)
         self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
         self.gameView = gameView.GameView(DISPLAYSURFACE)
         self.showNextButton = False
 
 
+    """
     def readFile(self):
         fileInput = open(USER_DATA_DIR+self.userName, "r")
         lines = fileInput.readlines()
@@ -36,14 +43,14 @@ class Controller:
 
     def writeFile(self):
         #No name represents debugging; no saves are made
-        if self.user.name == "":
+        if self.user.username == "":
             return
-        file = open(USER_DATA_DIR + self.user.name, "w")
+        file = open(USER_DATA_DIR + self.user.username, "w")
         file.truncate() #Clear file
         file.write(self.user.__repr__()) #Write Student Information
         file.write(self.stageModel.__repr__()) #Write Current Stage Information, for Loading PS: The last played answers will be in the end between []
         file.close()
-
+"""
 
     def gameLoop(self):
 
@@ -51,6 +58,7 @@ class Controller:
             if self.game: #After clicking START (After Start Menu Screen)
                 for event in pygame.event.get():
                     if event.type == QUIT or (event.type == KEYDOWN and event.type == K_ESCAPE):
+                        jsonIO.saveToJson(USER_DATA_DIR+self.user.username,self)
                         pygame.quit()
                         sys.exit()
                     ###
@@ -153,8 +161,16 @@ class Controller:
         self.stageModel = stageModel.StageModel(self.domainModel)
         self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
         self.user.currentStage += 1
-        self.writeFile()
         self.showNextButton = False
         self.stageView.clearDisplay()
 
+    def toJSON(self):
+        base={}
+        base["userModel"] = self.user.toJSON()
+        base["stage"] = self.stageModel.toJSON()
+        return base
+
+    def fromJSON(self,json):
+        self.user = userModel.User(json=json["userModel"])
+        self.stageModel = stageModel.StageModel(self.domainModel,json=json["stage"])
 

@@ -18,7 +18,7 @@ def main():
     #Ask for the User Name & Create Controller
     print("Enter User Name:")
     #userName = input() #Normal
-    userName="" #DEBUG MODE
+    userName="dev" #DEBUG MODE
     control = controller.Controller(domModel, userName)
 
     #The Game Loop

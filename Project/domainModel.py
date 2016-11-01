@@ -70,3 +70,13 @@ class Individual:
 
     def __repr__(self):
         return(self.name+" "+self.imagepath+" "+str(self.tags))
+
+    def toJSON(self):
+        base = {}
+        base["name"] = self.name
+        base["imagepath"] = self.imagepath
+        base["tags"] = self.tags
+        return base
+
+def indFromJSON(json):
+    return Individual(json["name"],json["imagepath"],json["tags"])

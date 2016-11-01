@@ -1,15 +1,18 @@
 __author__ = 'JoãoGabriel'
 class User:
-    def __init__(self, name, userData = None):
-        self.name = name
-
-        if userData is None: # No user file
-            self.score = 0
-            self.currentStage = 1
-            self.rightAnswers = []
-            self.wrongAnswers = []
-        else: #User file
-            self.retrieveData(userData)
+    def __init__(self, username="NO_USER", json=None):
+        """
+        NOTE: JSON data overrides input and default data
+        :param username: username
+        :param json: json data to load from
+        """
+        self.username = username
+        self.score = 0
+        self.currentStage = 1
+        self.rightAnswers = []
+        self.wrongAnswers = []
+        if json:
+            self.fromJSON(json)
 
     def retrieveData(self, userData):
         scoreLine = userData[0] #Line with the Score
@@ -50,8 +53,23 @@ class User:
 
 
     def __repr__(self):
-        return("Name: "+self.name+"\n"+
-               "Score: "+str(self.score)+"\n"+
-               "Current Stage: "+str(self.currentStage)+"\n"+
-               "Right Answers: "+str(self.rightAnswers)+"\n"+
-               "Wrong Answers: "+str(self.wrongAnswers)+"\n")
+        return("Name: " + self.username + "\n" +
+               "Score: " + str(self.score) +"\n" +
+               "Current Stage: " + str(self.currentStage) +"\n" +
+               "Right Answers: " + str(self.rightAnswers) +"\n" +
+               "Wrong Answers: " + str(self.wrongAnswers) +"\n")
+
+    def toJSON(self):
+        base = {}
+        base["username"] = self.username
+        base["score"] = self.score
+        base["currentStage"] = self.currentStage
+        return base
+
+    def fromJSON(self, json):
+        try:
+            self.username = json["username"]
+            self.currentStage = json["currentStage"]
+            self.score = json["score"]
+        except KeyError as e:
+            print(e)
