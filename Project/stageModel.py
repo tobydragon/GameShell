@@ -16,14 +16,9 @@ class StageModel:
             self.fromJSON(json)
 
     def __repr__(self):
-        string = ("Current Stage Category: " + self.correctTag + "\n" +
-                  "Current Stage Animals: ")
-        for i in range(len(self.indList)):
-            if (i == len(self.indList) - 1):
-                string += (str(self.indList[i].name) + ".\n")
-            else:
-                string += (str(self.indList[i].name + ", "))
-
+        string="stageModel: tagType=%s, correctTag=%s, len(indList)=%i" % (
+            self.tagType,self.correctTag,len(self.indList)
+        )
         return string
 
     def toJSON(self):
