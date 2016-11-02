@@ -13,7 +13,6 @@ class Individual:
             self.image = pygame.image.load("images/MISSING_TEXTURE.png")
             print("Unable to find image at '%s' for individual %s."%(imagepath,name))
 
-        print(type(self.image))
         self.tags = tags
         # human readable
         self.hrTags = hrTags

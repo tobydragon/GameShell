@@ -57,14 +57,14 @@ class Controller:
         while True:
             if self.game: #After clicking START (After Start Menu Screen)
                 for event in pygame.event.get():
-                    if event.type == QUIT or (event.type == KEYDOWN and event.type == K_ESCAPE):
+                    if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                         jsonIO.saveToJson(USER_DATA_DIR+self.user.username,self)
                         pygame.quit()
                         sys.exit()
                     ###
                     if self.showNextButton:
                         buttonResponse = self.gameView.checkForNextButton(event)
-                        if buttonResponse:
+                        if buttonResponse or (event.type == KEYDOWN and event.key == K_RETURN):
                             self.nextStage()
 
                     else:
@@ -120,12 +120,12 @@ class Controller:
 
             else: #Start Menu Screen
                 for event in pygame.event.get():
-                    if event.type == QUIT or (event.type == KEYDOWN and event.type == K_ESCAPE):
+                    if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                         pygame.quit()
                         sys.exit()
 
                     buttonResponse = self.startMenu.checkForStartButton(event)
-                    if(buttonResponse == True):
+                    if(buttonResponse == True) or (event.type == KEYDOWN and event.key == K_RETURN):
                         self.game = True
 
                 self.startMenu.paintBackground()
