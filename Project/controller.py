@@ -144,7 +144,7 @@ class Controller:
             card = clickedCards[0]
             if card.state is card.NONE:
                 print("Testing %s against %s"%(self.stageModel.correctTag,card.individual.tags[self.stageModel.tagType]))
-                if self.stageModel.correctTag == card.individual.tags[self.stageModel.tagType]:
+                if self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]:
                     card.setState(card.CORRECT)
                     correctCount += 1
                 else:

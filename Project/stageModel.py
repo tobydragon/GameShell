@@ -1,6 +1,6 @@
 __author__ = 'tdragon'
 
-import random, domainModel
+import random, domainModel, individual
 
 
 class StageModel:
@@ -10,7 +10,7 @@ class StageModel:
 
         self.indList = domainModel.individualList[:]
         random.shuffle(self.indList)
-        self.correctTag = self.indList[random.randint(0, len(self.indList))-1].tags[tagType]
+        self.correctTag = random.choice(self.indList[random.randint(0, len(self.indList))-1].tags[tagType])
 
         if json:
             self.fromJSON(json)
@@ -31,4 +31,4 @@ class StageModel:
     def fromJSON(self, json):
         self.correctTag = json["correctTag"]
         self.tagType = json["tagType"]
-        self.indList = [domainModel.indFromJSON(i) for i in json["individuals"]]
+        self.indList = [individual.indFromJSON(i) for i in json["individuals"]]

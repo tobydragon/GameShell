@@ -17,7 +17,7 @@ class Card:
     def draw(self,display):
         self.button.draw(display)
         font = pygame.font.Font(None, 32)
-        titleDisplay = font.render(self.title.format(**self.individual.tags), True, color.BLACK)
+        titleDisplay = font.render(self.title.format(**self.individual.hrTags), True, color.BLACK)
         display.blit(titleDisplay, (self.cardRect.x+20,self.cardRect.y+220))
         pygtools.drawGoodRect(display, self.borderColor, self.cardRect, self.borderThickness)
 

@@ -1,4 +1,4 @@
-import pygame, os
+import pygame, os, csv, individual
 
 class DomainModel:
     def __init__(self, individualList=[],path=""):
@@ -24,9 +24,21 @@ class DomainModel:
         """
         # Initializing the Individuals List
         indList = []
-
-        fileInput = open(path, "r")
-        lines = fileInput.readlines()
+        header=None
+        with open(path, "r") as csvFile:
+            reader=csv.reader(csvFile)
+            for row in  reader:
+                if header is None:
+                    header=row
+                else:
+                    tags = {}
+                    hrTags={}
+                    for k, v in zip(header, row):
+                        if v:
+                            tags[k] = v.split("|")
+                            hrTags[k]=", ".join(tags[k])
+                    self.individualList.append(individual.Individual(row[0], row[1], tags,hrTags))
+        """lines = fileInput.readlines()
         header = lines[0]
         if header[-1]=='\n':
             header=header[:-1]
@@ -45,38 +57,9 @@ class DomainModel:
             self.individualList.append(Individual(values[0], values[1], tags))
 
         fileInput.close()
-
+        """
         # Initializing the Categories List and the Domain Model
         # catList = ["Porifera", "Cnidaria", "Platyhelminthes", "Nematoda", "Mollusca", "Annelida", "Arthropoda", "Echinodermata", "Chordata"]
         # random.shuffle(catList)
 
         # Create domModel
-
-
-
-class Individual:
-    def __init__(self, name, imagepath, tags):
-        self.name = name
-        self.imagepath = imagepath
-
-        if os.path.exists(imagepath):
-            self.image=pygame.image.load(imagepath)
-        else:
-            self.image = pygame.image.load("images/MISSING_TEXTURE.png")
-            print("Unable to find image at '%s' for individual %s."%(imagepath,name))
-
-        print(type(self.image))
-        self.tags = tags
-
-    def __repr__(self):
-        return(self.name+" "+self.imagepath+" "+str(self.tags))
-
-    def toJSON(self):
-        base = {}
-        base["name"] = self.name
-        base["imagepath"] = self.imagepath
-        base["tags"] = self.tags
-        return base
-
-def indFromJSON(json):
-    return Individual(json["name"],json["imagepath"],json["tags"])
