@@ -10,7 +10,7 @@ def saveToJson(fileName,object):
             print("object does not have toJSON() method (object type %s"%str(type(object)))
             return False
     f = open(fileName,'w')
-    json.dump(JSONdata, f)
+    json.dump(JSONdata, f,indent="\t")
     f.close()
     return True
 
