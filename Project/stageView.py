@@ -14,7 +14,10 @@ class StageView:
         self.posX = positionX
         self.posY = positionY
         self.stageModel = stageModel
-        self.cardList=self.initCards()
+        try:
+            self.cardList=self.initCards()
+        except Exception as e:
+            print(e)
         self.display = display
         self.display.fill(color.WHITE)
         self.border = HighlightRect(color.DARKGREEN, 7, [positionX, positionY, 1300, 750])
@@ -22,6 +25,8 @@ class StageView:
     def initCards(self):
         cards = []
         numCards = len(self.stageModel.indList)
+        if numCards>10:
+            raise Exception("Too many cards (%i>10) to initialize all of them" % numCards)
         x=50
         for i in range(min(numCards,5)):
             cards.append(card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], "Year:{Year Built}"))
