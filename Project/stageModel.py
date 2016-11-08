@@ -4,16 +4,18 @@ import random, domainModel, individual
 
 
 class StageModel:
-    def __init__(self, domainModel, tagType="category", json=None):
+    def __init__(self, domainModel, tagType=None, json=None):
         self.domainModel = domainModel
         self.tagType=tagType
-
-        self.indList = domainModel.individualList[:]
-        random.shuffle(self.indList)
-        self.correctTag = random.choice(self.indList[random.randint(0, len(self.indList))-1].tags[tagType])
-
         if json:
             self.fromJSON(json)
+
+        #Post Loading
+        self.indList = domainModel.individualList[:]
+        random.shuffle(self.indList)
+        self.correctTag = random.choice(self.indList[random.randint(0, len(self.indList))-1].tags[self.tagType])
+
+
 
     def __repr__(self):
         string="stageModel: tagType=%s, correctTag=%s, len(indList)=%i" % (

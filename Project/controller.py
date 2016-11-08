@@ -13,19 +13,20 @@ class Controller:
         self.domainModel = domModel
         #self.userName = userName
         self.game = False
+        self.tagType="City"
 
         # No name represents debugging; no saves are made
         if userName != "" and os.path.isfile(USER_DATA_DIR+userName): #Check if there is already a file for this User
-            try:
-                self.fromJSON(jsonIO.loadFromJson(USER_DATA_DIR + userName))
+            #try:
+            self.fromJSON(jsonIO.loadFromJson(USER_DATA_DIR + userName))
             # TODO handle this better
-            except BaseException as e:
-                print("Unable to load save. Error:\n\t", e)
-                self.user = userModel.User(userName)
-                self.stageModel = stageModel.StageModel(domModel)
+            #except BaseException as e:
+                # print("Unable to load save. Error:\n\t", e,"\n\t",type(e))
+                # self.user = userModel.User(userName)
+                # self.stageModel = stageModel.StageModel(domModel,self.tagType)
         else:
             self.user = userModel.User(userName)
-            self.stageModel = stageModel.StageModel(domModel)
+            self.stageModel = stageModel.StageModel(domModel,self.tagType)
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.user.username)
         self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
@@ -158,7 +159,7 @@ class Controller:
             self.user.score-=1
 
     def nextStage(self):
-        self.stageModel = stageModel.StageModel(self.domainModel)
+        self.stageModel = stageModel.StageModel(self.domainModel,self.tagType)
         self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
         self.user.currentStage += 1
         self.showNextButton = False

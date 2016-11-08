@@ -3,11 +3,12 @@ __author__ = "BenjaminWelsh"
 import pygame, pygbutton, pygtools, color
 
 class Card:
-    def __init__(self, x, y, individual, title="", borderColor=color.BLACK, borderThickness=7):
+    def __init__(self, x, y, individual, title="", caption="", borderColor=color.BLACK, borderThickness=7):
         self.individual = individual
         self.borderColor = borderColor
         self.borderThickness = borderThickness
         self.title = title
+        self.caption = caption
         self.state = self.NONE
         self.cardRect=pygame.Rect(x,y,200,250)
         self.x=x
