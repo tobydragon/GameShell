@@ -10,12 +10,14 @@ class Card:
         self.title = title
         self.state = self.NONE
         self.cardRect=pygame.Rect(x,y,200,250)
+        self.x=x
+        self.y=y
+        self.thumbnail=pygame.transform.scale(individual.image,(160,160))
 
-
-        self.button=pygbutton.PygButton((x+20, y+20, 160, 160), normal=individual.image)
+        self.button=pygbutton.PygButton((x, y, 200, 250))
 
     def draw(self,display):
-        self.button.draw(display)
+        display.blit(self.thumbnail,(self.x+20, self.y+20, 160, 160))
         font = pygame.font.Font(None, 32)
         titleDisplay = font.render(self.title.format(**self.individual.hrTags), True, color.BLACK)
         display.blit(titleDisplay, (self.cardRect.x+20,self.cardRect.y+220))
