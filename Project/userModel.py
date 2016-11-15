@@ -6,6 +6,7 @@ class User:
         :param username: username
         :param json: json data to load from
         """
+        #TODO remove rightAnswers and wrongsxAnswers
         self.username = username
         self.score = 0
         self.currentStage = 1
@@ -14,6 +15,7 @@ class User:
         if json:
             self.fromJSON(json)
 
+    #TODO remove
     def retrieveData(self, userData):
         scoreLine = userData[0] #Line with the Score
         divide = scoreLine.split(": ")
