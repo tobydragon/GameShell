@@ -18,6 +18,7 @@ class StageView:
             self.cardList=self.initCards()
         except Exception as e:
             print(e)
+            raise e
         self.display = display
         self.display.fill(color.WHITE)
         self.border = HighlightRect(color.DARKGREEN, 7, [positionX, positionY, 1300, 750])

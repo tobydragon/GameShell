@@ -10,6 +10,7 @@ class StageModel:
         if json:
             self.fromJSON(json)
 
+        #TODO move this to a controller
         #Post Loading
         self.indList = domainModel.individualList[:]
         random.shuffle(self.indList)
