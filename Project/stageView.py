@@ -70,3 +70,9 @@ class StageView:
             if "click" in response:
                 ret.append(card)
         return ret
+
+    def render(self):
+        self.paintBackground()
+        self.writeQuestion()
+        self.drawButtons()
+        self.drawBorder()

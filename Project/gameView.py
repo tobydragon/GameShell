@@ -8,6 +8,7 @@ class GameView:
     def __init__(self, display):
         self.display = display
         self.nextButton = self.createNextButton('NEXT')
+        self.showNextButton=False
 
     def createNextButton(self, text):
         return pygbutton.PygButton((1200, 100, 120, 50), text)
@@ -32,3 +33,10 @@ class GameView:
         buttonResponse = self.nextButton.handleEvent(event)
         if 'click' in buttonResponse:
             return True
+
+    def render(self,score,stageNumber):
+        self.paintBackground()
+        self.writeScore(score)
+        self.writeStage(stageNumber)
+        if self.showNextButton:
+            self.displayNextButton()
