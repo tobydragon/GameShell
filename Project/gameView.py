@@ -38,5 +38,7 @@ class GameView:
         self.paintBackground()
         self.writeScore(score)
         self.writeStage(stageNumber)
+
+    def renderButton(self):
         if self.showNextButton:
             self.displayNextButton()

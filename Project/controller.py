@@ -1,4 +1,4 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel, startMenu, os.path, jsonIO
+import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel, startMenu, os.path, jsonIO, stageController
 from pygame.locals import *
 
 WINDOWWIDTH = 1500
@@ -11,9 +11,11 @@ class Controller:
         self.FPS = 30
         self.fpsClock = pygame.time.Clock()
         self.domainModel = domModel
-        #self.userName = userName
         self.inMenu = False
-        self.tagType="City"
+        self.tagType = "City"
+        self.tempScore = 0
+
+        self.stageController = stageController.StageController(DISPLAYSURFACE)
 
         # No name represents debugging; no saves are made
         if userName != "" and os.path.isfile(USER_DATA_DIR+userName): #Check if there is already a file for this User
@@ -23,23 +25,23 @@ class Controller:
             except BaseException as e:
                 print("Unable to load save. Error:\n\t", e,"\n\t",type(e))
                 self.user = userModel.User(userName)
-                self.stageModel = stageModel.StageModel(domModel,self.tagType)
+                self.stageController.generateStageModel(domModel,self.tagType)
         else:
             self.user = userModel.User(userName)
-            self.stageModel = stageModel.StageModel(domModel,self.tagType)
+            self.stageController.generateStageModel(domModel,self.tagType)
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.user.username)
-        self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
         self.gameView = gameView.GameView(DISPLAYSURFACE)
-        self.showNextButton = False
+        #self.showNextButton = False
 
     def gameLoop(self):
-
         while True:
             if self.inMenu: #After clicking START (After Start Menu Screen)
                 self.playLoop()
             else: #Start Menu Screen
                 self.menuLoop()
+            pygame.display.update()
+            self.fpsClock.tick(self.FPS)
 
     def playLoop(self):
         for event in pygame.event.get():
@@ -48,19 +50,21 @@ class Controller:
                 pygame.quit()
                 sys.exit()
             ###
-            if self.showNextButton:
+            if self.gameView.showNextButton:
                 buttonResponse = self.gameView.checkForNextButton(event)
                 if buttonResponse or (event.type == KEYDOWN and event.key == K_RETURN):
                     self.nextStage()
 
             else:
-                self.checkCards(event)
-            ###
+                score = self.stageController.checkCards(event)
+                self.tempScore += score
+                if score > 0:
+                    self.gameView.showNextButton = True
+
+
         self.gameView.render(self.user.score,self.user.currentStage)
-        self.stageView.render()
-        pygame.display.update()
-        self.fpsClock.tick(self.FPS)
-        self.stageView.clearDisplay()
+        self.stageController.renderStep(self.tempScore)
+        self.gameView.renderButton()
 
     def menuLoop(self):
         for event in pygame.event.get():
@@ -76,45 +80,27 @@ class Controller:
         self.startMenu.writeStartMenu()
         self.startMenu.displayStartButton()
 
-        pygame.display.update()
-        self.fpsClock.tick(self.FPS)
 
-    def checkCards(self,event):
-        clickedCards = self.stageView.checkForCardClick(event)
-        correctCount = 0
-        if len(clickedCards) > 1:
-            raise Exception()
-        if len(clickedCards) == 1:
-            card = clickedCards[0]
-            if card.state is card.NONE:
-                print("Testing %s against %s"%(self.stageModel.correctTag,card.individual.tags[self.stageModel.tagType]))
-                if self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]:
-                    card.setState(card.CORRECT)
-                    correctCount += 1
-                else:
-                    card.setState(card.INCORRECT)
-                    correctCount -= 1
-        if correctCount >= 1:
-            self.user.score+=1
-            self.showNextButton=True
-
-        elif correctCount == -1:
-            self.user.score-=1
 
     def nextStage(self):
-        self.stageModel = stageModel.StageModel(self.domainModel,self.tagType)
-        self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
+        #self.stageModel = stageModel.StageModel(self.domainModel,self.tagType)
+        #self.stageView = stageView.StageView(self.stageModel, 100, 50, DISPLAYSURFACE)
         self.user.currentStage += 1
-        self.showNextButton = False
-        self.stageView.clearDisplay()
+        self.user.score += self.tempScore
+        self.tempScore = 0
+        self.gameView.showNextButton = False
+        self.stageController.generateStageModel(self.domainModel,self.tagType)
+
+        #self.stageView.clearDisplay()
 
     def toJSON(self):
         base={}
         base["userModel"] = self.user.toJSON()
-        base["stage"] = self.stageModel.toJSON()
+        base["stageController"] = self.stageController.toJSON()
         return base
 
     def fromJSON(self,json):
         self.user = userModel.User(json=json["userModel"])
-        self.stageModel = stageModel.StageModel(self.domainModel,json=json["stage"])
+        self.stageController = stageController.StageController(DISPLAYSURFACE)
+        self.stageController.fromJSON(json["stageController"])
 

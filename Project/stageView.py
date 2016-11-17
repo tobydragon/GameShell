@@ -55,6 +55,11 @@ class StageView:
         question = questionFont.render(str(self.stageModel.correctTag), True, color.BLACK)
         self.display.blit(question, [self.posX + 50, self.posY + 50])
 
+    def writeScore(self, score):
+        font = pygame.font.Font(None, 30)
+        scoreRender = font.render("Stage Score: "+str(score), True, color.BLACK)
+        self.display.blit(scoreRender, [250, 20])
+
     def clearDisplay(self):
         self.display.fill(color.WHITE)
 
@@ -72,8 +77,9 @@ class StageView:
                 ret.append(card)
         return ret
 
-    def render(self):
+    def render(self,stageScore):
         self.paintBackground()
         self.writeQuestion()
+        self.writeScore(stageScore)
         self.drawButtons()
         self.drawBorder()
