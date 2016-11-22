@@ -16,9 +16,9 @@ class GameView:
     def paintBackground(self):
         pygame.draw.rect(self.display, LIGHTGREY, [0,0,1500,1000], 0)
 
-    def writeScore(self, score):
+    def writeScore(self, score,percent):
         font = pygame.font.Font(None, 30)
-        scoreRender = font.render("Score: "+str(score), True, BLACK)
+        scoreRender = font.render("Score: "+str(score)+"      Average percent correct: {:.2f}".format(float(percent)), True, BLACK)
         self.display.blit(scoreRender, [150, 20])
 
     def writeStage(self, stage):
@@ -34,9 +34,9 @@ class GameView:
         if 'click' in buttonResponse:
             return True
 
-    def render(self,score,stageNumber):
+    def render(self,score,percent,stageNumber):
         self.paintBackground()
-        self.writeScore(score)
+        self.writeScore(score,percent)
         self.writeStage(stageNumber)
 
     def renderButton(self):

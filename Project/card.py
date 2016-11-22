@@ -13,6 +13,8 @@ class Card:
         self.cardRect=pygame.Rect(x,y,200,250)
         self.x=x
         self.y=y
+        self.fade=False
+        self.symbol=self.NONE
         self.thumbnail=pygame.transform.scale(individual.image,(160,160))
 
         self.button=pygbutton.PygButton((x, y, 200, 250))
@@ -20,13 +22,24 @@ class Card:
     def draw(self,display):
         display.blit(self.thumbnail,(self.x+20, self.y+20, 160, 160))
         font = pygame.font.Font(None, 32)
+        symbolFont = pygame.font.SysFont("Segoe UI Symbol", 32)
         titleDisplay = font.render(self.title.format(**self.individual.hrTags), True, color.BLACK)
         display.blit(titleDisplay, (self.cardRect.x+20,self.cardRect.y+220))
+
+
         pygtools.drawGoodRect(display, self.borderColor, self.cardRect, self.borderThickness)
+        if self.fade:
+            surf=pygame.Surface((self.cardRect.w-self.borderThickness,self.cardRect.h-self.borderThickness),pygame.SRCALPHA)
+            surf.fill((255,255,255,200))
+            display.blit(surf,(self.cardRect.x+self.borderThickness/2,self.cardRect.y+self.borderThickness/2))
+
+        symbolDisplay = symbolFont.render(["", "","✔","✘"][self.symbol], True,
+                                    (color.BLACK, color.BLUE, color.NICEGREEN, color.RED)[self.symbol])
+        display.blit(symbolDisplay, (self.cardRect.x+self.cardRect.w-35, self.cardRect.y+self.cardRect.h-52))
 
     def setState(self,state):
         self.state=state
-        self.borderColor=(color.BLACK, color.LIGHTBLUE, color.GREEN, color.RED)[state]
+        self.borderColor=(color.BLACK, color.BLUE, color.NICEGREEN, color.RED)[state]
 
     def handleEvent(self,event):
         """

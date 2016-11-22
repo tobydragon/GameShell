@@ -50,20 +50,25 @@ class Controller:
                 pygame.quit()
                 sys.exit()
             ###
-            if self.gameView.showNextButton:
-                buttonResponse = self.gameView.checkForNextButton(event)
-                if buttonResponse or (event.type == KEYDOWN and event.key == K_RETURN):
-                    self.nextStage()
+            stageResult = self.stageController.loopStepAll(event)
+            if stageResult:
+                self.user.score += stageResult[0]
+                self.user.addPercent(stageResult[1])
+                self.nextStage()
+            # if self.gameView.showNextButton:
+            #     buttonResponse = self.gameView.checkForNextButton(event)
+            #     if buttonResponse or (event.type == KEYDOWN and event.key == K_RETURN):
+            #         self.nextStage()
+            #
+            # else:
+            #     score = self.stageController.checkCards(event)
+            #     self.tempScore += score
+            #     if score > 0:
+            #         self.gameView.showNextButton = True
 
-            else:
-                score = self.stageController.checkCards(event)
-                self.tempScore += score
-                if score > 0:
-                    self.gameView.showNextButton = True
 
-
-        self.gameView.render(self.user.score,self.user.currentStage)
-        self.stageController.renderStep(self.tempScore)
+        self.gameView.render(self.user.score,self.user.getAveragePercent(),self.user.currentStage)
+        self.stageController.renderStep()
         self.gameView.renderButton()
 
     def menuLoop(self):

@@ -22,6 +22,8 @@ class StageView:
         self.display = display
         self.display.fill(color.WHITE)
         self.border = HighlightRect(color.DARKGREEN, 7, [positionX, positionY, 1300, 750])
+        self.nextButton = pygbutton.PygButton((1200, 100, 120, 50), "Next")
+        self.scoreText=""
 
     def initCards(self):
         cards = []
@@ -55,10 +57,10 @@ class StageView:
         question = questionFont.render(str(self.stageModel.correctTag), True, color.BLACK)
         self.display.blit(question, [self.posX + 50, self.posY + 50])
 
-    def writeScore(self, score):
+    def writeScore(self):
         font = pygame.font.Font(None, 30)
-        scoreRender = font.render("Stage Score: "+str(score), True, color.BLACK)
-        self.display.blit(scoreRender, [250, 20])
+        scoreRender = font.render(self.scoreText, True, color.BLACK)
+        self.display.blit(scoreRender, [self.posX + 50, self.posY + 100])
 
     def clearDisplay(self):
         self.display.fill(color.WHITE)
@@ -77,9 +79,15 @@ class StageView:
                 ret.append(card)
         return ret
 
-    def render(self,stageScore):
+    def checkNextButton(self, event):
+        buttonResponse = self.nextButton.handleEvent(event)
+        if 'click' in buttonResponse:
+            return True
+
+    def render(self):
         self.paintBackground()
         self.writeQuestion()
-        self.writeScore(stageScore)
+        self.writeScore()
         self.drawButtons()
         self.drawBorder()
+        self.nextButton.draw(self.display)
