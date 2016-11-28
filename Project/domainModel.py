@@ -27,7 +27,7 @@ class DomainModel:
         header=None
         with open(path, "r") as csvFile:
             reader=csv.reader(csvFile)
-            for row in  reader:
+            for i,row in enumerate(reader):
                 if header is None:
                     header=row
                 else:
@@ -37,7 +37,8 @@ class DomainModel:
                         if v:
                             tags[k] = v.split("|")
                             hrTags[k]=", ".join(tags[k])
-                    self.individualList.append(individual.Individual(row[0], row[1], tags,hrTags))
+                    id=str(i)+"_"+row[0].replace(" ","_")
+                    self.individualList.append(individual.Individual(row[0],id, row[1], tags,hrTags))
         """lines = fileInput.readlines()
         header = lines[0]
         if header[-1]=='\n':

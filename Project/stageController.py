@@ -1,7 +1,7 @@
-import stageModel, domainModel, random, stageView, math
+import stageModel, domainModel, random, stageView, math, settings
 
 class StageController:
-    def __init__(self, display):
+    def __init__(self, display, logger):
         """
         WARNING: generateStageModel MUST be called to use.
         :param display:
@@ -10,6 +10,7 @@ class StageController:
         self.stageFinished = False
         self.score = 0
         self.percent = 0
+        self.logger = logger
 
     def generateStageModel(self,domainModel,tagType):
         indList = domainModel.individualList[:]
@@ -54,18 +55,31 @@ class StageController:
         return math.floor(coeff*correct/(correct+incorrect))
 
     def evaluateCardStates(self, setCardFade = False):
-        correct=0
-        incorrect=0
+        correct = 0
+        incorrect = 0
+        cardLogData = []
         for card in self.stageView.cardList:
-            cardIsCorrect=self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]
-            if  cardIsCorrect is (card.state==card.SELECTED):
-                correct+=1
-                card.symbol=card.CORRECT
+            cardIsCorrect = self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]
+            if cardIsCorrect is (card.state == card.SELECTED):
+                correct += 1
+                card.symbol = card.CORRECT
             else:
                 incorrect+=1
                 card.symbol = card.INCORRECT
             if not cardIsCorrect and setCardFade:
                 card.fade=True
+
+            if settings.LOG_STAGE_EVALS:
+                cardLogData.append({
+                    "individualID":card.individual.id(),
+                    "selected":card.state is card.SELECTED,
+                    "correctIndividual":cardIsCorrect
+                })
+        if settings.LOG_STAGE_EVALS:
+            self.logger.logAction("stageEval",{
+                "cards":cardLogData,
+                "correctTag":self.stageModel.correctTag
+            })
         return correct, incorrect
 
     def updateCards(self, event):
@@ -74,6 +88,10 @@ class StageController:
             raise Exception()
         if len(clickedCards) == 1:
             card = clickedCards[0]
+
+            if settings.LOG_SELECTIONS:
+                self.logger.logAction("cardSelection",{"individualID":card.individual.id(),"selected":card.state is card.NONE})
+
             if card.state is card.NONE:
                 card.setState(card.SELECTED)
             elif card.state is card.SELECTED:

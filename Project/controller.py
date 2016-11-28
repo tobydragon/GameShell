@@ -1,6 +1,7 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel, userModel, startMenu, os.path, jsonIO, stageController
+import domainModel, random, pygame, sys, stageView, gameView, stageModel
+import userModel, startMenu, os.path, jsonIO, stageController, settings
 from pygame.locals import *
-
+import logger
 WINDOWWIDTH = 1500
 WINDOWHEIGHT = 850
 DISPLAYSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -15,12 +16,13 @@ class Controller:
         self.tagType = "City"
         self.tempScore = 0
 
-        self.stageController = stageController.StageController(DISPLAYSURFACE)
+        self.logger = logger.Logger(userName, 1.0, settings.DOMAIN_FILE)
+        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger)
 
         # No name represents debugging; no saves are made
-        if userName != "" and os.path.isfile(USER_DATA_DIR+userName): #Check if there is already a file for this User
+        if userName != "" and os.path.isfile(USER_DATA_DIR+userName+".json"): #Check if there is already a file for this User
             try:
-                self.fromJSON(jsonIO.loadFromJson(USER_DATA_DIR + userName))
+                self.fromJSON(jsonIO.loadFromJson(USER_DATA_DIR + userName+".json"))
             # TODO handle this better
             except BaseException as e:
                 print("Unable to load save. Error:\n\t", e,"\n\t",type(e))
@@ -34,6 +36,9 @@ class Controller:
         self.gameView = gameView.GameView(DISPLAYSURFACE)
         #self.showNextButton = False
 
+
+        #self.logger.sendEmail()
+
     def gameLoop(self):
         while True:
             if self.inMenu: #After clicking START (After Start Menu Screen)
@@ -46,7 +51,8 @@ class Controller:
     def playLoop(self):
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
-                jsonIO.saveToJson(USER_DATA_DIR + self.user.username, self)
+                jsonIO.saveToJson(USER_DATA_DIR + self.user.username+".json", self)
+                self.logger.saveForExit()
                 pygame.quit()
                 sys.exit()
             ###
@@ -106,6 +112,6 @@ class Controller:
 
     def fromJSON(self,json):
         self.user = userModel.User(json=json["userModel"])
-        self.stageController = stageController.StageController(DISPLAYSURFACE)
+        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger)
         self.stageController.fromJSON(json["stageController"])
 

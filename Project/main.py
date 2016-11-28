@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, sys, stageView, controller, domainModel, random, stageModel, gameView, os.path
+import pygame, controller, domainModel, settings
 from pygame.locals import *
 #from libs.pygbutton import*
 
@@ -13,7 +13,7 @@ def main():
     pygame.display.set_caption('BioLab')
 
     #Create Domain Model
-    domModel=domainModel.DomainModel(path="Buildings Domain 8.csv")
+    domModel=domainModel.DomainModel(path=settings.DOMAIN_FILE)
 
     #Ask for the User Name & Create Controller
     print("Enter User Name:")
