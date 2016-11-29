@@ -36,9 +36,6 @@ class Controller:
         self.gameView = gameView.GameView(DISPLAYSURFACE)
         #self.showNextButton = False
 
-
-        #self.logger.sendEmail()
-
     def gameLoop(self):
         while True:
             if self.inMenu: #After clicking START (After Start Menu Screen)
@@ -51,8 +48,16 @@ class Controller:
     def playLoop(self):
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                self.gameView.paintBackground()
+                font = pygame.font.Font(None, 64)
+                stageRender = font.render("Saving Logs for exit", True, (0,0,0))
+                DISPLAYSURFACE.blit(stageRender, [50, 50])
+
+                pygame.display.update()
                 jsonIO.saveToJson(USER_DATA_DIR + self.user.username+".json", self)
-                self.logger.saveForExit()
+                if self.logger.containsData:
+                    self.logger.saveForExit()
+                    self.logger.sendEmail(self.user.username)
                 pygame.quit()
                 sys.exit()
             ###

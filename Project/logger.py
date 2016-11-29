@@ -19,6 +19,7 @@ class Logger:
             "actions":[]
         }
         self._actionsRef=self._data["actions"]
+        self.containsData=False
 
     def logAction(self, actionType, actionData):
         """
@@ -37,15 +38,28 @@ class Logger:
             "time":now.strftime("%H:%M:%S.%f")
         }
         action["actionType"]=actionType
-
         self._actionsRef.append(action)
+        self.containsData = True
 
-    def sendEmail(self):
-        msg = MIMEText("TESTING 123")
-        msg["From"] = "benjaminwelsh2@gmail.com"
-        msg["To"] = "benjaminwelsh2@gmail.com"
-        msg["Subject"] = "test"
-        server=smtplib.SMTP("smtp.gmail.com")
+    def sendEmail(self,username):
+        fromaddr="ICcsresearch1@gmail.com"
+        toaddr="ICcsresearch1@gmail.com"
+        # msg = '''
+        #     From: {}
+        #     To: {}
+        #     Subject: testin'
+        #     This is a test
+        #     .
+        # '''.format(fromaddr,toaddr)
+        msg=MIMEText(json.dumps(self._data,indent="\t"))
+        msg["Subject"]="Data: {}".format(username)
+        msg["From"]=fromaddr
+        msg["To"]=toaddr
+        server=smtplib.SMTP("smtp.gmail.com:587")
+        server.ehlo()
+        server.starttls()
+        server.login("ICcsresearch1@gmail.com","E4h65*dL")
+        #server.sendmail(fromaddr,toaddr,msg)
         server.send_message(msg)
         server.quit()
 
