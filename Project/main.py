@@ -16,7 +16,6 @@ def main():
     domModel=domainModel.DomainModel(path=settings.DOMAIN_FILE)
 
     #Ask for the User Name & Create Controller
-    print("Enter User Name:")
     #userName = input() #Normal
     userName="dev" #DEBUG MODE
     control = controller.Controller(domModel, userName)
