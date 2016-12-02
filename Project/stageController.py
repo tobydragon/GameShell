@@ -15,6 +15,8 @@ class StageController:
     def generateStageModel(self,domainModel,tagType):
         indList = domainModel.individualList[:]
         random.shuffle(indList)
+        if (len(indList) > 10):
+            indList=indList[:10]
         correctTag = random.choice(indList[random.randint(0, len(indList))-1].tags[tagType])
         self.stageModel = stageModel.StageModel(indList,tagType,correctTag)
         self._remakeStageView()
