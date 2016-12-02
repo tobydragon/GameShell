@@ -53,7 +53,7 @@ class StageView:
         pygame.draw.rect(self.display, color.WHITE, [self.posX, self.posY, 1300, 750], 0)
 
     def writeQuestion(self):
-        questionFont = pygame.font.SysFont("Arial", 48)
+        questionFont = pygame.font.SysFont("Courier", 30, True)
         question=str("Select the cards with the %s: %s"%(self.stageModel.tagType,self.stageModel.correctTag))
         #questionRender = questionFont.render(question, True, color.BLACK)
         #self.display.blit(questionRender, [self.posX + 50, self.posY + 50])
@@ -66,7 +66,7 @@ class StageView:
 
 
     def writeScore(self):
-        font = pygame.font.Font(None, 30)
+        font = pygame.font.SysFont("Courier", 30, True)
         scoreRender = font.render(self.scoreText, True, color.BLACK)
         self.display.blit(scoreRender, [self.posX + 50, self.posY + 100])
 
