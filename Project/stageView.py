@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton, controller, os.path, enum, card, color, pygtools
+import pygame, pygbutton, controller, os.path, enum, card, color, pygtools, TextWrap
 
 class HighlightRect:
     def __init__(self, color, thickness, rect):
@@ -53,9 +53,17 @@ class StageView:
         pygame.draw.rect(self.display, color.WHITE, [self.posX, self.posY, 1300, 750], 0)
 
     def writeQuestion(self):
-        questionFont = pygame.font.Font(None, 70)
-        question = questionFont.render(str(self.stageModel.correctTag), True, color.BLACK)
-        self.display.blit(question, [self.posX + 50, self.posY + 50])
+        questionFont = pygame.font.SysFont("Arial", 48)
+        question=str("Select the cards with the %s: %s"%(self.stageModel.tagType,self.stageModel.correctTag))
+        #questionRender = questionFont.render(question, True, color.BLACK)
+        #self.display.blit(questionRender, [self.posX + 50, self.posY + 50])
+        TextWrap.drawText(self.display,
+                          question,
+                          color.BLACK,
+                          pygame.Rect(self.posX + 50, self.posY + 10,1000,150),
+                          questionFont,
+                          True)
+
 
     def writeScore(self):
         font = pygame.font.Font(None, 30)
