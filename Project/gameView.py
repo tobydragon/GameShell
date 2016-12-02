@@ -21,6 +21,11 @@ class GameView:
         scoreRender = font.render("Score: "+str(score)+"      Average percent correct: {:.2f}".format(float(percent)), True, BLACK)
         self.display.blit(scoreRender, [150, 20])
 
+    def writeHelptext(self,):
+        font = pygame.font.Font(None, 30)
+        helpRender = font.render("Select The cards that match the question. Click the Check button when you're done. Then click the Next button to move to the next stage", True, BLACK)
+        self.display.blit(helpRender, [30, 820])
+
     def writeStage(self, stage):
         font = pygame.font.Font(None, 30)
         stageRender = font.render("Stage: "+str(stage), True, BLACK)
@@ -38,6 +43,7 @@ class GameView:
         self.paintBackground()
         self.writeScore(score,percent)
         self.writeStage(stageNumber)
+        self.writeHelptext()
 
     def renderButton(self):
         if self.showNextButton:

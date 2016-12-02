@@ -26,7 +26,7 @@ class StartMenu:
         stageRender = font.render("BioLab", True, BLACK) #Game Name
         self.display.blit(stageRender, [700, 100])
         font = pygame.font.Font(None, 30)
-        stageRender = font.render("Welcome "+str(self.student), True, BLACK) #Student Welcome
+        stageRender = font.render("Welcome!", True, BLACK) #Student Welcome
         self.display.blit(stageRender, [675, 450])
         font = pygame.font.Font(None, 18)
         stageRender = font.render("Developed by João Gama Vila Nova with the orientation of Dr. Toby Dragon", True, BLACK) #Student Welcome
