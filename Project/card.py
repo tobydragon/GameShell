@@ -1,6 +1,6 @@
 __author__ = "BenjaminWelsh"
 
-import pygame, pygbutton, pygtools, color, TextWrap
+import pygame, pygbutton, pygtools, color, TextWrap, os
 
 class Card:
     def __init__(self, x, y, individual, title="", caption="", borderColor=color.BLACK, borderThickness=7):
@@ -21,8 +21,12 @@ class Card:
 
     def draw(self,display):
         display.blit(self.thumbnail,(self.x+20, self.y+20, 160, 160))
-        font = pygame.font.SysFont("Courier", 19, True)
-        symbolFont = pygame.font.SysFont("Segoe UI Symbol", 32)
+        font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 19)
+        if os.name != "nt":
+            symbolFont = pygame.font.Font("/System/Library/Fonts/Menlo.ttc", 32)
+        else:
+            symbolFont = pygame.font.SysFont("Segoe UI Symbol", 32)
+
         #titleDisplay = font.render(
         #    self.title.format(**self.individual.hrTags),
         #    True,
