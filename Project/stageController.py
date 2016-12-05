@@ -44,32 +44,32 @@ class StageController:
             if self.stageView.checkNextButton(event):
                 self.stageView.nextButton.caption="Next"
                 cardResults = self.evaluateCardStates(True)
-                self.score=self.evaluateScore(*cardResults)
-                self.percent=100.0*cardResults[0]/(cardResults[0]+cardResults[1])
+                self.score=self.evaluateScore(cardResults)
+                self.percent=100.0*cardResults["correct"]["selected"]/(len(self.stageView.cardList))
                 print("Percent:",self.percent)
                 self.stageView.scoreText="{}/{} correct. {:.1f}%. Score:{}".format(
-                    cardResults[0],cardResults[0]+cardResults[1],self.percent,self.score)
+                    cardResults["correct"]["selected"],len(self.stageView.cardList),self.percent,self.score)
                 self.stageFinished=True
 
 
-    def evaluateScore(self,correct,incorrect):
+    def evaluateScore(self,score):
         coeff=4
-        return math.floor(coeff*correct/(correct+incorrect))
+        return 1#math.floor(coeff*correct/(correct+incorrect))
 
     def evaluateCardStates(self, setCardFade = False):
-        correct = 0
-        incorrect = 0
+        results={"correct":{"selected":0,"unselected":0},"incorrect":{"selected":0,"unselected":0}}
         cardLogData = []
         for card in self.stageView.cardList:
             cardIsCorrect = self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]
-            if cardIsCorrect is (card.state == card.SELECTED):
-                correct += 1
-                card.symbol = card.CORRECT
-            else:
-                incorrect+=1
-                card.symbol = card.INCORRECT
-            if not cardIsCorrect and setCardFade:
-                card.fade=True
+            # if cardIsCorrect is (card.state == card.SELECTED):
+            #     correct += 1
+            #     card.symbol = card.CORRECT
+            # else:
+            #     incorrect+=1
+            #     card.symbol = card.INCORRECT
+            # if not cardIsCorrect and setCardFade:
+            #     card.fade=True
+            results["correct" if cardIsCorrect else "incorrect"]["selected" if card.state is card.SELECTED else "unselected"]+=1
 
             if settings.LOG_STAGE_EVALS:
                 cardLogData.append({
@@ -82,7 +82,7 @@ class StageController:
                 "cards":cardLogData,
                 "correctTag":self.stageModel.correctTag
             })
-        return correct, incorrect
+        return results
 
     def updateCards(self, event):
         clickedCards = self.stageView.checkForCardClick(event)

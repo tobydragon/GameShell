@@ -55,13 +55,16 @@ class Logger:
         msg["Subject"]="Data: {}".format(username)
         msg["From"]=fromaddr
         msg["To"]=toaddr
-        server=smtplib.SMTP("smtp.gmail.com:587")
-        server.ehlo()
-        server.starttls()
-        server.login("ICcsresearch1@gmail.com","E4h65*dL")
-        #server.sendmail(fromaddr,toaddr,msg)
-        server.send_message(msg)
-        server.quit()
+        try:
+            server=smtplib.SMTP("smtp.gmail.com:587")
+            server.ehlo()
+            server.starttls()
+            server.login("ICcsresearch1@gmail.com","E4h65*dL")
+            #server.sendmail(fromaddr,toaddr,msg)
+            server.send_message(msg)
+            server.quit()
+        except Exception as e:
+            print("ERROR: Probably no internet connection\n",e)
 
     def saveForExit(self):
         _file = open("userdata/"+self.fileName, "w")
