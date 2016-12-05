@@ -54,10 +54,11 @@ class Controller:
                 DISPLAYSURFACE.blit(stageRender, [50, 50])
 
                 pygame.display.update()
-                jsonIO.saveToJson(USER_DATA_DIR + self.user.username+".json", self)
-                if self.logger.containsData:
-                    self.logger.saveForExit()
-                    self.logger.sendEmail(self.user.username)
+                if(self.user.username != "dev"):
+                    jsonIO.saveToJson(USER_DATA_DIR + self.user.username+".json", self)
+                    if self.logger.containsData:
+                        self.logger.saveForExit()
+                        self.logger.sendEmail(self.user.username)
                 pygame.quit()
                 sys.exit()
             ###
