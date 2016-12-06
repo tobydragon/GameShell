@@ -1,4 +1,4 @@
-import stageModel, domainModel, random, stageView, math, settings
+import stageModel, domainModel, random, stageView, math, settings, individual
 
 class StageController:
     def __init__(self, display, logger):
@@ -12,13 +12,17 @@ class StageController:
         self.percent = 0
         self.logger = logger
 
-    def generateStageModel(self,domainModel,tagType):
+        self.tagType = "Wing Type"
+        self.cardTitle = "{Name}"
+
+    def generateStageModel(self,domainModel):
         indList = domainModel.individualList[:]
+        indList = [i for i in indList if individual.tagFilter(self.tagType)(i)]
         random.shuffle(indList)
         if (len(indList) > 10):
             indList=indList[:10]
-        correctTag = random.choice(indList[random.randint(0, len(indList))-1].tags[tagType])
-        self.stageModel = stageModel.StageModel(indList,tagType,correctTag)
+        correctTag = random.choice(indList[random.randint(0, len(indList))-1].tags[self.tagType])
+        self.stageModel = stageModel.StageModel(indList,self.tagType,correctTag)
         self._remakeStageView()
 
         self.stageFinished = False
@@ -26,7 +30,7 @@ class StageController:
         self.percent = 0
 
     def _remakeStageView(self):
-        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display)
+        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display,self.cardTitle)
         self.stageView.nextButton.caption = "Check"
 
     def loopStepAll(self, event):

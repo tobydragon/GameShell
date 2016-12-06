@@ -13,7 +13,6 @@ class Controller:
         self.fpsClock = pygame.time.Clock()
         self.domainModel = domModel
         self.inMenu = False
-        self.tagType = "City"
         self.tempScore = 0
 
         self.logger = logger.Logger(userName, 1.0, settings.DOMAIN_FILE)
@@ -27,10 +26,10 @@ class Controller:
             except BaseException as e:
                 print("Unable to load save. Error:\n\t", e,"\n\t",type(e))
                 self.user = userModel.User(userName)
-                self.stageController.generateStageModel(domModel,self.tagType)
+                self.stageController.generateStageModel(domModel)
         else:
             self.user = userModel.User(userName)
-            self.stageController.generateStageModel(domModel,self.tagType)
+            self.stageController.generateStageModel(domModel)
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.user.username)
         self.gameView = gameView.GameView(DISPLAYSURFACE)
@@ -56,7 +55,7 @@ class Controller:
                 pygame.display.update()
                 if(self.user.username != "dev"):
                     jsonIO.saveToJson(USER_DATA_DIR + self.user.username+".json", self)
-                    if self.logger.containsData:
+                    if self.logger.containsData and self.user.username != "dev_save":
                         self.logger.saveForExit()
                         self.logger.sendEmail(self.user.username)
                 pygame.quit()
@@ -106,7 +105,7 @@ class Controller:
         self.user.score += self.tempScore
         self.tempScore = 0
         self.gameView.showNextButton = False
-        self.stageController.generateStageModel(self.domainModel,self.tagType)
+        self.stageController.generateStageModel(self.domainModel)
 
         #self.stageView.clearDisplay()
 

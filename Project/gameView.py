@@ -17,18 +17,18 @@ class GameView:
         pygame.draw.rect(self.display, LIGHTGREY, [0,0,1500,1000], 0)
 
     def writeScore(self, score,percent):
-        font = pygame.font.SysFont("Courier", 22, True)
+        font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 22)
         scoreRender = font.render("Score: "+str(score)+"      Average percent correct: {:.2f}".format(float(percent)), True, BLACK)
         self.display.blit(scoreRender, [150, 20])
 
     def writeHelptext(self,):
-        font = pygame.font.SysFont("Courier", 22, True)
-        helpRender = font.render("Select The cards that match the question. Click the Check button when you're done. Then click the Next button to move to the next stage", True, BLACK)
+        font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 22)
+        helpRender = font.render("Select The cards that match the question. Click the Check button when you're done. Then click the Next button to move to the next round.", True, BLACK)
         self.display.blit(helpRender, [30, 820])
 
     def writeStage(self, stage):
-        font = pygame.font.SysFont("Courier", 22, True)
-        stageRender = font.render("Stage: "+str(stage), True, BLACK)
+        font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 22)
+        stageRender = font.render("Round: "+str(stage), True, BLACK)
         self.display.blit(stageRender, [1250, 20])
 
     def displayNextButton(self):

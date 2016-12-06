@@ -1,0 +1,32 @@
+Name,Image Number,Development,Mouthparts,Wing Type
+Protura,1,anamorphic,entognathous,wingless
+Collembola,2|3,ametabolous,entognathous,wingless
+Diplura,4|5,ametabolous,,wingless
+Microcoryphia,6|7,ametabolous,,wingless
+Thysanura,8|9,ametabolous,chewing,wingless
+Ephemeroptera,10|11|12|13,hemimetabolous,,membranous
+Odonata,14|15|16|17,hemimetabolous,chewing,straight|membranous
+Orthoptera,18|19|20|21,hemimetabolous,chewing,
+Phasmatodea,22|23,hemimetabolous,chewing,
+Grylloblattodea,24,hemimetabolous,chewing,wingless
+Mantophasmatodea,25,hemimetabolous,chewing,wingless
+Dermaptera,26|27,hemimetabolous,chewing,
+Plecoptera,28|29|30,hemimetabolous,chewing,membranous
+Embiidina,31|32,hemimetabolous,chewing,
+Zoraptera,33,hemimetabolous,chewing,
+Blattodea,34|35,hemimetabolous,chewing,
+Isoptera,36|37,hemimetabolous,chewing,
+Mantodea,38|39,hemimetabolous,chewing,
+Psocoptera,40|41,hemimetabolous,chewing,
+Phthiraptera,42|43,hemimetabolous,,wingless
+Hemiptera,44|45|46|47,hemimetabolous,piercing-sucking,
+Thysanoptera,48|49,hemimetabolous,,fringed
+Coleoptera,50|51|52|53|54|55,holometabolous,chewing,
+Neuroptera,56|57|58|59|60,holometabolous,,membranous
+Hymenoptera,61|62|63|64,holometabolous,chewing,membranous
+Lepidoptera,65|66|67|68|69,holometabolous,,covered with scales|membranous
+Trichoptera,70|71|72|73,holometabolous,chewing,membranous
+Mecoptera,74|75,holometabolous,chewing,membranous
+Siphonaptera,76|77,holometabolous,,wingless
+Diptera,78|79|80|81,holometabolous,,
+Strepsiptera,82|83,holometabolous,,

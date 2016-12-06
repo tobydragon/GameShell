@@ -21,7 +21,7 @@ class Card:
 
     def draw(self,display):
         display.blit(self.thumbnail,(self.x+20, self.y+20, 160, 160))
-        font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 19)
+        font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 18)
         if os.name != "nt":
             symbolFont = pygame.font.Font("/System/Library/Fonts/Menlo.ttc", 32)
         else:
@@ -32,12 +32,15 @@ class Card:
         #    True,
         #    color.BLACK)
         #display.blit(titleDisplay, (self.cardRect.x+20,self.cardRect.y+210))
-        TextWrap.drawText(display,
+        try:
+            TextWrap.drawText(display,
                           self.title.format(**self.individual.hrTags),
                           color.BLACK,
                           pygame.Rect(self.cardRect.x+20,self.cardRect.y+185,160,65),
                           font,
                           True)
+        except KeyError as e:
+            print("Unable to generate title: KeyError\n",e)
 
         pygtools.drawGoodRect(display, self.borderColor, self.cardRect, self.borderThickness)
         if self.fade:

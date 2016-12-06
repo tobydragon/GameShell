@@ -10,12 +10,12 @@ class HighlightRect:
 
 
 class StageView:
-    def __init__(self, stageModel, positionX, positionY, display):
+    def __init__(self, stageModel, positionX, positionY, display, cardTitle):
         self.posX = positionX
         self.posY = positionY
         self.stageModel = stageModel
         try:
-            self.cardList=self.initCards()
+            self.cardList=self.initCards(cardTitle)
         except Exception as e:
             print(e)
             raise e
@@ -25,19 +25,19 @@ class StageView:
         self.nextButton = pygbutton.PygButton((1200, 100, 120, 50), "Next")
         self.scoreText=""
 
-    def initCards(self):
+    def initCards(self,title):
         cards = []
         numCards = len(self.stageModel.indList)
         if numCards>10:
             raise Exception("Too many cards (%i>10) to initialize all of them" % numCards)
         x=50
         for i in range(min(numCards,5)):
-            cards.append(card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], "Year:{Year Built}"))
+            cards.append(card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], title))
             x+=250
         x=50
         if(numCards>5):
             for i in range(5,min(numCards, 10)):
-                cards.append(card.Card(self.posX + x, self.posY + 450, self.stageModel.indList[i], "Year:{Year Built}"))
+                cards.append(card.Card(self.posX + x, self.posY + 450, self.stageModel.indList[i], title))
                 x += 250
         return cards
 
@@ -53,7 +53,7 @@ class StageView:
         pygame.draw.rect(self.display, color.WHITE, [self.posX, self.posY, 1300, 750], 0)
 
     def writeQuestion(self):
-        questionFont = pygame.font.SysFont("Courier", 30, True)
+        questionFont = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 30)
         question=str("Select the cards with the %s: %s"%(self.stageModel.tagType,self.stageModel.correctTag))
         #questionRender = questionFont.render(question, True, color.BLACK)
         #self.display.blit(questionRender, [self.posX + 50, self.posY + 50])
@@ -66,7 +66,7 @@ class StageView:
 
 
     def writeScore(self):
-        font = pygame.font.SysFont("Courier", 30, True)
+        font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 19)
         scoreRender = font.render(self.scoreText, True, color.BLACK)
         self.display.blit(scoreRender, [self.posX + 50, self.posY + 100])
 

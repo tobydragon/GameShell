@@ -35,3 +35,8 @@ class Individual:
 
 def indFromJSON(json):
     return Individual(json["name"], json["id"], json["imagepath"], json["tags"], json["hrTags"])
+
+def tagFilter(tag):
+    def filt(ind):
+        return tag in ind.tags and ind.tags[tag]!=[]
+    return filt
