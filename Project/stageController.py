@@ -1,7 +1,7 @@
-import stageModel, domainModel, random, stageView, math, settings, individual
+import stageModel, domainModel, random, stageView, math, settings, individual, json
 
 class StageController:
-    def __init__(self, display, logger):
+    def __init__(self, display, logger, questionFile="questionTemplates.json"):
         """
         WARNING: generateStageModel MUST be called to use.
         :param display:
@@ -14,8 +14,23 @@ class StageController:
 
         self.tagType = "Wing Type"
         self.cardTitle = "{Name}"
+        self.useCardImages = True
+        self.qStage=0
+        self.questionTemplates=None
+        if questionFile:
+            print("loading qFile)")
+            self.loadQuestionFile(questionFile)
 
     def generateStageModel(self,domainModel):
+        print(self.questionTemplates)
+        if self.questionTemplates:
+            qtNum=math.floor(self.qStage/settings.STAGES_PER_QUESTION)%len(self.questionTemplates)
+            print("using qTemp num",qtNum)
+            qTemplate=self.questionTemplates[qtNum]
+            self.tagType=qTemplate["TagType"]
+            self.cardTitle=qTemplate["Title"]
+            self.useCardImages=qTemplate["UseImage"]
+
         indList = domainModel.individualList[:]
         indList = [i for i in indList if individual.tagFilter(self.tagType)(i)]
         random.shuffle(indList)
@@ -28,9 +43,10 @@ class StageController:
         self.stageFinished = False
         self.score = 0
         self.percent = 0
+        self.qStage+=1
 
     def _remakeStageView(self):
-        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display,self.cardTitle)
+        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display,self.cardTitle,self.useCardImages)
         self.stageView.nextButton.caption = "Check"
 
     def loopStepAll(self, event):
@@ -139,6 +155,16 @@ class StageController:
 
     def renderStep(self):
         self.stageView.render()
+
+    def loadQuestionFile(self,fileName):
+        try:
+            f = open(fileName)
+        except FileNotFoundError as e:
+            print(e)
+            raise e
+        JSONdata = json.load(f)
+        self.questionTemplates=JSONdata["questions"]
+        self.questionTemplates=random.shuffle(self.questionTemplates[:])
 
     def toJSON(self):
         base = {}

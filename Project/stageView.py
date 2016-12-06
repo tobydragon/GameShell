@@ -10,12 +10,12 @@ class HighlightRect:
 
 
 class StageView:
-    def __init__(self, stageModel, positionX, positionY, display, cardTitle):
+    def __init__(self, stageModel, positionX, positionY, display, cardTitle, useImages):
         self.posX = positionX
         self.posY = positionY
         self.stageModel = stageModel
         try:
-            self.cardList=self.initCards(cardTitle)
+            self.cardList=self.initCards(cardTitle,useImages)
         except Exception as e:
             print(e)
             raise e
@@ -25,19 +25,19 @@ class StageView:
         self.nextButton = pygbutton.PygButton((1200, 100, 120, 50), "Next")
         self.scoreText=""
 
-    def initCards(self,title):
+    def initCards(self,title,useImage):
         cards = []
         numCards = len(self.stageModel.indList)
         if numCards>10:
             raise Exception("Too many cards (%i>10) to initialize all of them" % numCards)
         x=50
         for i in range(min(numCards,5)):
-            cards.append(card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], title))
+            cards.append(card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], title, useImage=useImage))
             x+=250
         x=50
         if(numCards>5):
             for i in range(5,min(numCards, 10)):
-                cards.append(card.Card(self.posX + x, self.posY + 450, self.stageModel.indList[i], title))
+                cards.append(card.Card(self.posX + x, self.posY + 450, self.stageModel.indList[i], title, useImage=useImage))
                 x += 250
         return cards
 
