@@ -18,7 +18,7 @@ class StageController:
         self.qStage=0
         self.questionTemplates=None
         if questionFile:
-            print("loading qFile)")
+            print("loading question File")
             self.loadQuestionFile(questionFile)
 
     def generateStageModel(self,domainModel):
@@ -65,10 +65,9 @@ class StageController:
                 self.stageView.nextButton.caption="Next"
                 cardResults = self.evaluateCardStates(True)
                 self.score=self.evaluateScore(cardResults)
-                self.percent=100.0*cardResults["correct"]["selected"]/(len(self.stageView.cardList))
-                print("Percent:",self.percent)
-                self.stageView.scoreText="{}/{} correct. {:.1f}%. Score:{}".format(
-                    cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.percent,self.score)
+                self.percent=100.0*(cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"])/(len(self.stageView.cardList))
+                self.stageView.scoreText="{}/{} correct. Score: {:.1F}/10.0".format(
+                    cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.score)
                 self.stageFinished=True
 
 
@@ -76,13 +75,15 @@ class StageController:
         coeff=4
         print(score)
         selectedCorrect = score["correct"]["selected"]
-        selectedIncorrect = score["incorrect"]["unselected"]
+        unselectedIncorrect = score["incorrect"]["unselected"]
         correct=score["correct"]["total"]
         incorrect=score["incorrect"]["total"]
         total=score["total"]
-        calcScore=((selectedCorrect / correct) - (selectedCorrect / total)) + ((selectedIncorrect / incorrect) - (selectedIncorrect / total))
+        print("selectedCorrect %i  unselectedIncorrect %i  correct %i  incorrect %i  total %i"%(selectedCorrect,unselectedIncorrect,correct,incorrect,total))
+        #calcScore=((selectedCorrect / correct) - (selectedCorrect / total)) + ((unselectedIncorrect / incorrect) - (unselectedIncorrect / total))
+        calcScore=(selectedCorrect/correct)*(incorrect/total)+(unselectedIncorrect/incorrect)*(correct/total)
         print("score is:%.2f"%calcScore)
-        return calcScore
+        return calcScore*10
 
     def evaluateCardStates(self, setCardFade = False):
         results={"correct":{"selected":0,"unselected":0,"total":0},"incorrect":{"selected":0,"unselected":0,"total":0},"total":0}
@@ -163,8 +164,10 @@ class StageController:
             print(e)
             raise e
         JSONdata = json.load(f)
-        self.questionTemplates=JSONdata["questions"]
-        self.questionTemplates=random.shuffle(self.questionTemplates[:])
+        questionTemplates=JSONdata["questions"]
+        random.shuffle(questionTemplates)
+        self.questionTemplates=questionTemplates[:]
+        #print(questionTemplates,self.questionTemplates)
 
     def toJSON(self):
         base = {}

@@ -1,6 +1,6 @@
 __author__ = "BenjaminWelsh"
 
-import pygame, pygbutton, pygtools, color, TextWrap, os
+import pygame, pygbutton, pygtools, color, TextWrap, os,random
 
 class Card:
     def __init__(self, x, y, individual, title="", caption="", borderColor=color.BLACK, borderThickness=7, useImage=True):
@@ -15,7 +15,7 @@ class Card:
         self.y=y
         self.fade=False
         self.symbol=self.NONE
-        self.thumbnail=pygame.transform.scale(individual.image,(160,160))
+        self.thumbnail=pygame.transform.scale(individual.images[random.randint(0,len(individual.images)-1)],(160,160))
         self.useImage=useImage
         self.button=pygbutton.PygButton((x, y, 200, 250))
 
