@@ -32,7 +32,7 @@
     },
     {
       "TagType":"Wing Type",
-      "Title":"",
+      "Title":"{Wing Type}",
       "UseImage":true
     },
     {

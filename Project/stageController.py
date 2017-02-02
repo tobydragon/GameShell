@@ -17,6 +17,8 @@ class StageController:
         self.useCardImages = True
         self.qStage=0
         self.questionTemplates=None
+        random.seed(3300)
+
         if questionFile:
             print("loading question File")
             self.loadQuestionFile(questionFile)
@@ -81,7 +83,10 @@ class StageController:
         total=score["total"]
         print("selectedCorrect %i  unselectedIncorrect %i  correct %i  incorrect %i  total %i"%(selectedCorrect,unselectedIncorrect,correct,incorrect,total))
         #calcScore=((selectedCorrect / correct) - (selectedCorrect / total)) + ((unselectedIncorrect / incorrect) - (unselectedIncorrect / total))
-        calcScore=(selectedCorrect/correct)*(incorrect/total)+(unselectedIncorrect/incorrect)*(correct/total)
+        if incorrect is 0:
+            calcScore = selectedCorrect/correct
+        else:
+            calcScore=(selectedCorrect/correct)*(incorrect/total)+(unselectedIncorrect/incorrect)*(correct/total)
         print("score is:%.2f"%calcScore)
         return calcScore*10
 
