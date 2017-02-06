@@ -65,6 +65,7 @@ class Controller:
             if stageResult:
                 self.user.score += stageResult[0]
                 self.user.addPercent(stageResult[1])
+                self.user.addScore(stageResult[0])
                 self.nextStage()
             # if self.gameView.showNextButton:
             #     buttonResponse = self.gameView.checkForNextButton(event)
@@ -78,7 +79,7 @@ class Controller:
             #         self.gameView.showNextButton = True
 
 
-        self.gameView.render(self.user.score,self.user.getAveragePercent(),self.user.currentStage)
+        self.gameView.render(self.user.score,self.user.getAverageScore(),self.user.currentStage)
         self.stageController.renderStep()
         self.gameView.renderButton()
 

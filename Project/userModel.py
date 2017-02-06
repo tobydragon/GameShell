@@ -10,6 +10,7 @@ class User:
         self.username = username
         self.score = 0
         self.percentages=[]
+        self.scores = []
         self.currentStage = 1
         if json:
             self.fromJSON(json)
@@ -20,8 +21,17 @@ class User:
         except ZeroDivisionError as e:
             return 0
 
+    def getAverageScore(self):
+        try:
+            return sum(self.scores)/float(len(self.scores))
+        except ZeroDivisionError as e:
+            return 0
+
     def addPercent(self,percent):
         self.percentages.append(percent)
+
+    def addScore(self,score):
+        self.scores.append(score)
 
     def __repr__(self):
         return("Name: " + self.username + "\n" +
@@ -32,6 +42,7 @@ class User:
         base = {}
         base["username"] = self.username
         base["score"] = self.score
+        base["scores"] = self.scores
         base["percentages"]=self.percentages
         base["currentStage"] = self.currentStage
         return base
@@ -41,6 +52,7 @@ class User:
             self.username = json["username"]
             self.currentStage = json["currentStage"]
             self.score = json["score"]
+            self.scores = json["scores"]
             self.percentages = json["percentages"]
         except KeyError as e:
             print(e)

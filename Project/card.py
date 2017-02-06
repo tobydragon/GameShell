@@ -1,9 +1,9 @@
 __author__ = "BenjaminWelsh"
 
-import pygame, pygbutton, pygtools, color, TextWrap, os
+import pygame, pygbutton, pygtools, color, TextWrap, os,random
 
 class Card:
-    def __init__(self, x, y, individual, title="", caption="", borderColor=color.BLACK, borderThickness=7):
+    def __init__(self, x, y, individual, title="", caption="", borderColor=color.BLACK, borderThickness=7, useImage=True):
         self.individual = individual
         self.borderColor = borderColor
         self.borderThickness = borderThickness
@@ -15,12 +15,13 @@ class Card:
         self.y=y
         self.fade=False
         self.symbol=self.NONE
-        self.thumbnail=pygame.transform.scale(individual.image,(160,160))
-
+        self.thumbnail=pygame.transform.scale(individual.images[random.randint(0,len(individual.images)-1)],(160,160))
+        self.useImage=useImage
         self.button=pygbutton.PygButton((x, y, 200, 250))
 
     def draw(self,display):
-        display.blit(self.thumbnail,(self.x+20, self.y+20, 160, 160))
+        if self.useImage:
+            display.blit(self.thumbnail,(self.x+20, self.y+20, 160, 160))
         font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 18)
         if os.name != "nt":
             symbolFont = pygame.font.Font("/System/Library/Fonts/Menlo.ttc", 32)

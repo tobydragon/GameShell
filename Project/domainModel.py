@@ -39,26 +39,7 @@ class DomainModel:
                             hrTags[k]=", ".join(tags[k])
                     id=str(i)+"_"+row[0].replace(" ","_")
                     self.individualList.append(individual.Individual(row[0],id, row[1], tags,hrTags))
-        """lines = fileInput.readlines()
-        header = lines[0]
-        if header[-1]=='\n':
-            header=header[:-1]
-        keys = header.split(",")
-        data = lines[1:]
-        for line in data:
 
-            if (line[-1]) == '\n': #Strip trailing newline
-                line = line[:-1]
-
-            values = line.split(",")
-            tags={}
-            for k, v in zip(keys, values):
-                if v:
-                    tags[k] = v
-            self.individualList.append(Individual(values[0], values[1], tags))
-
-        fileInput.close()
-        """
         # Initializing the Categories List and the Domain Model
         # catList = ["Porifera", "Cnidaria", "Platyhelminthes", "Nematoda", "Mollusca", "Annelida", "Arthropoda", "Echinodermata", "Chordata"]
         # random.shuffle(catList)

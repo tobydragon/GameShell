@@ -1,7 +1,7 @@
-import stageModel, domainModel, random, stageView, math, settings, individual
+import stageModel, domainModel, random, stageView, math, settings, individual, json
 
 class StageController:
-    def __init__(self, display, logger):
+    def __init__(self, display, logger, questionFile="questionTemplates.json"):
         """
         WARNING: generateStageModel MUST be called to use.
         :param display:
@@ -14,8 +14,25 @@ class StageController:
 
         self.tagType = "Wing Type"
         self.cardTitle = "{Name}"
+        self.useCardImages = True
+        self.qStage=0
+        self.questionTemplates=None
+        random.seed(3300)
+
+        if questionFile:
+            print("loading question File")
+            self.loadQuestionFile(questionFile)
 
     def generateStageModel(self,domainModel):
+        print(self.questionTemplates)
+        if self.questionTemplates:
+            qtNum=math.floor(self.qStage/settings.STAGES_PER_QUESTION)%len(self.questionTemplates)
+            print("using qTemp num",qtNum)
+            qTemplate=self.questionTemplates[qtNum]
+            self.tagType=qTemplate["TagType"]
+            self.cardTitle=qTemplate["Title"]
+            self.useCardImages=qTemplate["UseImage"]
+
         indList = domainModel.individualList[:]
         indList = [i for i in indList if individual.tagFilter(self.tagType)(i)]
         random.shuffle(indList)
@@ -28,9 +45,10 @@ class StageController:
         self.stageFinished = False
         self.score = 0
         self.percent = 0
+        self.qStage+=1
 
     def _remakeStageView(self):
-        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display,self.cardTitle)
+        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display,self.cardTitle,self.useCardImages)
         self.stageView.nextButton.caption = "Check"
 
     def loopStepAll(self, event):
@@ -49,10 +67,9 @@ class StageController:
                 self.stageView.nextButton.caption="Next"
                 cardResults = self.evaluateCardStates(True)
                 self.score=self.evaluateScore(cardResults)
-                self.percent=100.0*cardResults["correct"]["selected"]/(len(self.stageView.cardList))
-                print("Percent:",self.percent)
-                self.stageView.scoreText="{}/{} correct. {:.1f}%. Score:{}".format(
-                    cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.percent,self.score)
+                self.percent=100.0*(cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"])/(len(self.stageView.cardList))
+                self.stageView.scoreText="{}/{} correct. Score: {:.1F}/10.0".format(
+                    cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.score)
                 self.stageFinished=True
 
 
@@ -60,13 +77,18 @@ class StageController:
         coeff=4
         print(score)
         selectedCorrect = score["correct"]["selected"]
-        selectedIncorrect = score["incorrect"]["unselected"]
+        unselectedIncorrect = score["incorrect"]["unselected"]
         correct=score["correct"]["total"]
         incorrect=score["incorrect"]["total"]
         total=score["total"]
-        calcScore=((selectedCorrect / correct) - (selectedCorrect / total)) + ((selectedIncorrect / incorrect) - (selectedIncorrect / total))
+        print("selectedCorrect %i  unselectedIncorrect %i  correct %i  incorrect %i  total %i"%(selectedCorrect,unselectedIncorrect,correct,incorrect,total))
+        #calcScore=((selectedCorrect / correct) - (selectedCorrect / total)) + ((unselectedIncorrect / incorrect) - (unselectedIncorrect / total))
+        if incorrect is 0:
+            calcScore = selectedCorrect/correct
+        else:
+            calcScore=(selectedCorrect/correct)*(incorrect/total)+(unselectedIncorrect/incorrect)*(correct/total)
         print("score is:%.2f"%calcScore)
-        return calcScore
+        return calcScore*10
 
     def evaluateCardStates(self, setCardFade = False):
         results={"correct":{"selected":0,"unselected":0,"total":0},"incorrect":{"selected":0,"unselected":0,"total":0},"total":0}
@@ -139,6 +161,18 @@ class StageController:
 
     def renderStep(self):
         self.stageView.render()
+
+    def loadQuestionFile(self,fileName):
+        try:
+            f = open(fileName)
+        except FileNotFoundError as e:
+            print(e)
+            raise e
+        JSONdata = json.load(f)
+        questionTemplates=JSONdata["questions"]
+        random.shuffle(questionTemplates)
+        self.questionTemplates=questionTemplates[:]
+        #print(questionTemplates,self.questionTemplates)
 
     def toJSON(self):
         base = {}

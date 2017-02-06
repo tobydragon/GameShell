@@ -1,29 +1,44 @@
 {
   "questions":[
     {
-      "TagType":"",
+      "TagType":"Name",
       "Title":"",
       "UseImage":true
     },
     {
-      "TagType":"",
+      "TagType":"Name",
       "Title":"",
       "UseImage":true
     },
     {
-      "TagType":"",
+      "TagType":"Development",
       "Title":"",
       "UseImage":true
     },
     {
-      "TagType":"",
+      "TagType":"Development",
+      "Title":"{Name}",
+      "UseImage":false
+    },
+    {
+      "TagType":"Mouthparts",
       "Title":"",
       "UseImage":true
     },
     {
-      "TagType":"",
-      "Title":"",
+      "TagType":"Mouthparts",
+      "Title":"{Name}",
+      "UseImage":false
+    },
+    {
+      "TagType":"Wing Type",
+      "Title":"{Wing Type}",
       "UseImage":true
+    },
+    {
+      "TagType":"Wing Type",
+      "Title":"{Name}",
+      "UseImage":false
     }
   ]
 }
