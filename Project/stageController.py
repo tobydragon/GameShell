@@ -90,6 +90,8 @@ class StageController:
         print("score is:%.2f"%calcScore)
         return calcScore*10
 
+    #def knowledgeModel
+
     def evaluateCardStates(self, setCardFade = False):
         results={"correct":{"selected":0,"unselected":0,"total":0},"incorrect":{"selected":0,"unselected":0,"total":0},"total":0}
         cardLogData = []
