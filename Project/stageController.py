@@ -90,7 +90,17 @@ class StageController:
         print("score is:%.2f"%calcScore)
         return calcScore*10
 
-    #def knowledgeModel
+    def evaluateKnowledgeScore(self, score):
+
+        #add difficulty field (how do we want to decide this?  Based on template?)
+        tag = self.tagType
+        #difficulty = Must have difficulty variable (1-10)
+        correct = score["correct"]["selected"]+score["incorrect"]["unselected"]
+        incorrect = score["correct"]["unselected"]+score["incorrect"]["selected"]
+        #knowledgeScore = (difficulty*(correct/10))-((10-difficulty)*(incorrect/10))
+        #return knowledgeScore
+
+
 
     def evaluateCardStates(self, setCardFade = False):
         results={"correct":{"selected":0,"unselected":0,"total":0},"incorrect":{"selected":0,"unselected":0,"total":0},"total":0}
