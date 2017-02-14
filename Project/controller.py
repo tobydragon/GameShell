@@ -16,6 +16,8 @@ class Controller:
         self.tempScore = 0
 
         self.logger = logger.Logger(userName, 1.0, settings.DOMAIN_FILE)
+
+        #create knowledgeModel object and pass to stageCOntroller
         self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger)
 
         # No name represents debugging; no saves are made
@@ -118,6 +120,5 @@ class Controller:
 
     def fromJSON(self,json):
         self.user = userModel.User(json=json["userModel"])
-        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger)
         self.stageController.fromJSON(json["stageController"])
 

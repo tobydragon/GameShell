@@ -2,6 +2,7 @@ import stageModel, domainModel, random, stageView, math, settings, individual, j
 
 class StageController:
     def __init__(self, display, logger, questionFile="questionTemplates.json"):
+        ###Add knowledgeModel to parameter list to update after stage ends
         """
         WARNING: generateStageModel MUST be called to use.
         :param display:
@@ -70,6 +71,7 @@ class StageController:
                 self.percent=100.0*(cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"])/(len(self.stageView.cardList))
                 self.stageView.scoreText="{}/{} correct. Score: {:.1F}/10.0".format(
                     cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.score)
+                ##call update knowledgeModel
                 self.stageFinished=True
 
 
@@ -89,18 +91,6 @@ class StageController:
             calcScore=(selectedCorrect/correct)*(incorrect/total)+(unselectedIncorrect/incorrect)*(correct/total)
         print("score is:%.2f"%calcScore)
         return calcScore*10
-
-    def evaluateKnowledgeScore(self, score):
-
-        #add difficulty field (how do we want to decide this?  Based on template?)
-        tag = self.tagType
-        #difficulty = Must have difficulty variable (1-10)
-        correct = score["correct"]["selected"]+score["incorrect"]["unselected"]
-        incorrect = score["correct"]["unselected"]+score["incorrect"]["selected"]
-        #knowledgeScore = (difficulty*(correct/10))-((10-difficulty)*(incorrect/10))
-        #return knowledgeScore
-
-
 
     def evaluateCardStates(self, setCardFade = False):
         results={"correct":{"selected":0,"unselected":0,"total":0},"incorrect":{"selected":0,"unselected":0,"total":0},"total":0}

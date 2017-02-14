@@ -12,7 +12,6 @@ class User:
         self.percentages=[]
         self.scores = []
         self.currentStage = 1
-        self.knowledgeScore = {'Name':0, 'Development':0, 'Mouthparts':0, 'Wing Type':0}
         if json:
             self.fromJSON(json)
 
@@ -33,9 +32,6 @@ class User:
 
     def addScore(self,score):
         self.scores.append(score)
-
-    def addKnowledgeScore(self, tag, newScore):
-        self.knowledgeScore[tag] = self.knowledgeScore[tag]+newScore
 
     def __repr__(self):
         return("Name: " + self.username + "\n" +
