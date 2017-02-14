@@ -1,7 +1,7 @@
 import stageModel, domainModel, random, stageView, math, settings, individual, json
 
 class StageController:
-    def __init__(self, display, logger, questionFile="questionTemplates.json"):
+    def __init__(self, display, logger, knowledge, questionFile="questionTemplates.json"):
         ###Add knowledgeModel to parameter list to update after stage ends
         """
         WARNING: generateStageModel MUST be called to use.
@@ -19,6 +19,7 @@ class StageController:
         self.qStage=0
         self.questionTemplates=None
         random.seed(3300)
+        self.knowledge = knowledge
 
         if questionFile:
             print("loading question File")
@@ -71,7 +72,8 @@ class StageController:
                 self.percent=100.0*(cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"])/(len(self.stageView.cardList))
                 self.stageView.scoreText="{}/{} correct. Score: {:.1F}/10.0".format(
                     cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.score)
-                ##call update knowledgeModel
+                #self.knowledge.updateScore(key, score)
+                ##Must add parameter key and score before uncommenting updateScore call
                 self.stageFinished=True
 
 

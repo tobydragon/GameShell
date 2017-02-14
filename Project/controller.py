@@ -1,4 +1,4 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel
+import domainModel, random, pygame, sys, stageView, gameView, stageModel, knowledgeModel
 import userModel, startMenu, os.path, jsonIO, stageController, settings
 from pygame.locals import *
 import logger
@@ -16,9 +16,9 @@ class Controller:
         self.tempScore = 0
 
         self.logger = logger.Logger(userName, 1.0, settings.DOMAIN_FILE)
-
+        self.knowledge = knowledgeModel.Knowledge()
         #create knowledgeModel object and pass to stageCOntroller
-        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger)
+        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger, self.knowledge)
 
         # No name represents debugging; no saves are made
         if userName != "" and os.path.isfile(USER_DATA_DIR+userName+".json"): #Check if there is already a file for this User
