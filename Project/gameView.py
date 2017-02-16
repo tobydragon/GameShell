@@ -18,7 +18,7 @@ class GameView:
 
     def writeScore(self, score, averageScore):
         font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 22)
-        scoreRender = font.render("Score: "+str(score)+"      Average score: {:.2f}".format(float(averageScore)), True, BLACK)
+        scoreRender = font.render("Total score: {:.2f}    Average score: {:.2f}".format(score,float(averageScore)), True, BLACK)
         self.display.blit(scoreRender, [150, 20])
 
     def writeHelptext(self,):

@@ -15,7 +15,7 @@ class DomainModel:
             self.load(path)
 
     def __repr__(self):
-        return (self.individualList.__repr__())
+        return self.individualList.__repr__()
 
     def load(self, path):
         """
@@ -23,24 +23,28 @@ class DomainModel:
         See wiki for file format
         :param path: path to file (csv format)
         """
-        # Initializing the Individuals List
-        indList = []
         header = None
         typeHeader = None
         with open(path, "r") as csvFile:
             reader = csv.reader(csvFile)
             for rowNum, row in enumerate(reader):
                 if header is None:
+                    # Save the first row as the header
                     header = row
                 elif typeHeader is None and settings.DOMAIN_FIELD_TYPE_HEADER:
+                    # Save the second row as the typeHeader if enabled in settings.py
                     typeHeader = row
                 else:
+                    # Process each line of data
+                    if len(row)<2:
+                        # ignore blank lines
+                        continue
                     tags = {}
                     hrTags = {}  # Human readable
-                    for k, v in zip(header, row):
-                        if v:
-                            tags[k] = v.split("|")
-                            hrTags[k] = ", ".join(tags[k])  # generate human readable tag
+                    for tagType, tagValue in zip(header, row):
+                        if tagValue:
+                            tags[tagType] = tagValue.split("|") # split multiple tags on "|"
+                            hrTags[tagType] = ", ".join(tags[tagType])  # generate human readable tag
 
                     # generate an id for the individual with the format <rowNumInFile>_<individual_name>
                     # Note: replaces spaces in the name with underscores
