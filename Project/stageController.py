@@ -72,8 +72,23 @@ class StageController:
                 self.percent=100.0*(cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"])/(len(self.stageView.cardList))
                 self.stageView.scoreText="{}/{} correct. Score: {:.1F}/10.0".format(
                     cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.score)
+
+                length = 0
+                individuals = []
+                scores = []
+                for card in self.stageView.cardList:
+                    individuals.append(card.individual.name)
+                    scores.append(card.symbol)
+                    length = length + 1
+                    #card.symbol -> 2=correct 3=incorrect
+                    #self.knowledge.updateIndividualScore(self, individuals, scores, length) ##UNCOMMENT
+
+                #self.knowledge.updateTagScore(self, self.tagType, self.score) ##UNCOMMENT
+
+                #create list of individuals and scores and integer length(cardList)
                 #self.knowledge.updateScore(key, score)
-                ##Must add parameter key and score before uncommenting updateScore call
+                ##Must add parameter tag and score before uncommenting updateScore call
+
                 self.stageFinished=True
 
 
@@ -99,9 +114,14 @@ class StageController:
         cardLogData = []
         for card in self.stageView.cardList:
             cardIsCorrect = self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]
+
+            print(card.individual.name) ####
+
+
             if cardIsCorrect is (card.state == card.SELECTED):
             #     correct += 1
                  card.symbol = card.CORRECT
+
             else:
             #     incorrect+=1
                  card.symbol = card.INCORRECT

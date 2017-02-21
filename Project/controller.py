@@ -16,8 +16,7 @@ class Controller:
         self.tempScore = 0
 
         self.logger = logger.Logger(userName, 1.0, settings.DOMAIN_FILE)
-        self.knowledge = knowledgeModel.Knowledge()
-        #create knowledgeModel object and pass to stageCOntroller
+        self.knowledge = knowledgeModel.KnowledgeModel()
         self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger, self.knowledge)
 
         # No name represents debugging; no saves are made
