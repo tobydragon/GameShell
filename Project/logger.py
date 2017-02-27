@@ -1,8 +1,15 @@
 import datetime, json, smtplib
 from email.mime.text import MIMEText
+import settings
 
 class Logger:
-    def __init__(self,username,softwareVersion,domainFile):
+    def __init__(self,username,domainFile):
+        """
+
+        :param username:
+        :param softwareVersion: The file format code. Increment when the format is changed
+        :param domainFile: Name of domain file being used
+        """
         currentDateTime = datetime.datetime.now()
         timestamp = currentDateTime.strftime("%Y-%m-%d-%H_%M_%S")
         self.fileName=timestamp+"_"+username+".json"
@@ -14,17 +21,19 @@ class Logger:
                 "year":currentDateTime.year
             },
             "username":username,
-            "Software Version":softwareVersion,
+            "Software Version":settings.SOFTWARE_VERSION,
             "domain":domainFile,
             "actions":[]
         }
+        # make a reference to the data array in the data object
         self._actionsRef=self._data["actions"]
         self.containsData=False
 
     def logAction(self, actionType, actionData):
         """
         writes action to log after inserting timestamp
-        :param action:
+        :param actionType:
+        :param actionData:
         :return:
         """
         now=datetime.datetime.now()
