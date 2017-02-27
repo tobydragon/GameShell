@@ -32,7 +32,7 @@ class Individual:
         return self._id
 
     def __repr__(self):
-        return (self.name + " " + str(self.imagepaths) + "Tags: "+", ".join(self.tags))
+        return "<Individual> id=%s"%self._id#(self.name + " " + str(self.imagepaths) + "Tags: "+", ".join(self.tags))
 
     def toJSON(self):
         base = {}

@@ -39,4 +39,6 @@ def drawText(surface, text, color, rect, font, aa=False, bkg=None):
         # remove the text we just blitted
         text = text[i:]
 
+    if text:
+        print("Overflow text:",text)
     return text

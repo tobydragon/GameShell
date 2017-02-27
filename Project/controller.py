@@ -86,13 +86,12 @@ class Controller:
             stageResult = self.stageController.loopStepAll(event)
             # If the stage has been completed
             if stageResult:
-                self.user.score += stageResult[0]
-                self.user.addPercent(stageResult[1])
-                self.user.addScore(stageResult[0])
+                self.user.score += stageResult
+                self.user.addScore(stageResult)
                 self.nextStage()
 
         # Render screen
-        self.gameView.render(self.user.score, self.user.getAverageScore(), self.user.currentStage)
+        self.gameView.render(self.user.score*100, self.user.getAverageScore()*100, self.user.currentStage)
         self.stageController.renderStep()
         self.gameView.renderButton()
 

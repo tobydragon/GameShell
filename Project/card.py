@@ -11,6 +11,7 @@ class Card:
         self.borderThickness = borderThickness
         self.title = title
         self.caption = caption
+        self.overlayCaption = ""
         self.state = self.NONE
         self.cardRect = pygame.Rect(x, y, 200, 250)
         self.x = x
@@ -31,6 +32,7 @@ class Card:
         if self.useImage:
             display.blit(self.thumbnail, (self.x + 20, self.y + 20, 160, 160))
         font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 18)
+        scoreFont = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-B.ttf", 32)
         if os.name != "nt":
             symbolFont = pygame.font.Font("/System/Library/Fonts/Menlo.ttc", 32)
         else:
@@ -56,6 +58,20 @@ class Card:
             surf = pygame.Surface((self.cardRect.w - self.borderThickness, self.cardRect.h - self.borderThickness), pygame.SRCALPHA)
             surf.fill((255, 255, 255, 200))
             display.blit(surf, (self.cardRect.x + self.borderThickness / 2, self.cardRect.y + self.borderThickness / 2))
+
+        if self.overlayCaption is not "" and self.overlayCaption is not None:
+            surf = pygame.Surface((self.cardRect.w - self.borderThickness, 50 - self.borderThickness),
+                                  pygame.SRCALPHA)
+            surf.fill((255, 255, 255, 170))
+            display.blit(surf, (self.cardRect.x + self.borderThickness / 2+1, self.cardRect.y + self.borderThickness / 2))
+
+            TextWrap.drawText(display,
+                              self.overlayCaption,
+                              (color.BLACK, color.BLUE, color.NICEGREEN, color.RED)[self.symbol],
+                              pygame.Rect(self.cardRect.x + 15,
+                                          self.cardRect.y + 5, 160, 65),
+                              scoreFont,
+                              True)
 
         symbolDisplay = symbolFont.render(["", "", "✔", "✘"][self.symbol], True,
                                           (color.BLACK, color.BLUE, color.NICEGREEN, color.RED)[self.symbol])

@@ -1,7 +1,7 @@
 import stageModel, domainModel, random, stageView, math, settings, individual, json
 
 class StageController:
-    def __init__(self, display, logger, questionFile="insects_set.question_set.json"):
+    def __init__(self, display, logger, questionFile=None):
         """
         WARNING: generateStageModel MUST be called to use.
         :param display:
@@ -12,7 +12,7 @@ class StageController:
         self.percent = 0
         self.logger = logger
 
-        self.tagType = "Wing Type"
+        self.tagType = "Name"
         self.cardTitle = "{Name}"
         self.useCardImages = True
         self.qStage=0
@@ -24,6 +24,9 @@ class StageController:
         if questionFile:
             print("loading question File")
             self.loadQuestionFile(questionFile)
+        elif settings.QUESTIONS_FILE:
+            self.loadQuestionFile(settings.QUESTIONS_FILE)
+
 
     def _checkStageModelInit(self):
         if self.stageModel==None:
@@ -48,6 +51,10 @@ class StageController:
         # Filter indList to individuals that have the tagType of the question
         filterFunction = individual.createTagFilter(self.tagType)
         indList = [i for i in indList if filterFunction(i)]
+
+        if len(indList)==0:
+            print("ERROR: No individuals have the specified tagType %s"%self.tagType)
+            raise Exception
         # Randomize the order
         random.shuffle(indList)
         if (len(indList) > 10):
@@ -81,62 +88,80 @@ class StageController:
         if self.stageFinished:
             # Waiting for Next button to be clicked
             if self.stageView.checkNextButton(event):
-                return self.score,self.percent
+                return self.score
         else:
             self.updateCards(event)
             if self.stageView.checkNextButton(event):
                 self.stageView.nextButton.caption="Next"
                 cardResults = self.evaluateCardStates(True)
-                self.score=self.evaluateScore(cardResults)
-                self.percent=100.0*(cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"])/(len(self.stageView.cardList))
-                self.stageView.scoreText="{}/{} correct. Score: {:.1F}/10.0".format(
-                    cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.score)
+                scoreInfo=ScoreInfo(cardResults)
+                self.giveCardsValues(cardResults,scoreInfo)
+                self.score=self.evaluateScore(cardResults,scoreInfo)
+
+                #self.percent=100.0*(len(cardResults.correct)/(len(self.stageView.cardList)))
+                self.stageView.scoreText="{}/{} correct. Points: {:.1F}".format(
+                    len(cardResults.correct),len(self.stageView.cardList),self.score*100)
                 self.stageFinished=True
 
 
-    def evaluateScore(self,score):
+    def evaluateScore(self,cardStates,scoreInfo):
         self._checkStageModelInit()
-
-        coeff=4
-        print(score)
-        selectedCorrect = score["correct"]["selected"]
-        unselectedIncorrect = score["incorrect"]["unselected"]
-        correct=score["correct"]["total"]
-        incorrect=score["incorrect"]["total"]
-        total=score["total"]
-        print("selectedCorrect %i  unselectedIncorrect %i  correct %i  incorrect %i  total %i"%(selectedCorrect,unselectedIncorrect,correct,incorrect,total))
         #calcScore=((selectedCorrect / correct) - (selectedCorrect / total)) + ((unselectedIncorrect / incorrect) - (unselectedIncorrect / total))
-        if incorrect is 0:
-            calcScore = selectedCorrect/correct
-        else:
-            calcScore=(selectedCorrect/correct)*(incorrect/total)+(unselectedIncorrect/incorrect)*(correct/total)
+        calcScore=scoreInfo.rightVal*len(cardStates.correctRightTag)+scoreInfo.wrongVal*len(cardStates.correctWrongTag)
         print("score is:%.2f"%calcScore)
-        return calcScore*10
+        return calcScore
+
+    def giveCardsValues(self,cardStates,scoreInfo):
+        for card in cardStates.rightTag:
+            card.overlayCaption = str(round(100*scoreInfo.rightVal,1))
+        for card in cardStates.wrongTag:
+            card.overlayCaption = str(round(100*scoreInfo.wrongVal,1))
 
     def evaluateCardStates(self, setCardFade = False):
         self._checkStageModelInit()
 
-        results={"correct":{"selected":0,"unselected":0,"total":0},"incorrect":{"selected":0,"unselected":0,"total":0},"total":0}
+        #results={"correct":{"selected":0,"unselected":0,"total":0},"incorrect":{"selected":0,"unselected":0,"total":0},"total":0}
         cardLogData = []
+        selected=[]
+        unselected=[]
+        rightTag=[]
+        wrongTag=[]
         for card in self.stageView.cardList:
-            cardIsCorrect = self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]
-            if cardIsCorrect is (card.state == card.SELECTED):
+            cardHasRightTag = self.stageModel.correctTag in card.individual.tags[self.stageModel.tagType]
+            if cardHasRightTag:
+                rightTag.append(card)
+            else:
+                wrongTag.append(card)
+
+            if card.state==card.SELECTED:
+                selected.append(card)
+            else:
+                unselected.append(card)
+            """
+            if cardHasRightTag is (card.state == card.SELECTED):
             #     correct += 1
                  card.symbol = card.CORRECT
             else:
             #     incorrect+=1
                  card.symbol = card.INCORRECT
-            if not cardIsCorrect and setCardFade:
-                 card.fade=True
-            results["correct" if cardIsCorrect else "incorrect"]["selected" if card.state is card.SELECTED else "unselected"]+=1
-            results["correct" if cardIsCorrect else "incorrect"]["total"]+=1
-            results["total"]+=1
+                """
+
             if settings.LOG_STAGE_EVALS:
                 cardLogData.append({
                     "individualID":card.individual.id(),
                     "selected":card.state is card.SELECTED,
-                    "correctIndividual":cardIsCorrect
+                    "correctIndividual":cardHasRightTag
                 })
+        results=CardStateInfo(selected,unselected,rightTag,wrongTag)
+        if setCardFade:
+            for card in results.wrongTag:
+                card.fade = True
+        for card in results.correct:
+            card.symbol=card.CORRECT
+
+        for card in results.incorrect:
+            card.symbol = card.INCORRECT
+
         if settings.LOG_STAGE_EVALS:
             self.logger.logAction("stageEval",{
                 "cards":cardLogData,
@@ -182,7 +207,7 @@ class StageController:
         except FileNotFoundError as e:
             print(e)
             raise e
-        
+
     def toJSON(self):
         base = {}
         base["stage"] = self.stageModel.toJSON()
@@ -218,3 +243,38 @@ class StageController:
         else:
             return 0
         """
+class ScoreInfo:
+    def __init__(self,cardStates):
+        if len(cardStates.rightTag)==0:
+            self.rightVal=0
+            self.wrongVal=1.0/len(cardStates.wrongTag)
+        elif len(cardStates.wrongTag)==0:
+            self.rightVal=1.0/len(cardStates.rightTag)
+            self.wrongVal=0
+        else:
+            self.rightVal=0.5/len(cardStates.rightTag)
+            self.wrongVal=0.5/len(cardStates.wrongTag)
+        self.rightVal = math.ceil(self.rightVal*1000)/1000.0
+        self.wrongVal = math.ceil(self.wrongVal * 1000) / 1000.0
+
+
+class CardStateInfo:
+    def __init__(self,selected,unselected,rightTag,wrongTag):
+        self.selected=selected
+        self.unselected=unselected
+        self.rightTag=rightTag
+        self.wrongTag=wrongTag
+        self.correctRightTag = [i for i in selected if i in rightTag]
+        self.correctWrongTag =[i for i in unselected if i in wrongTag]
+        self.correct=self.correctRightTag+self.correctWrongTag
+        self.incorrect=[i for i in unselected if i in rightTag]+[i for i in selected if i in wrongTag]
+        assert(len(selected)+len(unselected)==len(rightTag)+len(wrongTag) and len(rightTag)+len(wrongTag)==len(self.correct)+len(self.incorrect))
+        self.totalCount = len(self.correct) + len(self.incorrect)
+
+    def __repr__(self):
+        return "selected:%s\nunselected:%s\nrightTag%s\nwrongTag%s\ncorrect%s\nincorrect%s"%(str(self.selected),
+                                                                                             str(self.unselected),
+                                                                                             str(self.rightTag),
+                                                                                             str(self.wrongTag),
+                                                                                             str(self.correct),
+                                                                                             str(self.incorrect))
