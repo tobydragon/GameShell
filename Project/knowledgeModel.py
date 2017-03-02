@@ -7,32 +7,47 @@ class KnowledgeModel:
         self.tagKnowledgeScore = {}
         self.num_Tags = 0
 
-    #individuals is list of individuals on stage
-    #scores are corresponding score (correct = 1) (incorrect = -1)
-    #length is number of values in lists indiviuals and scores
-    def updateIndividualScore(self, individuals, scores, length):
-        print("Test")
-        for i in length:
-            if individuals[i] in self.individualKnowledgeScore:
-                self.individualKnowledgeScore[individuals[i]] = self.individualKnowledgeScore[individuals[i]] + scores[i]
+    def updateIndividualScore(self, name, score):
+        if name in self.individualKnowledgeScore:
+            self.individualKnowledgeScore[name] = self.individualKnowledgeScore[name] + score
+
+        else:
+            self.individualKnowledgeScore[name] = score
+            self.num_Individuals = self.num_Individuals + 1
+
+    def checkCorrectCards(self, cardList):
+        for i in range(len(cardList)):
+            checkCorrect = cardList[i].symbol
+            if (checkCorrect == 2):
+                #Correct
+                self.updateIndividualScore(cardList[i].individual.name, 1)
+
+            elif (checkCorrect == 3):
+                #Incorrect
+                self.updateIndividualScore(cardList[i].individual.name, -1)
 
             else:
-                self.individualKnowledgeScore[individuals[i]] = scores[i]
-                self.num_Individuals = self.num_Individuals + 1
+                print("Error, card symbol (correct or incorrect) did not return value of 2 or 3")
 
-        for z in self.individualKnowledgeScore:
-            print(z, ": ", self.individualKnowledgeScore[z])
+        # Card SCORE PRINTOUT (Must Create function)
+        # self.printCards()
+
+
 
     def updateTagScore(self, tag, score):
         if tag in self.tagKnowledgeScore:
             self.tagKnowledgeScore[tag] = self.tagKnowledgeScore[tag] + score
             #This must be fixed because it is a percent so adding score will make it >100%
+            #TODO: Create a method of updating the tag score based on percentage rather than adding them together
 
         else:
             self.tagKnowledgeScore[tag] = score
             self.num_Tags = self.num_Tags + 1
 
-    def getIndividualScore(self, keyToGet):
+        #TAG SCORE PRINTOUT (Must Create function)
+        #self.printTags()
+
+    def getCardScore(self, keyToGet):
         if keyToGet in self.individualKnowledgeScore:
             print("Key: ", keyToGet, " Score: ", self.individualKnowledgeScore[keyToGet])
             return self.individualKnowledgeScore[keyToGet]

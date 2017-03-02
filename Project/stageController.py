@@ -73,21 +73,15 @@ class StageController:
                 self.stageView.scoreText="{}/{} correct. Score: {:.1F}/10.0".format(
                     cardResults["correct"]["selected"]+cardResults["incorrect"]["unselected"],len(self.stageView.cardList),self.score)
 
-                length = 0
-                individuals = []
-                scores = []
-                for card in self.stageView.cardList:
-                    individuals.append(card.individual.name)
-                    scores.append(card.symbol)
-                    length = length + 1
-                    #card.symbol -> 2=correct 3=incorrect
-                    #self.knowledge.updateIndividualScore(self, individuals, scores, length) ##UNCOMMENT
+                #TODO: Fix card.symbol to return something different than 2 and 3 for correct and incorrect answer
 
-                #self.knowledge.updateTagScore(self, self.tagType, self.score) ##UNCOMMENT
 
-                #create list of individuals and scores and integer length(cardList)
-                #self.knowledge.updateScore(key, score)
-                ##Must add parameter tag and score before uncommenting updateScore call
+                self.knowledge.checkCorrectCards(self.stageView.cardList)
+                #SHould we call this updateCardScore() and within that checkCorrect/update?
+
+                self.knowledge.updateTagScore(self.tagType, self.score)
+                #Updates Score for tag based on what score the stage was given
+
 
                 self.stageFinished=True
 
