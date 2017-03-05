@@ -11,6 +11,15 @@ class HighlightRect:
 
 class StageView:
     def __init__(self, stageModel, positionX, positionY, display, cardTitle, useImages):
+        """
+
+        :param stageModel: the StageModel to use
+        :param positionX:
+        :param positionY:
+        :param display: pygame display object
+        :param cardTitle: The title string for cards
+        :param useImages: boolean to use images on cards
+        """
         self.posX = positionX
         self.posY = positionY
         self.stageModel = stageModel
@@ -25,7 +34,13 @@ class StageView:
         self.nextButton = pygbutton.PygButton((1200, 100, 120, 50), "Next")
         self.scoreText=""
 
-    def initCards(self,title,useImage):
+    def initCards(self, title, useImage):
+        """
+        Generate new cards from the StageModel
+        :param title: Card title
+        :param useImage: boolean: whether to show images
+        :return:
+        """
         cards = []
         numCards = len(self.stageModel.indList)
         if numCards>10:
