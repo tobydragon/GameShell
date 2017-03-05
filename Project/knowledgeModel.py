@@ -12,7 +12,7 @@ class KnowledgeModel:
             self.individualKnowledgeScore[name] = self.individualKnowledgeScore[name] + score
 
         else:
-            self.individualKnowledgeScore[name] = score
+            self.individualKnowledgeScore[name] = []
             self.num_Individuals = self.num_Individuals + 1
 
     def checkCorrectCards(self, cardList):
