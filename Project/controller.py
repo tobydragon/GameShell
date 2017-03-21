@@ -18,8 +18,8 @@ class Controller:
         self.tempScore = 0
 
         self.logger = logger.Logger(userName, settings.DOMAIN_FILE)
-        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger, self.knowledge)
         self.knowledge = knowledgeModel.KnowledgeModel()
+        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger, self.knowledge)
 
         # No name represents debugging; no saves are made
         if userName != "" and os.path.isfile(

@@ -1,7 +1,7 @@
 import stageModel, domainModel, random, stageView, math, settings, individual, json
 
 class StageController:
-    def __init__(self, display, logger, knowledge, questionFile="questionTemplates.json"):
+    def __init__(self, display, logger, knowledge, questionFile=None):
         ###Add knowledgeModel to parameter list to update after stage ends
         """
         WARNING: generateStageModel MUST be called to use.
@@ -103,8 +103,10 @@ class StageController:
                 #self.percent=100.0*(len(cardResults.correct)/(len(self.stageView.cardList)))
                 self.stageView.scoreText="{}/{} correct. Points: {:.1F}".format(
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
+
                 self.knowledge.updateTagScore(self.tagType, self.score)
-                self.knowledge.checkCorrectCards(self.stageView.cardList)
+                self.knowledge.checkCorrectCards(cardResults.correct, cardResults.incorrect, cardResults.rightTag, cardResults.wrongTag, scoreInfo)
+
                 #Updates Score for tag based on what score the stage was given
                 #SHould we call this updateCardScore() and within that checkCorrect/update?
 
