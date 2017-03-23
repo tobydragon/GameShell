@@ -1,4 +1,6 @@
 __author__ = 'Kevin Pomer'
+import scoreTimestampModel
+
 class KnowledgeModel:
     def __init__(self):
         self.individualKnowledgeScore = {}
@@ -41,13 +43,13 @@ class KnowledgeModel:
             self.updateIndividualScore(individual, individualScores[individual])
 
     def updateTagScore(self, tag, score):
+        scoreTime = scoreTimestampModel.Timestamp(score)
         if tag in self.tagKnowledgeScore:
-            self.tagKnowledgeScore[tag].append(score)
-            #This must be fixed because it is a percent so adding score will make it >100%
+            self.tagKnowledgeScore[tag].append(scoreTime)
             #TODO: Create a method of updating the tag score based on percentage rather than adding them together
 
         else:
-            self.tagKnowledgeScore[tag] = [score]
+            self.tagKnowledgeScore[tag] = [scoreTime]
 
 
     def getIndividualScore(self, keyToGet):
@@ -68,8 +70,8 @@ class KnowledgeModel:
         # TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
         if keyToGet in self.tagKnowledgeScore:
             totalScore = 0
-            for score in self.tagKnowledgeScore[keyToGet]:
-                totalScore = totalScore + score
+            for timeStamp in self.tagKnowledgeScore[keyToGet]:
+                totalScore = totalScore + timeStamp.getScore()
 
             totalScore = totalScore / len(self.tagKnowledgeScore[keyToGet])
             return totalScore
