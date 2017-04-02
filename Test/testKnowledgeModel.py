@@ -4,17 +4,17 @@ from knowledgeModel import KnowledgeModel
 from knowledgeModel import computeScore
 #from stageController import CardStateInfo
 
-from scoreTimestampModel import AssesmentEvent
+from assessmentEventModel import AssesmentEvent
 from time import sleep
 
 class TestKnowledgeScore(TestCase):
 
     def testTagScore(self):
         testKnowledge = KnowledgeModel()
-        testKnowledge.updateTagScore("tag1", 0.5)
-        self.assertEqual(0.5, testKnowledge.calcTagScore("tag1"))
-        testKnowledge.updateTagScore("tag1", 0.75)
-        self.assertEqual(0.625, testKnowledge.calcTagScore("tag1"))
+        testKnowledge.updateTagTypeScore("tag1", 0.5)
+        self.assertEqual(0.5, testKnowledge.calcTagTypeScore("tag1"))
+        testKnowledge.updateTagTypeScore("tag1", 0.75)
+        self.assertEqual(0.625, testKnowledge.calcTagTypeScore("tag1"))
 
     def testIndividualScore(self):
         #Does not use timeStamp, but instead averages all scores
@@ -38,10 +38,10 @@ class TestKnowledgeScore(TestCase):
         testKnowledge = KnowledgeModel()
         beforeTime = AssesmentEvent(0, 5)
         sleep(0.1)
-        testKnowledge.updateTagScore("Tag1", 15, [1])
+        testKnowledge.updateTagTypeScore("Tag1", 15, [1])
         sleep(0.1)
         afterTime = AssesmentEvent(0, 5)
-        time = testKnowledge.tagKnowledgeScore["Tag1"][0].getTime()
+        time = testKnowledge.tagTypeKnowledgeScore["Tag1"][0].getTime()
         beforeTimeCorrect = 0
         afterTimeCorrect = 0
 

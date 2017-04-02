@@ -1,14 +1,18 @@
 __author__ = 'Kevin Pomer'
-import scoreTimestampModel
+import assessmentEventModel
 from stageController import CardStateInfo
 
 class KnowledgeModel:
-    def __init__(self):
-        self.individualKnowledgeScore = {}
-        self.tagKnowledgeScore = {}
+    def __init__(self, json=None):
+        if json:
+            self.fromJSON(json)
+
+        else:
+            self.individualKnowledgeScore = {}
+            self.tagTypeKnowledgeScore = {}
 
     def updateIndividualScore(self, name, score, difficulty):
-        event = scoreTimestampModel.AssesmentEvent(score, difficulty)
+        event = assessmentEventModel.AssesmentEvent(score, difficulty)
         if name in self.individualKnowledgeScore:
             self.individualKnowledgeScore[name].append(event)
 
@@ -74,7 +78,7 @@ class KnowledgeModel:
         for individual in individualScores:
             self.updateIndividualScore(individual, individualScores[individual], difficulty[individual])
 
-    def getTagDifficulty(self, cardResults):
+    def getTagTypeDifficulty(self, cardResults):
         #Current system is based on number of correct answers in question
         #This can be changed in the future when a better method is decided on
         #Scored 1 - 10
@@ -88,15 +92,15 @@ class KnowledgeModel:
 
         return difficulty
 
-    def updateTagScore(self, tag, score, cardResults):
-        difficulty = self.getTagDifficulty(cardResults)
-        event = scoreTimestampModel.AssesmentEvent(score, difficulty)
-        if tag in self.tagKnowledgeScore:
-            self.tagKnowledgeScore[tag].append(event)
+    def updateTagTypeScore(self, tag, score, cardResults):
+        difficulty = self.getTagTypeDifficulty(cardResults)
+        event = assessmentEventModel.AssesmentEvent(score, difficulty)
+        if tag in self.tagTypeKnowledgeScore:
+            self.tagTypeKnowledgeScore[tag].append(event)
             #TODO: Create a method of updating the tag score based on percentage rather than adding them together
 
         else:
-            self.tagKnowledgeScore[tag] = [event]
+            self.tagTypeKnowledgeScore[tag] = [event]
 
 
     def calcIndividualScore(self, keyToGet):
@@ -125,7 +129,7 @@ class KnowledgeModel:
             print("There is no score for this key")
         """
 
-    def calcTagScore(self, keyToGet):
+    def calcTagTypeScore(self, keyToGet):
         # TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
         totalScore = computeScore(self.TagScore[keyToGet])
         return totalScore
@@ -151,9 +155,23 @@ class KnowledgeModel:
             print("There is no score for this key")
         """
 
+    def toJSON(self):
+        base = {}
+        base["individualKnowledgeScore"] = self.individualKnowledgeScore
+        base["tagTypeKnowledgeScore"] = self.tagTypeKnowledgeScore
+        return base
+
+    def fromJSON(self, json):
+        try:
+            self.individualKnowledgeScore = json["individualKnowledgeScore"]
+            self.tagTypeKnowledgeScore = json["tagTypeKnowledgeScore"]
+        #Why do we have this try-catch?  IF there is a json, this should never happen
+        except KeyError as e:
+            print(e)
+
 #must import knowledgeModel to call
 from knowledgeModel import KnowledgeModel
-from scoreTimestampModel import AssesmentEvent
+from assessmentEventModel import AssesmentEvent
 def computeScore(events):
     difficulties = []
     totalScore = 0

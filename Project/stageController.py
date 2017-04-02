@@ -105,7 +105,7 @@ class StageController:
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
 
 
-                self.knowledge.updateTagScore(self.tagType, self.score, cardResults)
+                self.knowledge.updateTagTypeScore(self.tagType, self.score, cardResults)
                 self.knowledge.checkCorrectCards(cardResults, scoreInfo)
 
                 #Updates Score for tag based on what score the stage was given
