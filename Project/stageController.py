@@ -104,8 +104,9 @@ class StageController:
                 self.stageView.scoreText="{}/{} correct. Points: {:.1F}".format(
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
 
-                self.knowledge.updateTagScore(self.tagType, self.score)
-                self.knowledge.checkCorrectCards(cardResults.correct, cardResults.incorrect, cardResults.rightTag, cardResults.wrongTag, scoreInfo)
+
+                self.knowledge.updateTagScore(self.tagType, self.score, cardResults)
+                self.knowledge.checkCorrectCards(cardResults, scoreInfo)
 
                 #Updates Score for tag based on what score the stage was given
                 #SHould we call this updateCardScore() and within that checkCorrect/update?
@@ -113,7 +114,6 @@ class StageController:
 
 
                 self.stageFinished=True
-
 
     def evaluateScore(self,cardStates,scoreInfo):
         self._checkStageModelInit()

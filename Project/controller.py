@@ -134,3 +134,4 @@ class Controller:
     def fromJSON(self, json):
         self.user = userModel.User(json=json["userModel"])
         self.stageController.fromJSON(json["stageController"])
+        ##Model user fromJSON for knowledgeModel
