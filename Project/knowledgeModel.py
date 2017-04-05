@@ -14,6 +14,7 @@ class KnowledgeModel:
                                                     #Because it is simply computed by the TagKnowledgeScore dictionary
             #TODO: Create methods for questionTagType and differentiate between Tag/TagType scores
 
+    ##BEGIN INDIVIDUAL METHODS##
     def updateIndividualScore(self, name, score, difficulty):
         event = assessmentEventModel.AssesmentEvent(score, difficulty)
         if name in self.individualKnowledgeScore:
@@ -52,6 +53,7 @@ class KnowledgeModel:
 
 
     def checkCorrectCards(self, cardResults, scoreInfo):
+        ##Used to calculate Individual Score
         rightVal = round(100*scoreInfo.rightVal,1)
         wrongVal = round(100*scoreInfo.wrongVal,1)
 
@@ -81,7 +83,14 @@ class KnowledgeModel:
         for individual in individualScores:
             self.updateIndividualScore(individual, individualScores[individual], difficulty[individual])
 
-    def getQuestionTagDifficulty(self, cardResults):
+    def calcIndividualScore(self, keyToGet):
+        #TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
+        totalScore = computeScore(self.individualKnowledgeScore[keyToGet])
+        return totalScore
+    ##END INDIVIDUAL METHODS##
+
+    ##BEGIN QUESTION_TAG METHODS##
+    def calcQuestionTagDifficulty(self, cardResults):
         #Current system is based on number of correct answers in question
         #This can be changed in the future when a better method is decided on
         #Scored 1 - 10
@@ -96,7 +105,7 @@ class KnowledgeModel:
         return difficulty
 
     def updateQuestionTagScore(self, tag, score, cardResults):
-        difficulty = self.getQuestionTagDifficulty(cardResults)
+        difficulty = self.calcQuestionTagDifficulty(cardResults)
         event = assessmentEventModel.AssesmentEvent(score, difficulty)
         if tag in self.questionTagKnowledgeScore:
             self.questionTagKnowledgeScore[tag].append(event)
@@ -106,58 +115,14 @@ class KnowledgeModel:
             self.questionTagKnowledgeScore[tag] = [event]
 
 
-    def calcIndividualScore(self, keyToGet):
-        #TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
-        totalScore = computeScore(self.individualKnowledgeScore[keyToGet])
-        return totalScore
-
-
-
-        """
-        Old method of doing score
-
-
-        :param keyToGet:
-        :return:
-
-        if keyToGet in self.individualKnowledgeScore:
-            totalScore = 0
-            for score in self.individualKnowledgeScore[keyToGet]:
-                totalScore = totalScore + score
-
-            totalScore = totalScore/len(self.individualKnowledgeScore[keyToGet])
-            return totalScore
-
-        else:
-            # Should this return anything?
-            print("There is no score for this key")
-        """
-
     def calcQuestionTagScore(self, keyToGet):
         # TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
-        totalScore = computeScore(self.TagScore[keyToGet])
+        totalScore = computeScore(self.questionTagKnowledgeScore[keyToGet])
         return totalScore
 
+    ##END QUESTION_TAG METHODS##
 
-        """
-        Old method of scoring
-
-
-        :param keyToGet:
-        :return:
-
-        if keyToGet in self.tagKnowledgeScore:
-            totalScore = 0
-            for timeStamp in self.tagKnowledgeScore[keyToGet]:
-                totalScore = totalScore + timeStamp.getScore()
-
-            totalScore = totalScore / len(self.tagKnowledgeScore[keyToGet])
-            return totalScore
-
-        else:
-            #Should this return anything?
-            print("There is no score for this key")
-        """
+    #TODO: Create method to calculate questionTagTypeKnowledgeScore from values in dict questionTagKnowledgeScore
 
     def toJSON(self):
         base = {}
@@ -192,7 +157,7 @@ def computeScore(events):
     for d in difficulties:
         averageDifficulty = averageDifficulty + d
 
-    averageDifficulty = averageDifficulty/len(averageDifficulty)
+    averageDifficulty = averageDifficulty/(len(difficulties))
 
     totalScore = totalScore/(len(events)*averageDifficulty)
     return totalScore
