@@ -11,10 +11,10 @@ class TestKnowledgeScore(TestCase):
 
     def testTagScore(self):
         testKnowledge = KnowledgeModel()
-        testKnowledge.updateTagTypeScore("tag1", 0.5)
-        self.assertEqual(0.5, testKnowledge.calcTagTypeScore("tag1"))
-        testKnowledge.updateTagTypeScore("tag1", 0.75)
-        self.assertEqual(0.625, testKnowledge.calcTagTypeScore("tag1"))
+        testKnowledge.updateQuestionTagScore("tag1", 0.5)
+        self.assertEqual(0.5, testKnowledge.calcQuestionTagScore("tag1"))
+        testKnowledge.updateQuestionTagScore("tag1", 0.75)
+        self.assertEqual(0.625, testKnowledge.calcQuestionTagScore("tag1"))
 
     def testIndividualScore(self):
         #Does not use timeStamp, but instead averages all scores
@@ -38,10 +38,10 @@ class TestKnowledgeScore(TestCase):
         testKnowledge = KnowledgeModel()
         beforeTime = AssesmentEvent(0, 5)
         sleep(0.1)
-        testKnowledge.updateTagTypeScore("Tag1", 15, [1])
+        testKnowledge.updateQuestionTagScore("Tag1", 15, [1])
         sleep(0.1)
         afterTime = AssesmentEvent(0, 5)
-        time = testKnowledge.tagTypeKnowledgeScore["Tag1"][0].getTime()
+        time = testKnowledge.questionTagKnowledgeScore["Tag1"][0].getTime()
         beforeTimeCorrect = 0
         afterTimeCorrect = 0
 

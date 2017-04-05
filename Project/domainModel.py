@@ -14,6 +14,8 @@ class DomainModel:
         if path:
             self.load(path)
 
+        self.questionTagTypeDict = {"Development":["Anamorphic", "Ametabolous", "Hemimatabolous", "Holometabolous"], "MouthParts":["Entognathous", "Chewing", "Piercing-Sucking"], "WingType":["Wingless", "Membranous", "Straight", "Fringed", "Covered With Scales"]}
+        #{questionTagType:[Tags]} - Links tags with tagTypes rather than just with individuals
     def __repr__(self):
         return self.individualList.__repr__()
 
