@@ -11,12 +11,16 @@ class DomainModel:
         :param path: path to a domain file (.csv) to load from
         """
         self.individualList = individualList
+        self.questionTagTypeDict = {"Development": ["Anamorphic", "Ametabolous", "Hemimatabolous", "Holometabolous"],
+                                    "MouthParts": ["Entognathous", "Chewing", "Piercing-Sucking"],
+                                    "WingType": ["Wingless", "Membranous", "Straight", "Fringed",
+                                                 "Covered With Scales"]}
+        # {questionTagType:[questionTags]} - Links tags with tagTypes rather than just with individuals
+        # Do we need one for {questionTag: [Individuals]} or is that covered when we get the individialList
+
         if path:
             self.load(path)
 
-        self.questionTagTypeDict = {"Development":["Anamorphic", "Ametabolous", "Hemimatabolous", "Holometabolous"], "MouthParts":["Entognathous", "Chewing", "Piercing-Sucking"], "WingType":["Wingless", "Membranous", "Straight", "Fringed", "Covered With Scales"]}
-        #{questionTagType:[questionTags]} - Links tags with tagTypes rather than just with individuals
-        #Do we need one for {questionTag: [Individuals]} or is that covered when we get the individialList
     def __repr__(self):
         return self.individualList.__repr__()
 

@@ -2,17 +2,19 @@ __author__ = 'Kevin Pomer'
 import assessmentEventModel
 from stageController import CardStateInfo
 
+
 class KnowledgeModel:
-    def __init__(self, json=None):
+    def __init__(self, qTagTypeDict, json=None):
         if json:
             self.fromJSON(json)
+            self.questionTagTypeDictionary = qTagTypeDict
 
         else:
             self.individualKnowledgeScore = {}
             self.questionTagKnowledgeScore = {}
-            self.questionTagTypeKnowledgeScore = {} #SHould this be a value instead of a dictionary
+            self.questionTagTypeKnowledgeScore = 0 #This is a value instead of a dictionary
                                                     #Because it is simply computed by the TagKnowledgeScore dictionary
-            #TODO: Create methods for questionTagType and differentiate between Tag/TagType scores
+            self.questionTagTypeDictionary = qTagTypeDict
 
     ##BEGIN INDIVIDUAL METHODS##
     def updateIndividualScore(self, name, score, difficulty):
@@ -121,6 +123,29 @@ class KnowledgeModel:
         return totalScore
 
     ##END QUESTION_TAG METHODS##
+
+
+    ##BEGIN_QUESTION_TAG_TYPE_METHODS##
+
+    def calcQuestionTagTypeScore(self, tagTypeToGet):
+        ##Uses the scores from each questionTag within a questionTagType to calculate a questionTagType score
+        score = 0
+        numTags = 0
+        if tagTypeToGet in self.questionTagTypeDictionary:
+            listOfTags = self.questionTagTypeDictionary[tagTypeToGet]
+            numTags = len(listOfTags)
+            for tag in listOfTags:
+                tagScore = self.calcQuestionTagScore(tag)
+                score = score + tagScore
+        else:
+            print(tagTypeToGet, " is not one of the tagTypes asked about.")
+
+        score = score/numTags
+        return score
+        ##Average of the tag scores for each tagType
+
+    ##END_QUESTION_TAG_TYPE_METHODS##
+
 
     #TODO: Create method to calculate questionTagTypeKnowledgeScore from values in dict questionTagKnowledgeScore
 
