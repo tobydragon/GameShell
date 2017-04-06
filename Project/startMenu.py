@@ -12,7 +12,7 @@ class StartMenu:
 
     def paintBackground(self):
         pygame.draw.rect(self.display, LIGHTGREY, [0,0,1500,1000], 0)
-        logo = urlImage.fetchFlag("us")#urlImage.fetchLocationImage("United Arab Emirates")#pygame.image.load('images/biology_icon.jpg')
+        logo = pygame.image.load('images/biology_icon.jpg') #urlImage.fetchFlag("us")#urlImage.fetchLocationImage("United Arab Emirates")#
         self.display.blit(logo,(650,150))
 
 

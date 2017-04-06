@@ -1,4 +1,4 @@
-import pygame, os, settings
+import pygame, os, settings, urlImage
 
 __author__ = "BenjaminWelsh"
 
@@ -11,6 +11,7 @@ class Individual:
         self.imagepaths = imagepath.split("|") if type(imagepath) is str else imagepath
         self._id = id
         self.images = []
+        self.imagedict={}
 
         for imagepath in self.imagepaths:
             if settings.IMAGEPATH_TEMPLATE!="" and settings.IMAGEPATH_TEMPLATE!=None:
@@ -23,6 +24,9 @@ class Individual:
         if not self.images:
             # Use MISSING_TEXTURE image if no images were loaded
             self.images.append(pygame.image.load("images/MISSING_TEXTURE.png"))
+        if settings.DOMAIN_FILE=="wfb_dataset.csv":
+            self.imagedict["flag"]=urlImage.fetchFlag(tags["cc"][0])
+            self.imagedict["map"]=urlImage.fetchLocationImage(tags["Name"][0])
 
         self.tags = tags
         # human readable

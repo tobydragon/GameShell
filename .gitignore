@@ -1,3 +1,6 @@
 __pycache__/
 userdata/
 .idea
+
+Project/cache/*
+!Project/cache/.placeholder

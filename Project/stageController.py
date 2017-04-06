@@ -46,6 +46,7 @@ class StageController:
             self.tagType=qTemplate["TagType"]
             self.cardTitle=qTemplate["Title"]
             self.useCardImages=qTemplate["UseImage"]
+            self.imageToUse = qTemplate["image"]
 
         indList = domainModel.individualList[:]
         # Filter indList to individuals that have the tagType of the question
