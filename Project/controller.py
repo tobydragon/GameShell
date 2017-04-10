@@ -14,6 +14,7 @@ class Controller:
         self.FPS = 30
         self.fpsClock = pygame.time.Clock()
         self.domainModel = domModel
+
         self.inMenu = False
         self.tempScore = 0
 
@@ -42,6 +43,7 @@ class Controller:
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.user.username)
         self.gameView = gameView.GameView(DISPLAYSURFACE)
+
 
     def gameLoop(self):
         """

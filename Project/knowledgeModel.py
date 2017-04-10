@@ -7,14 +7,12 @@ class KnowledgeModel:
     def __init__(self, qTagTypeDict, json=None):
         if json:
             self.fromJSON(json)
-            self.questionTagTypeDictionary = qTagTypeDict
 
         else:
             self.individualKnowledgeScore = {}
             self.questionTagKnowledgeScore = {}
-            self.questionTagTypeKnowledgeScore = 0 #This is a value instead of a dictionary
-                                                    #Because it is simply computed by the TagKnowledgeScore dictionary
-            self.questionTagTypeDictionary = qTagTypeDict
+
+        self.questionTagTypeDictionary = qTagTypeDict ##ORiginally from domainModel.py --> {questionTagType:[questionTags]}
 
     ##BEGIN INDIVIDUAL METHODS##
     def updateIndividualScore(self, name, score, difficulty):

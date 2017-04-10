@@ -179,7 +179,7 @@ class StageController:
                 "cards":cardLogData,
                 "correctTag":self.stageModel.correctTag
             })
-        print(results)
+
         return results
 
     def updateCards(self, event):
