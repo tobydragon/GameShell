@@ -21,13 +21,14 @@ class DomainModel:
         # {questionTagType:[questionTags]} - Links tags with tagTypes rather than just with individuals
         for individual in individualList:
             for tagType in individual.tags:
-                if (tagType != 'Name') and (tagType != 'Image Number'):
+                if (tagType != 'Image Number'):
                     if tagType in self.questionTagTypeDict:
                         for tag in individual.tags[tagType]:
                             if tag not in self.questionTagTypeDict[tagType]:
                                 self.questionTagTypeDict[tagType].append(tag)
                     else:
                         self.questionTagTypeDict[tagType] = individual.tags[tagType]
+
 
     def __repr__(self):
         return self.individualList.__repr__()

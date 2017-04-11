@@ -14,6 +14,7 @@ class StageController:
         self.logger = logger
 
         self.tagType = "Name"
+        self.cTag = "Lepidoptera" ##Used in knowledgeModel to update questionTagScore
         self.cardTitle = "{Name}"
         self.useCardImages = True
         self.qStage=0
@@ -64,6 +65,7 @@ class StageController:
 
         # Choose the correct tag value by selecting an individual at random
         correctTag = random.choice(indList[random.randint(0, len(indList))-1].tags[self.tagType])
+        self.cTag = correctTag
         self.stageModel = stageModel.StageModel(indList,self.tagType,correctTag)
         # Rebuild stageView with the new stageModel
         self._remakeStageView()
@@ -105,13 +107,11 @@ class StageController:
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
 
 
-                self.knowledge.updateQuestionTagScore(self.tagType, self.score, cardResults)
+                self.knowledge.updateQuestionTagScore(self.cTag, self.score, cardResults)
                 self.knowledge.checkCorrectCards(cardResults, scoreInfo)
 
                 #Updates Score for tag based on what score the stage was given
                 #SHould we call this updateCardScore() and within that checkCorrect/update?
-
-
 
                 self.stageFinished=True
 

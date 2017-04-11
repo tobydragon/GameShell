@@ -117,7 +117,10 @@ class KnowledgeModel:
 
     def calcQuestionTagScore(self, keyToGet):
         # TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
-        totalScore = computeScore(self.questionTagKnowledgeScore[keyToGet])
+        if keyToGet not in self.questionTagKnowledgeScore:
+            totalScore = 0
+        else:
+            totalScore = computeScore(self.questionTagKnowledgeScore[keyToGet])
         return totalScore
 
     ##END QUESTION_TAG METHODS##
@@ -133,6 +136,7 @@ class KnowledgeModel:
             listOfTags = self.questionTagTypeDictionary[tagTypeToGet]
             numTags = len(listOfTags)
             for tag in listOfTags:
+
                 tagScore = self.calcQuestionTagScore(tag)
                 score = score + tagScore
         else:
@@ -165,22 +169,24 @@ class KnowledgeModel:
 
 #must import knowledgeModel to call
 from knowledgeModel import KnowledgeModel
+from assessmentEventModel import AssesmentEvent
 def computeScore(events):
     difficulties = []
     totalScore = 0
+    if len(events) == 0:
+        return 0 ##Must be 0 for calcQuestionTagTypeScore()
+    else:
+        for i in events:
+            diff = i.getDifficulty()
+            score = i.getScore()
+            totalScore = totalScore + (diff*score)
+            difficulties.append(i.getDifficulty())
 
-    for i in events:
-        diff = i.getDifficulty
-        score = i.getScore
-        print(diff)
-        totalScore = totalScore + (diff*score)
-        difficulties.append(i.getDifficulty)
+        averageDifficulty = 0
+        for d in difficulties:
+            averageDifficulty = averageDifficulty + d
 
-    averageDifficulty = 0
-    for d in difficulties:
-        averageDifficulty = averageDifficulty + d
+        averageDifficulty = averageDifficulty/(len(difficulties))
 
-    averageDifficulty = averageDifficulty/(len(difficulties))
-
-    totalScore = totalScore/(len(events)*averageDifficulty)
-    return totalScore
+        totalScore = totalScore/(len(events)*averageDifficulty)
+        return totalScore
