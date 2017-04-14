@@ -155,15 +155,14 @@ class KnowledgeModel:
         base = {}
         base["individualKnowledgeScore"] = self.individualKnowledgeScore
         base["questionTagKnowledgeScore"] = self.questionTagKnowledgeScore
-        base["questionTagTypeKnowledgeScore"] = self.questionTagTypeKnowledgeScore
+
         return base
 
     def fromJSON(self, json):
         try:
             self.individualKnowledgeScore = json["individualKnowledgeScore"]
             self.questionTagKnowledgeScore = json["questionTagKnowledgeScore"]
-            self.questionTagTypeKnowledgeScore = json["questionTagTypeKnowledgeScore"]
-        #Why do we have this try-catch?  IF there is a json, this should never happen
+
         except KeyError as e:
             print(e)
 
