@@ -107,8 +107,10 @@ class StageController:
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
 
 
-                self.knowledge.updateQuestionTagScore(self.cTag, self.score, cardResults)
+                self.knowledge.updateQuestionTagScore(self.cTag, self.score)
+                self.knowledge.updateTagBuckets()
                 self.knowledge.checkCorrectCards(cardResults, scoreInfo)
+                self.knowledge.updateIndividualBuckets()
 
                 #Updates Score for tag based on what score the stage was given
                 #SHould we call this updateCardScore() and within that checkCorrect/update?

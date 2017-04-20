@@ -10,7 +10,7 @@ from time import sleep
 class TestKnowledgeScore(TestCase):
 
     def testTagScore(self):
-        testKnowledge = KnowledgeModel()
+        testKnowledge = KnowledgeModel({}, [])
         testKnowledge.updateQuestionTagScore("tag1", 0.5)
         self.assertEqual(0.5, testKnowledge.calcQuestionTagScore("tag1"))
         testKnowledge.updateQuestionTagScore("tag1", 0.75)
@@ -18,7 +18,7 @@ class TestKnowledgeScore(TestCase):
 
     def testIndividualScore(self):
         #Does not use timeStamp, but instead averages all scores
-        testKnowledge = KnowledgeModel()
+        testKnowledge = KnowledgeModel({}, [])
         testKnowledge.updateIndividualScore("i1", 5.6)
         testKnowledge.updateIndividualScore("i2", 7)
         testKnowledge.updateIndividualScore("i3", -4)
@@ -35,12 +35,12 @@ class TestKnowledgeScore(TestCase):
 
     def testAssessmentEvent(self):
         #This test will be edited after timeStamp is finished being added to Individual score and tag Score in knowledgeModel
-        testKnowledge = KnowledgeModel()
-        beforeTime = AssesmentEvent(0, 5)
+        testKnowledge = KnowledgeModel({}, [])
+        beforeTime = AssesmentEvent(0)
         sleep(0.1)
-        testKnowledge.updateQuestionTagScore("Tag1", 15, [1])
+        testKnowledge.updateQuestionTagScore("Tag1", 15)
         sleep(0.1)
-        afterTime = AssesmentEvent(0, 5)
+        afterTime = AssesmentEvent(0)
         time = testKnowledge.questionTagKnowledgeScore["Tag1"][0].getTime()
         beforeTimeCorrect = 0
         afterTimeCorrect = 0
@@ -54,8 +54,21 @@ class TestKnowledgeScore(TestCase):
         self.assertEqual(1, beforeTimeCorrect)
         self.assertEqual(1, afterTimeCorrect)
 
+
     def testComputeScore(self):
-        eventsList = []
-        e1 = AssesmentEvent(5.2, 5)
-        eventsList.append(e1)
-        self.assertEqual(5.2, computeScore(eventsList))
+      #  eventsList = []
+       # e1 = AssesmentEvent(5.2, 5)
+       # eventsList.append(e1)
+       # self.assertEqual(5.2, computeScore(eventsList))
+        test = 0 ##Not using computeScore()
+
+    def testBuckets(self):
+        testKnowledge = KnowledgeModel({}, [])
+        individuals = ['i1', 'i2', 'i3']
+        self.individualBuckets = {"Known": [], "Unknown": [], "Unclear": [], "Not Asked": individuals}
+        for j in range(0, 15, 1)
+            for i in individuals:
+                testKnowledge.updateIndividualScore({'i1': 1, 'i2':-1, 'i3':1})
+        testKnowledge.updateIndividualBuckets()
+        ##CREATE GETBUCKET() function
+
