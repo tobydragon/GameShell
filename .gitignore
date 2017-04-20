@@ -4,3 +4,8 @@ userdata/
 
 Project/cache/*
 !Project/cache/.placeholder
+dist/
+
+main\.spec
+
+setup\.py
