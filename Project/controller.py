@@ -1,4 +1,4 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel
+import domainModel, random, pygame, sys, stageView, gameView, stageModel, knowledgeModel
 import userModel, startMenu, os.path, jsonIO, stageController, settings
 from pygame.locals import *
 import logger
@@ -14,11 +14,13 @@ class Controller:
         self.FPS = 30
         self.fpsClock = pygame.time.Clock()
         self.domainModel = domModel
+
         self.inMenu = False
         self.tempScore = 0
 
         self.logger = logger.Logger(userName, settings.DOMAIN_FILE)
-        self.stageController = stageController.StageController(DISPLAYSURFACE, self.logger)
+        self.knowledge = knowledgeModel.KnowledgeModel(domModel.questionTagTypeDict, self.domainModel.individualList)
+        self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger, self.knowledge)
 
         # No name represents debugging; no saves are made
         if userName != "" and os.path.isfile(
@@ -41,6 +43,7 @@ class Controller:
 
         self.startMenu = startMenu.StartMenu(DISPLAYSURFACE, self.user.username)
         self.gameView = gameView.GameView(DISPLAYSURFACE)
+
 
     def gameLoop(self):
         """
@@ -133,3 +136,4 @@ class Controller:
     def fromJSON(self, json):
         self.user = userModel.User(json=json["userModel"])
         self.stageController.fromJSON(json["stageController"])
+        ##Model user fromJSON for knowledgeModel

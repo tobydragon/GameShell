@@ -1,7 +1,8 @@
 import stageModel, domainModel, random, stageView, math, settings, individual, json
 
 class StageController:
-    def __init__(self, display, logger, questionFile=None):
+    def __init__(self, display, logger, knowledge, questionFile=None):
+        ###Add knowledgeModel to parameter list to update after stage ends
         """
         WARNING: generateStageModel MUST be called to use.
         :param display:
@@ -13,6 +14,7 @@ class StageController:
         self.logger = logger
 
         self.tagType = "Name"
+        self.cTag = "Lepidoptera" ##Used in knowledgeModel to update questionTagScore
         self.cardTitle = "{Name}"
         self.useCardImages = True
         self.qStage=0
@@ -20,6 +22,7 @@ class StageController:
         self.stageModel=None
         if settings.RANDOM_SEED:
             random.seed(settings.RANDOM_SEED)
+        self.knowledge = knowledge
 
         if questionFile:
             print("loading question File")
@@ -62,6 +65,7 @@ class StageController:
 
         # Choose the correct tag value by selecting an individual at random
         correctTag = random.choice(indList[random.randint(0, len(indList))-1].tags[self.tagType])
+        self.cTag = correctTag
         self.stageModel = stageModel.StageModel(indList,self.tagType,correctTag)
         # Rebuild stageView with the new stageModel
         self._remakeStageView()
@@ -101,8 +105,17 @@ class StageController:
                 #self.percent=100.0*(len(cardResults.correct)/(len(self.stageView.cardList)))
                 self.stageView.scoreText="{}/{} correct. Points: {:.1F}".format(
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
-                self.stageFinished=True
 
+
+                self.knowledge.updateQuestionTagScore(self.cTag, self.score)
+                self.knowledge.updateTagBuckets()
+                self.knowledge.checkCorrectCards(cardResults, scoreInfo)
+                self.knowledge.updateIndividualBuckets()
+
+                #Updates Score for tag based on what score the stage was given
+                #SHould we call this updateCardScore() and within that checkCorrect/update?
+
+                self.stageFinished=True
 
     def evaluateScore(self,cardStates,scoreInfo):
         self._checkStageModelInit()
@@ -141,6 +154,7 @@ class StageController:
             if cardHasRightTag is (card.state == card.SELECTED):
             #     correct += 1
                  card.symbol = card.CORRECT
+
             else:
             #     incorrect+=1
                  card.symbol = card.INCORRECT
@@ -167,7 +181,7 @@ class StageController:
                 "cards":cardLogData,
                 "correctTag":self.stageModel.correctTag
             })
-        print(results)
+
         return results
 
     def updateCards(self, event):
