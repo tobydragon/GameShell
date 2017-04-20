@@ -2,8 +2,10 @@ __pycache__/
 userdata/
 .idea
 
-Project/cache/
+Project/cache/*
+!Project/cache/.placeholder
+dist/
 
-*.spec
+main\.spec
 
 setup\.py

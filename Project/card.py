@@ -5,7 +5,7 @@ import pygame, pygbutton, pygtools, color, TextWrap, os, random
 
 class Card:
     def __init__(self, x, y, individual, title="", caption="", borderColor=color.BLACK, borderThickness=7,
-                 useImage=True):
+                 imageType="image"):
         self.individual = individual
         self.borderColor = borderColor
         self.borderThickness = borderThickness
@@ -18,8 +18,13 @@ class Card:
         self.y = y
         self.fade = False
         self.symbol = self.NONE
-        self.thumbnail = pygame.transform.scale(individual.images[random.randint(0, len(individual.images) - 1)], (160, 160))
-        self.useImage = useImage
+        if imageType!="":
+            try:
+                self.thumbnail = pygame.transform.scale(individual.images[imageType][random.randint(0, len(individual.images[imageType]) - 1)], (160, 160))
+            except TypeError:
+                print("No image found of type %s for individual %s" % (imageType, individual._id))
+                raise
+        self.imageType = imageType
         self.button = pygbutton.PygButton((x, y, 200, 250))
 
     def draw(self, display):
@@ -29,7 +34,7 @@ class Card:
         :param display: PyGame display object
         :return: None
         """
-        if self.useImage:
+        if self.imageType!= "":
             display.blit(self.thumbnail, (self.x + 20, self.y + 20, 160, 160))
         font = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-R.ttf", 18)
         scoreFont = pygame.font.Font("ubuntu-font-family-0.83/Ubuntu-B.ttf", 32)

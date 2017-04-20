@@ -10,7 +10,7 @@ class HighlightRect:
 
 
 class StageView:
-    def __init__(self, stageModel, positionX, positionY, display, cardTitle, useImages):
+    def __init__(self, stageModel, positionX, positionY, display, cardTitle, imageToUse):
         """
 
         :param stageModel: the StageModel to use
@@ -24,17 +24,17 @@ class StageView:
         self.posY = positionY
         self.stageModel = stageModel
         try:
-            self.cardList=self.initCards(cardTitle,useImages)
+            self.cardList=self.initCards(cardTitle,imageToUse)
         except Exception as e:
             print(e)
-            raise e
+            raise
         self.display = display
         self.display.fill(color.WHITE)
         self.border = HighlightRect(color.DARKGREEN, 7, [positionX, positionY, 1300, 750])
         self.nextButton = pygbutton.PygButton((1200, 100, 120, 50), "Next")
         self.scoreText=""
 
-    def initCards(self, title, useImage):
+    def initCards(self, title, imageToUse):
         """
         Generate new cards from the StageModel
         :param title: Card title
@@ -47,12 +47,12 @@ class StageView:
             raise Exception("Too many cards (%i>10) to initialize all of them" % numCards)
         x=50
         for i in range(min(numCards,5)):
-            cards.append(card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], title, useImage=useImage))
+            cards.append(card.Card(self.posX + x, self.posY + 150, self.stageModel.indList[i], title, imageType=imageToUse))
             x+=250
         x=50
         if(numCards>5):
             for i in range(5,min(numCards, 10)):
-                cards.append(card.Card(self.posX + x, self.posY + 450, self.stageModel.indList[i], title, useImage=useImage))
+                cards.append(card.Card(self.posX + x, self.posY + 450, self.stageModel.indList[i], title, imageType=imageToUse))
                 x += 250
         return cards
 

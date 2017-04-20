@@ -1,4 +1,5 @@
 import stageModel, domainModel, random, stageView, math, settings, individual, json
+from string import Formatter
 
 class StageController:
     def __init__(self, display, logger, knowledge, questionFile=None):
@@ -17,6 +18,7 @@ class StageController:
         self.cTag = "Lepidoptera" ##Used in knowledgeModel to update questionTagScore
         self.cardTitle = "{Name}"
         self.useCardImages = True
+        self.imageToUse=""
         self.qStage=0
         self.questionTemplates=None
         self.stageModel=None
@@ -48,13 +50,16 @@ class StageController:
             qTemplate=self.questionTemplates[qtNum]
             self.tagType=qTemplate["TagType"]
             self.cardTitle=qTemplate["Title"]
-            self.useCardImages=qTemplate["UseImage"]
+            self.useCardImages=qTemplate["image"]!=""
+            self.imageToUse = qTemplate["image"]
 
         indList = domainModel.individualList[:]
-        # Filter indList to individuals that have the tagType of the question
-        filterFunction = individual.createTagFilter(self.tagType)
-        indList = [i for i in indList if filterFunction(i)]
+        # Collect tags from question's name field
+        tagsFromTitle=[i[1] for i in Formatter().parse(self.cardTitle)]
 
+        # Filter indList to individuals that have the tagType of the question
+        filterFunction = individual.createTagFilter(self.tagType,*tagsFromTitle,imagetag=self.imageToUse)
+        indList = [i for i in indList if filterFunction(i)]
         if len(indList)==0:
             print("ERROR: No individuals have the specified tagType %s"%self.tagType)
             raise Exception
@@ -77,7 +82,7 @@ class StageController:
 
     def _remakeStageView(self):
         self._checkStageModelInit()
-        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display,self.cardTitle,self.useCardImages)
+        self.stageView = stageView.StageView(self.stageModel, 100, 50, self.display,self.cardTitle,self.imageToUse)
         self.stageView.nextButton.caption = "Check"
 
     def loopStepAll(self, event):
