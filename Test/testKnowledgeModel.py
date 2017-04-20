@@ -65,10 +65,24 @@ class TestKnowledgeScore(TestCase):
     def testBuckets(self):
         testKnowledge = KnowledgeModel({}, [])
         individuals = ['i1', 'i2', 'i3']
-        self.individualBuckets = {"Known": [], "Unknown": [], "Unclear": [], "Not Asked": individuals}
-        for j in range(0, 15, 1)
+        individualBuckets = {"Known": [], "Unknown": [], "Unclear": [], "Not Asked": individuals}
+        for j in range(0, 15, 1):
             for i in individuals:
-                testKnowledge.updateIndividualScore({'i1': 1, 'i2':-1, 'i3':1})
+                testKnowledge.updateIndividualScore({'i1': 1, 'i2':(-1)^j, 'i3':1})
         testKnowledge.updateIndividualBuckets()
-        ##CREATE GETBUCKET() function
+
+        x = 0
+        if 'i1' in individualBuckets["Known"]:
+            x = 1
+        self.assertEqual(1, x)
+
+        if 'i2' in individualBuckets["Unknown"]:
+            x = 2
+        self.assertEqual(2, x)
+
+        if 'i3' in individualBuckets["Unclear"]:
+            x = 3
+        self.assertEqual(3, x)
+
+
 
