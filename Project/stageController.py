@@ -107,6 +107,7 @@ class StageController:
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
 
 
+                ##Knowledge Model Functions
                 self.knowledge.updateQuestionTagScore(self.cTag, self.score)
                 self.knowledge.updateTagBuckets()
                 self.knowledge.checkCorrectCards(cardResults, scoreInfo)

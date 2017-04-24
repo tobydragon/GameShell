@@ -14,15 +14,15 @@ class KnowledgeModel:
 
             #Buckets of individuals to understand user's knowledge of individual after asking questions
             individuals = []
-            for ind in individualList: ##GEt string names for individuals
+            for ind in individualList: ##Get string names for individuals
                 name = str(ind)
                 name = name.split("_")
                 name = name[1]
                 individuals.append(name)
 
-            self.individualBuckets = {"Known": [], "Unknown": [], "Unclear": [], "Not Asked": individuals}
-            #Known = ##High Score
-            #Unknown = #Low Score
+            self.individualBuckets = {"Competent": [], "Incompetent": [], "Unclear": [], "Not Asked": individuals}
+            #Competent = ##High Score
+            #Incompetent = #Low Score
             #Unclear = ##Score unclear (not high or low) after asking questions
             #Not Asked = ##Not questioned yet
 
@@ -34,9 +34,9 @@ class KnowledgeModel:
                     tagList.append(tag)
 
             # Buckets of tags to understand user's knowledge of tag after asking questions
-            self.tagBuckets = {"Known": [], "Unknown": [], "Unclear": [], "Not Asked": tagList}
-            # Known = ##High Score
-            # Unknown = #Low Score
+            self.tagBuckets = {"Competent": [], "Incompetent": [], "Unclear": [], "Not Asked": tagList}
+            # Competent = ##High Score
+            # InCompetent = #Low Score
             # Unclear = ##Score unclear (not high or low) after asking questions
             # Not Asked = ##Not questioned yet
 
@@ -51,6 +51,13 @@ class KnowledgeModel:
             else:
                 self.individualKnowledgeScore[individual] = [event]
 
+###PRINTOUT FOR PLAYTESTING###
+        print("\nKnowledgeModel Individual Scores Updated:")
+        for ind in self.individualKnowledgeScore:
+            print(ind, "\tTOTAL: ", self.calcIndividualScore(ind))
+            for event in self.individualKnowledgeScore[ind]:
+              print("\tTimeStamp: ", event.getTime(), "\tScore: ", event.getScore())
+###PRINTOUT FOR PLAYTESTING###
 
 
     def checkCorrectCards(self, cardResults, scoreInfo):
@@ -81,27 +88,23 @@ class KnowledgeModel:
 
     def calcIndividualScore(self, keyToGet):
         #TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
-        totalScore = computeScore(self.individualKnowledgeScore[keyToGet])
+        totalScore = 0
+        for event in self.individualKnowledgeScore[keyToGet]:
+            score = event.getScore()
+            totalScore = totalScore + score
+
         return totalScore
 
     def updateIndividualBuckets(self):
-        print("Not Asked", self.individualBuckets["Not Asked"]) ##DELETE
-        print("Unclear", self.individualBuckets["Unclear"]) ##DELETE
-        print(len(self.individualBuckets["Not Asked"])) ##DELETE
         for ind in self.individualBuckets["Not Asked"]:
-            print(ind)  ##WHY ARE SOME MISSING??? ##DELETE
-            print(len(self.individualBuckets["Not Asked"]))  ##DELETE
             if ind in self.individualKnowledgeScore:
-                print("HAS K_SCORE: ", ind) ##DELETE
                 self.individualBuckets["Unclear"].append(ind)
-                print("Ind To Remove: ", ind)  ##DELETE
+
+        for ind in self.individualBuckets["Unclear"]:
+            if ind in self.individualBuckets["Not Asked"]:
                 self.individualBuckets["Not Asked"].remove(ind)
-                print("Ind Removed: ", ind) ##DELETE
 
-        print("Not Asked", self.individualBuckets["Not Asked"]) ##DELETE
-        print("Unclear", self.individualBuckets["Unclear"]) ##DELETE
-
-        for ind in self.individualBuckets["Unclear"]:  # Should this check Known and Unknown buckets too?
+        for ind in self.individualBuckets["Unclear"]:  # Should this check Competent and InCompetent buckets too?
             if len(self.individualKnowledgeScore[ind]) >= 10:
                 score = 0
                 events = self.individualKnowledgeScore[ind]
@@ -110,12 +113,19 @@ class KnowledgeModel:
 
 
                 if score >= 6:
-                    self.individualBuckets["Known"].append(ind)
+                    self.individualBuckets["Competent"].append(ind)
                     self.individualBuckets["Unclear"].remove(ind)
 
                 if score <= -6:
-                    self.individualBuckets["Unknown"].append(ind)
+                    self.individualBuckets["Incompetent"].append(ind)
                     self.individualBuckets["Unclear"].remove(ind)
+###PRINTOUT FOR PLAYTESTING###
+        print("\nKnowledgeModel Individual Buckets Updated: ")  ###Printout
+        print("\tCompetent: ", self.individualBuckets["Competent"])###Printout
+        print("\tIncompetent: ", self.individualBuckets["Incompetent"])###Printout
+        print("\tUnclear: ", self.individualBuckets["Unclear"])###Printout
+        print("\tNot Asked: ", self.individualBuckets["Not Asked"])###Printout
+###PRINTOUT FOR PLAYTESTING###
 
     def getIndividualBuckets(self):
         return self.individualBuckets
@@ -132,6 +142,18 @@ class KnowledgeModel:
         else:
             self.questionTagKnowledgeScore[tag] = [event]
 
+###PRINTOUT FOR PLAYTESTING###
+        print("\nKnowledgeModel Tag Score Updated:")
+        for tag in self.questionTagKnowledgeScore:
+            print(tag, "\tTOTAL: ", self.calcQuestionTagScore(tag))
+            for event in self.questionTagKnowledgeScore[tag]:
+                print("\tTimeStamp: ", event.getTime(), "\tScore: ", event.getScore())
+
+        print("\nKnowledgeModel TagType Score Updated: ")
+        for tagType in self.questionTagTypeDictionary:
+            print("\t", tagType, ": ", self.calcQuestionTagTypeScore(tagType))
+###PRINTOUT FOR PLAYTESTING###
+
 
     def calcQuestionTagScore(self, keyToGet):
         # TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
@@ -145,9 +167,12 @@ class KnowledgeModel:
         for tag in self.tagBuckets["Not Asked"]:
             if tag in self.questionTagKnowledgeScore:
                 self.tagBuckets["Unclear"].append(tag)
+
+        for tag in self.tagBuckets["Unclear"]:
+            if tag in self.tagBuckets["Not Asked"]:
                 self.tagBuckets["Not Asked"].remove(tag)
 
-        for tag in self.tagBuckets["Unclear"]:  #Should this check Known and Unknown buckets too?
+        for tag in self.tagBuckets["Unclear"]:  #Should this check Competent and InCompetent buckets too?
             if len(self.questionTagKnowledgeScore[tag]) >= 10:
                 score = 0
                 events = self.questionTagKnowledgeScore[tag]
@@ -156,12 +181,20 @@ class KnowledgeModel:
                 score = score/(len(events))
 
                 if score >= 0.8:
-                    self.tagBuckets["Known"].append(tag)
+                    self.tagBuckets["Competent"].append(tag)
                     self.tagBuckets["Unclear"].remove(tag)
 
                 if score <= 0.2:
-                    self.tagBuckets["Unknown"].append(tag)
+                    self.tagBuckets["Incompetent"].append(tag)
                     self.tagBuckets["Unclear"].remove(tag)
+
+###PRINTOUT FOR PLAYTESTING###
+            print("\nKnowledgeModel Tag Buckets Updated: ")  ###Printout
+            print("\tCompetent: ", self.tagBuckets["Competent"])  ###Printout
+            print("\tIncompetent: ", self.tagBuckets["Incompetent"])  ###Printout
+            print("\tUnclear: ", self.tagBuckets["Unclear"])  ###Printout
+            print("\tNot Asked: ", self.tagBuckets["Not Asked"])  ###Printout
+###PRINTOUT FOR PLAYTESTING###
 
     def getTagBuckets(self):
         return self.tagBuckets
@@ -176,14 +209,17 @@ class KnowledgeModel:
         numTags = 0
         if tagTypeToGet in self.questionTagTypeDictionary:
             listOfTags = self.questionTagTypeDictionary[tagTypeToGet]
-            numTags = len(listOfTags)
+            numTags = 0
             for tag in listOfTags:
-
-                tagScore = self.calcQuestionTagScore(tag)
-                score = score + tagScore
+                if tag in self.questionTagKnowledgeScore:
+                    tagScore = self.calcQuestionTagScore(tag)
+                    score = score + tagScore
+                    numTags = numTags + 1
         else:
             print(tagTypeToGet, " is not one of the tagTypes asked about.")
-
+        if numTags == 0:
+            score = "--"
+            return score
         score = score/numTags
         return score
         ##Average of the tag scores for each tagType
