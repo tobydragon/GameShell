@@ -20,9 +20,9 @@ class KnowledgeModel:
                 name = name[1]
                 individuals.append(name)
 
-            self.individualBuckets = {"Known": [], "Unknown": [], "Unclear": [], "Not Asked": individuals}
-            #Known = ##High Score
-            #Unknown = #Low Score
+            self.individualBuckets = {"Competent": [], "Incompetent": [], "Unclear": [], "Not Asked": individuals}
+            #Competent = ##High Score
+            #InCompetent = #Low Score
             #Unclear = ##Score unclear (not high or low) after asking questions
             #Not Asked = ##Not questioned yet
 
@@ -34,9 +34,9 @@ class KnowledgeModel:
                     tagList.append(tag)
 
             # Buckets of tags to understand user's knowledge of tag after asking questions
-            self.tagBuckets = {"Known": [], "Unknown": [], "Unclear": [], "Not Asked": tagList}
-            # Known = ##High Score
-            # Unknown = #Low Score
+            self.tagBuckets = {"Competent": [], "Incompetent": [], "Unclear": [], "Not Asked": tagList}
+            # Competent = ##High Score
+            # InCompetent = #Low Score
             # Unclear = ##Score unclear (not high or low) after asking questions
             # Not Asked = ##Not questioned yet
 
@@ -101,7 +101,7 @@ class KnowledgeModel:
         print("Not Asked", self.individualBuckets["Not Asked"]) ##DELETE
         print("Unclear", self.individualBuckets["Unclear"]) ##DELETE
 
-        for ind in self.individualBuckets["Unclear"]:  # Should this check Known and Unknown buckets too?
+        for ind in self.individualBuckets["Unclear"]:  # Should this check Competent and Incompetent buckets too?
             if len(self.individualKnowledgeScore[ind]) >= 10:
                 score = 0
                 events = self.individualKnowledgeScore[ind]
@@ -110,11 +110,11 @@ class KnowledgeModel:
 
 
                 if score >= 6:
-                    self.individualBuckets["Known"].append(ind)
+                    self.individualBuckets["Competent"].append(ind)
                     self.individualBuckets["Unclear"].remove(ind)
 
                 if score <= -6:
-                    self.individualBuckets["Unknown"].append(ind)
+                    self.individualBuckets["Incompetent"].append(ind)
                     self.individualBuckets["Unclear"].remove(ind)
 
     def getIndividualBuckets(self):
@@ -147,7 +147,7 @@ class KnowledgeModel:
                 self.tagBuckets["Unclear"].append(tag)
                 self.tagBuckets["Not Asked"].remove(tag)
 
-        for tag in self.tagBuckets["Unclear"]:  #Should this check Known and Unknown buckets too?
+        for tag in self.tagBuckets["Unclear"]:  #Should this check Competent and Incompetent buckets too?
             if len(self.questionTagKnowledgeScore[tag]) >= 10:
                 score = 0
                 events = self.questionTagKnowledgeScore[tag]
@@ -156,11 +156,11 @@ class KnowledgeModel:
                 score = score/(len(events))
 
                 if score >= 0.8:
-                    self.tagBuckets["Known"].append(tag)
+                    self.tagBuckets["Competent"].append(tag)
                     self.tagBuckets["Unclear"].remove(tag)
 
                 if score <= 0.2:
-                    self.tagBuckets["Unknown"].append(tag)
+                    self.tagBuckets["Incompetent"].append(tag)
                     self.tagBuckets["Unclear"].remove(tag)
 
     def getTagBuckets(self):
