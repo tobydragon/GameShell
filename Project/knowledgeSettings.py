@@ -3,28 +3,28 @@ __author__ = 'Kevin Pomer'
 
 class UnitTestModel:
     def __init__(self):
-        timeStamp_Window = 10
+        self.timeStamp_Window = 10
 
-        tagCompetentThreshold = 0.8
-        tagIncompetentThreshold = 0.2
+        self.tagCompetentThreshold = 0.8
+        self.tagIncompetentThreshold = 0.2
 
-        individualCompetentThreshold = 6
-        individualIncompetentThreshold = -6
+        self.individualCompetentThreshold = 6
+        self.individualIncompetentThreshold = -6
 
-        def getTimeStampWindow():
-            return timeStamp_Window
+    def getTimeStampWindow(self):
+        return self.timeStamp_Window
 
-        def getTagCompetentThreshold():
-            return tagCompetentThreshold
+    def getTagCompetentThreshold(self):
+        return self.tagCompetentThreshold
 
-        def getTagIncompetentThreshold():
-            return tagIncompetentThreshold
+    def getTagIncompetentThreshold(self):
+        return self.tagIncompetentThreshold
 
-        def getIndividualCompetentThreshold():
-            return individualCompetentThreshold
+    def getIndividualCompetentThreshold(self):
+        return self.individualCompetentThreshold
 
-        def getIndividualIncompetentThreshold():
-            return individualIncompetentThreshold
+    def getIndividualIncompetentThreshold(self):
+        return self.individualIncompetentThreshold
 
         #other fields?
 
@@ -33,27 +33,27 @@ class UnitTestModel:
 
 class PlayTestModel:
     def __init__(self):
-        timeStamp_Window = 3
+        self.timeStamp_Window = 3
 
-        tagCompetentThreshold = 0.8
-        tagIncompetentThreshold = 0.2
+        self.tagCompetentThreshold = 0.8
+        self.tagIncompetentThreshold = 0.2
 
-        individualCompetentThreshold = 2
-        individualIncompetentThreshold = -2
+        self.individualCompetentThreshold = 2
+        self.individualIncompetentThreshold = -2
 
-        def getTimeStampWindow():
-            return timeStamp_Window
+    def getTimeStampWindow(self):
+        return self.timeStamp_Window
 
-        def getTagCompetentThreshold():
-            return tagCompetentThreshold
+    def getTagCompetentThreshold(self):
+        return self.tagCompetentThreshold
 
-        def getTagIncompetentThreshold():
-            return tagIncompetentThreshold
+    def getTagIncompetentThreshold(self):
+        return self.tagIncompetentThreshold
 
-        def getIndividualCompetentThreshold():
-            return individualCompetentThreshold
+    def getIndividualCompetentThreshold(self):
+        return self.individualCompetentThreshold
 
-        def getIndividualIncompetentThreshold():
-            return individualIncompetentThreshold
+    def getIndividualIncompetentThreshold(self):
+        return self.individualIncompetentThreshold
 
         #Other fields?

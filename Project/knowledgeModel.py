@@ -4,7 +4,7 @@ from stageController import CardStateInfo
 
 
 class KnowledgeModel:
-    def __init__(self, qTagTypeDict, individualList, json=None):
+    def __init__(self, qTagTypeDict, individualList, settings, json=None):
         if json:
             self.fromJSON(json)
 
@@ -39,6 +39,12 @@ class KnowledgeModel:
             # InCompetent = #Low Score
             # Unclear = ##Score unclear (not high or low) after asking questions
             # Not Asked = ##Not questioned yet
+
+            self.timeStamp_Window = settings.getTimeStampWindow()
+            self.tagCompetentThreshold = settings.getTagCompetentThreshold()
+            self.tagIncompetentThreshold = settings.getTagIncompetentThreshold()
+            self.individualCompetentThreshold = settings.getIndividualCompetentThreshold()
+            self.individualIncompetentThreshold = settings.getIndividualIncompetentThreshold()
 
 
     ##BEGIN INDIVIDUAL METHODS##
@@ -102,18 +108,18 @@ class KnowledgeModel:
         print("Unclear", self.individualBuckets["Unclear"]) ##DELETE
 
         for ind in self.individualBuckets["Unclear"]:  # Should this check Competent and Incompetent buckets too?
-            if len(self.individualKnowledgeScore[ind]) >= 10:
+            if len(self.individualKnowledgeScore[ind]) >= self.timeStamp_Window:
                 score = 0
                 events = self.individualKnowledgeScore[ind]
                 for e in events:
                     score = score + e.getScore()
 
 
-                if score >= 6:
+                if score >= self.individualCompetentThreshold:
                     self.individualBuckets["Competent"].append(ind)
                     self.individualBuckets["Unclear"].remove(ind)
 
-                if score <= -6:
+                if score <= self.individualIncompetentThreshold:
                     self.individualBuckets["Incompetent"].append(ind)
                     self.individualBuckets["Unclear"].remove(ind)
 
@@ -148,18 +154,18 @@ class KnowledgeModel:
                 self.tagBuckets["Not Asked"].remove(tag)
 
         for tag in self.tagBuckets["Unclear"]:  #Should this check Competent and Incompetent buckets too?
-            if len(self.questionTagKnowledgeScore[tag]) >= 10:
+            if len(self.questionTagKnowledgeScore[tag]) >= self.timeStamp_Window:
                 score = 0
                 events = self.questionTagKnowledgeScore[tag]
                 for e in events:
                     score = score + e.getScore()
                 score = score/(len(events))
 
-                if score >= 0.8:
+                if score >= self.tagCompetentThreshold:
                     self.tagBuckets["Competent"].append(tag)
                     self.tagBuckets["Unclear"].remove(tag)
 
-                if score <= 0.2:
+                if score <= self.tagIncompetentThreshold:
                     self.tagBuckets["Incompetent"].append(tag)
                     self.tagBuckets["Unclear"].remove(tag)
 
