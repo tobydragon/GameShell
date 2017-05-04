@@ -95,11 +95,11 @@ def createTagFilter(*tags,imagetag=None):
         #print("Testing",ind.id()," | ",ind.images," | ", tags," | ",imagetag)
         for tag in tags:
             if (not tag in ind.tags) or ind.tags[tag] == []:
-                print(ind.id(),"does not have tag",tag)
+                #print(ind.id(),"does not have tag",tag)
                 return False
         if imagetag:
             if (not imagetag in ind.images) or ind.images[imagetag]==[None]:
-                print(ind.id(), "does not have image of type", imagetag)
+                #print(ind.id(), "does not have image of type", imagetag)
                 return False
         return True
 
