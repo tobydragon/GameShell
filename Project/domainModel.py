@@ -55,14 +55,4 @@ class DomainModel:
                     if len(row)<2:
                         # ignore blank lines
                         continue
-                    tags = {}
-                    hrTags = {}  # Human readable
-                    for tagType, tagValue in zip(header, row):
-                        if tagValue:
-                            tags[tagType] = tagValue.split("|") # split multiple tags on "|"
-                            hrTags[tagType] = ", ".join(tags[tagType])  # generate human readable tag
-
-                    # generate an id for the individual with the format <rowNumInFile>_<individual_name>
-                    # Note: replaces spaces in the name with underscores
-                    id = str(rowNum) + "_" + row[0].replace(" ", "_")
-                    self.individualList.append(individual.Individual(row[0], id, row[1], tags, hrTags))
+                    self.individualList.append(individual.individualFromCSVdata(row,rowNum,header,typeHeader))

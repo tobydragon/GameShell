@@ -3,7 +3,22 @@
     {
       "TagType":"Location",
       "Title":"{Name}",
-      "UseImage":false
+      "image":"map"
+    },
+    {
+      "TagType":"Name",
+      "Title":"",
+      "image":"flag"
+    },
+    {
+      "TagType":"Relative Area",
+      "Title":"{Name}",
+      "image":"map"
+    },
+    {
+      "TagType":"National Symbol(s)",
+      "Title":"{Name}",
+      "image":"map"
     }
   ]
 }

@@ -1,5 +1,5 @@
 __author__ = 'JoãoGabriel'
-import pygame, pygbutton
+import pygame, pygbutton, urlImage
 
 BLACK = (0, 0, 0)
 LIGHTGREY = (160, 160, 160)
@@ -12,8 +12,9 @@ class StartMenu:
 
     def paintBackground(self):
         pygame.draw.rect(self.display, LIGHTGREY, [0,0,1500,1000], 0)
-        logo = pygame.image.load('images/biology_icon.jpg')
+        logo = pygame.image.load('images/biology_icon.jpg') #urlImage.fetchFlag("us")#urlImage.fetchLocationImage("United Arab Emirates")#
         self.display.blit(logo,(650,150))
+
 
     def createStartButton(self, text):
         return pygbutton.PygButton((690, 550, 120, 50), text)
