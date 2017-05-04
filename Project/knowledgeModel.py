@@ -1,6 +1,6 @@
 __author__ = 'Kevin Pomer'
 import assessmentEventModel
-from stageController import CardStateInfo
+
 
 
 class KnowledgeModel:
@@ -40,6 +40,8 @@ class KnowledgeModel:
             # Unclear = ##Score unclear (not high or low) after asking questions
             # Not Asked = ##Not questioned yet
 
+
+            ##Settings from selected settings file
             self.timeStamp_Window = settings.getTimeStampWindow()
             self.tagCompetentThreshold = settings.getTagCompetentThreshold()
             self.tagIncompetentThreshold = settings.getTagIncompetentThreshold()

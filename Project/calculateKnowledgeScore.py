@@ -20,6 +20,7 @@ class CalculateScore:
         weight = 1
         length = len(events)
         weightDivisor = 2^length
+        print(weightDivisor)
         scoreDict = {}
         if length == 0:
             return 0  ##Must be 0 for calcQuestionTagTypeScore()
@@ -30,6 +31,7 @@ class CalculateScore:
                 weight = weight * 2
         totalScore = 0
         for s in scoreDict:
-            totalScore = totalScore + (s*scoreDict[s])
+            weightedScore = s*(scoreDict[s])
+            totalScore = totalScore + weightedScore
         totalScore = totalScore/weightDivisor
         return totalScore

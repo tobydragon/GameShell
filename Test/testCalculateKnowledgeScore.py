@@ -15,6 +15,9 @@ class testScores(TestCase):
         return eventsList
 
     def testAverage(self):
+        compute = CalculateScore()
         list = self.createEvents()
         l1 = [list[0]]
-        self.assertEqual(CalculateScore.computeAverageScore(l1), 5)
+
+        self.assertEqual(compute.computeAverageScore(l1), 5)
+        self.assertEqual(compute.computeWeightedScore(l1), 5)
