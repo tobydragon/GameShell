@@ -1,5 +1,5 @@
 __author__ = 'Kevin Pomer'
-
+import calculateKnowledgeScore
 
 class UnitTestModel:
     def __init__(self):
@@ -10,6 +10,8 @@ class UnitTestModel:
 
         self.individualCompetentThreshold = 6
         self.individualIncompetentThreshold = -6
+
+        self.computeScore = calculateKnowledgeScore.computeAverageScore
 
     def getTimeStampWindow(self):
         return self.timeStamp_Window
@@ -25,6 +27,9 @@ class UnitTestModel:
 
     def getIndividualIncompetentThreshold(self):
         return self.individualIncompetentThreshold
+
+    def getComputeScore(self):
+        return self.computeScore
 
         #other fields?
 
@@ -41,6 +46,8 @@ class PlayTestModel:
         self.individualCompetentThreshold = 2
         self.individualIncompetentThreshold = -2
 
+        self.computeScore = calculateKnowledgeScore.computeAverageScore
+
     def getTimeStampWindow(self):
         return self.timeStamp_Window
 
@@ -55,5 +62,8 @@ class PlayTestModel:
 
     def getIndividualIncompetentThreshold(self):
         return self.individualIncompetentThreshold
+
+    def getComputeScore(self):
+        return self.computeScore
 
         #Other fields?
