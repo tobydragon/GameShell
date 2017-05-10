@@ -15,7 +15,7 @@ class StageController:
         self.logger = logger
 
         self.tagType = "Name"
-        self.cTag = "Lepidoptera" ##Used in knowledgeModel to update questionTagScore
+        self.cTag = "Lepidoptera" ##Used in knowledgeModel to update questionTagScore #TODO fix this to avoid hard coding!!! - creats issue in knowledgeModel
         self.cardTitle = "{Name}"
         self.useCardImages = True
         self.imageToUse=""
@@ -112,14 +112,14 @@ class StageController:
                     len(cardResults.correct),len(self.stageView.cardList),self.score*100)
 
 
-                self.knowledge.updateQuestionTagScore(self.cTag, self.score)
+                ##KnowledgeModel Functions
+                self.knowledge.updateQuestionTagScore(self.cTag, self.score) ##cTag creates issue with 1st stage used in KnowledgeModel
                 self.knowledge.updateTagBuckets()
                 self.knowledge.checkCorrectCards(cardResults, scoreInfo)
                 self.knowledge.updateIndividualBuckets()
                 self.knowledge.PRINTOUTS() ##Used for playTesting in knowledgeModel
 
-                #Updates Score for tag based on what score the stage was given
-                #SHould we call this updateCardScore() and within that checkCorrect/update?
+
 
                 self.stageFinished=True
 

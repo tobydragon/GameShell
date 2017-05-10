@@ -11,7 +11,7 @@ class UnitTestModel:
         self.individualCompetentThreshold = 6
         self.individualIncompetentThreshold = -6
 
-        self.computeScore = calculateKnowledgeScore.computeAverageScore ##Select method of computing score (Avg or weighted)
+        self.computeScore = calculateKnowledgeScore.computeWeightedScore ##Select method of computing score (Avg or weighted)
 
     def getTimeStampWindow(self):
         return self.timeStamp_Window
