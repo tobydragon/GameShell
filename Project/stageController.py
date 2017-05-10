@@ -116,6 +116,7 @@ class StageController:
                 self.knowledge.updateTagBuckets()
                 self.knowledge.checkCorrectCards(cardResults, scoreInfo)
                 self.knowledge.updateIndividualBuckets()
+                self.knowledge.PRINTOUTS() ##Used for playTesting in knowledgeModel
 
                 #Updates Score for tag based on what score the stage was given
                 #SHould we call this updateCardScore() and within that checkCorrect/update?
