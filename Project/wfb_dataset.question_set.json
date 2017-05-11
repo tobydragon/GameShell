@@ -19,6 +19,16 @@
       "TagType":"National Symbol(s)",
       "Title":"{Name}",
       "image":"map"
+        },
+    {
+      "TagType":"Capital",
+      "Title":"{Name}",
+      "image":"map"
+        },
+    {
+      "TagType":"Climate",
+      "Title":"{Name}",
+      "image":"map"
     }
   ]
 }
