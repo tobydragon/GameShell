@@ -14,9 +14,10 @@ class KnowledgeModel:
             #Buckets of individuals to understand user's knowledge of individual after asking questions
             individuals = []
             for ind in individualList: ##GEt string names for individuals
-                name = str(ind)
-                name = name.split("_")
-                name = name[1]
+                name = ind.name
+                ##Using name as ID in knowledgeModel
+                #name = name.split("_")
+                #name = name[1]
                 individuals.append(name)
 
             self.individualBuckets = {"Competent": [], "Incompetent": [], "Unclear": [], "Not Asked": individuals}
@@ -65,18 +66,18 @@ class KnowledgeModel:
         individualScores = {}
 
         for card in cardResults.correct:
-            name = str(card.individual)
-            name = name.split("_")
-            name = name[1]
+            name = card.individual.name
+            #name = name.split("_")
+            #name = name[1]
             if card in cardResults.rightTag:
                 individualScores[name] = 1
             elif card in cardResults.wrongTag:
                 individualScores[name] = 1
 
         for card in cardResults.incorrect:
-            name = str(card.individual)
-            name = name.split("_")
-            name = name[1]
+            name = card.individual.name
+            #name = name.split("_")
+            #name = name[1]
             if card in cardResults.rightTag:
                 individualScores[name] = -1
             elif card in cardResults.wrongTag:
