@@ -1,8 +1,11 @@
 __author__ = 'Kevin Pomer'
 import assessmentEventModel
 from stageController import CardStateInfo
-def computeAverageScore(events=[]):
+
+def computeAverageScore(events=[], window=0):
     totalScore = 0
+    sliceWindow = -1*window
+    events = events[sliceWindow:] #TimeWindow
     if len(events) == 0:
         return 0 ##Must be 0 for calcQuestionTagTypeScore()
     else:
@@ -13,7 +16,9 @@ def computeAverageScore(events=[]):
     totalScore = totalScore/(len(events))
     return totalScore
 
-def computeWeightedScore(events=[]):
+def computeWeightedScore(events=[], window=0):
+    sliceWindow = -1*window
+    events = events[sliceWindow:] #Time Window
     weight = 1
     length = len(events)
     weightDivisor = 0
