@@ -11,8 +11,24 @@ class DomainModel:
         :param path: path to a domain file (.csv) to load from
         """
         self.individualList = individualList
+        self.questionTagTypeDict = {} ##To be filled in after self.load(path)
+
+
         if path:
             self.load(path)
+
+        ##Fill questionTagTypeDict using individualList
+        # {questionTagType:[questionTags]} - Links tags with tagTypes rather than just with individuals
+        for individual in individualList:
+            for tagType in individual.tags:
+                if (tagType != 'Image Number'):
+                    if tagType in self.questionTagTypeDict:
+                        for tag in individual.tags[tagType]:
+                            if tag not in self.questionTagTypeDict[tagType]:
+                                self.questionTagTypeDict[tagType].append(tag)
+                    else:
+                        self.questionTagTypeDict[tagType] = individual.tags[tagType]
+
 
     def __repr__(self):
         return self.individualList.__repr__()
@@ -36,17 +52,7 @@ class DomainModel:
                     typeHeader = row
                 else:
                     # Process each line of data
-                    if len(row)<2:
+                    if len(row)<2 or row[0]=="":
                         # ignore blank lines
                         continue
-                    tags = {}
-                    hrTags = {}  # Human readable
-                    for tagType, tagValue in zip(header, row):
-                        if tagValue:
-                            tags[tagType] = tagValue.split("|") # split multiple tags on "|"
-                            hrTags[tagType] = ", ".join(tags[tagType])  # generate human readable tag
-
-                    # generate an id for the individual with the format <rowNumInFile>_<individual_name>
-                    # Note: replaces spaces in the name with underscores
-                    id = str(rowNum) + "_" + row[0].replace(" ", "_")
-                    self.individualList.append(individual.Individual(row[0], id, row[1], tags, hrTags))
+                    self.individualList.append(individual.individualFromCSVdata(row,rowNum,header,typeHeader))
