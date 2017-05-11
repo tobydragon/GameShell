@@ -87,7 +87,7 @@ class KnowledgeModel:
 
     def calcIndividualScore(self, keyToGet):
         #TODO: use scoreTimeStampModel.py to change the amount different scores matter to total score
-        totalScore = self.computeScore(self.individualKnowledgeScore[keyToGet])
+        totalScore = self.computeScore(self.individualKnowledgeScore[keyToGet], self.timeStamp_Window)
         return totalScore
 
     def updateIndividualBuckets(self):
@@ -138,7 +138,7 @@ class KnowledgeModel:
         if keyToGet not in self.questionTagKnowledgeScore:
             totalScore = 0
         else:
-            totalScore = self.computeScore(self.questionTagKnowledgeScore[keyToGet])
+            totalScore = self.computeScore(self.questionTagKnowledgeScore[keyToGet], self.timeStamp_Window)
         return totalScore
 
     def updateTagBuckets(self):

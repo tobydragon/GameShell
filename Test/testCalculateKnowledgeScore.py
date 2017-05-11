@@ -20,10 +20,12 @@ class testScores(TestCase):
         reverseList = self.createEvents()[1]
         l1 = [list[0]]
 
-        self.assertEqual(calculateKnowledgeScore.computeAverageScore(l1), 5)
+        self.assertEqual(calculateKnowledgeScore.computeAverageScore(l1, 10), 5)
         self.assertEqual(calculateKnowledgeScore.computeWeightedScore(l1), 5)
 
-        self.assertEqual(calculateKnowledgeScore.computeAverageScore(list), 7.5)
-        self.assertEqual(calculateKnowledgeScore.computeWeightedScore(list), (8 + (1/3))) ##Round for weighting 8.333...
-        self.assertEqual(calculateKnowledgeScore.computeAverageScore(reverseList), 7.5)
-        self.assertEqual(calculateKnowledgeScore.computeWeightedScore(reverseList), (6 + (2/3))) ##6.666...
+        self.assertEqual(calculateKnowledgeScore.computeAverageScore(list, 10), 7.5)
+        self.assertEqual(calculateKnowledgeScore.computeWeightedScore(list, 10), (8 + (1/3))) ##Round for weighting 8.333...
+        self.assertEqual(calculateKnowledgeScore.computeAverageScore(list, 4), 8.5) ##Test Time WIndow
+        self.assertEqual(calculateKnowledgeScore.computeWeightedScore(reverseList, 3), (5+(2/3))) #Test Time Window
+        self.assertEqual(calculateKnowledgeScore.computeAverageScore(reverseList, 10), 7.5)
+        self.assertEqual(calculateKnowledgeScore.computeWeightedScore(reverseList, 10), (6 + (2/3))) ##6.666...
