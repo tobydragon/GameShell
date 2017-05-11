@@ -52,7 +52,7 @@ class DomainModel:
                     typeHeader = row
                 else:
                     # Process each line of data
-                    if len(row)<2:
+                    if len(row)<2 or row[0]=="":
                         # ignore blank lines
                         continue
                     self.individualList.append(individual.individualFromCSVdata(row,rowNum,header,typeHeader))
