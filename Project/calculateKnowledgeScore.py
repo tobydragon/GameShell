@@ -1,6 +1,7 @@
 __author__ = 'Kevin Pomer'
 import assessmentEventModel
 from stageController import CardStateInfo
+
 def computeAverageScore(events=[], window=0):
     totalScore = 0
     sliceWindow = -1*window
