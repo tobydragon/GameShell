@@ -1,4 +1,4 @@
-import domainModel, random, pygame, sys, stageView, gameView, stageModel, knowledgeModel
+import domainModel, random, pygame, sys, stageView, gameView, stageModel, knowledgeModel, knowledgeSettings
 import userModel, startMenu, os.path, jsonIO, stageController, settings
 from pygame.locals import *
 import logger
@@ -19,7 +19,13 @@ class Controller:
         self.tempScore = 0
 
         self.logger = logger.Logger(userName, settings.DOMAIN_FILE)
-        self.knowledge = knowledgeModel.KnowledgeModel(domModel.questionTagTypeDict, self.domainModel.individualList)
+        ##Create KnowledgeModel Settings objects to pass to self.knowledge
+        playtestSettings = knowledgeSettings.PlayTestModel()
+        unittestSettings = knowledgeSettings.UnitTestModel()
+        ##
+
+        ##Select either test above to send to knowledgeModel
+        self.knowledge = knowledgeModel.KnowledgeModel(domModel.questionTagTypeDict, self.domainModel.individualList, playtestSettings)
         self.stageController = stageController.StageController(DISPLAYSURFACE,self.logger, self.knowledge)
 
         # No name represents debugging; no saves are made
