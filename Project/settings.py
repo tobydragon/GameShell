@@ -4,7 +4,7 @@ DOMAIN_FILE = "wfb_dataset.csv"
 QUESTIONS_FILE = 'wfb_dataset.question_set.json'
 DOMAIN_FIELD_TYPE_HEADER = True # Whether the domain file has a datatype header row
 STAGES_PER_QUESTION = 2
-RANDOM_SEED = 3#None # Sets the random seed. Used for testing&demonstration, if oyu want the same series of questions. Default is None
+RANDOM_SEED = None # Sets the random seed. Used for testing&demonstration, if oyu want the same series of questions. Default is None
 IMAGEPATH_TEMPLATE="images_insects/{}.jpg" # Path to images. Any "{}" is replaced with value from datafile. Default is None or ""
 CACHED_ONLY=True # Don't fetch uncached images from url
 
